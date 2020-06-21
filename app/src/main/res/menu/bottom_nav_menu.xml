@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_home"
+        android:title="@string/title_home" />
+
+    <item
+        android:id="@+id/navigation_reflection"
+        android:icon="@drawable/ic_renungan"
+        android:title="@string/reflection" />
+
+    <item
+        android:id="@+id/navigation_tipitaka"
+        android:icon="@drawable/ic_kitab"
+        android:title="@string/tipitaka" />
+
+    <item
+        android:id="@+id/navigation_meditation"
+        android:icon="@drawable/ic_meditasi"
+        android:title="@string/meditation" />
+
+
+</menu>

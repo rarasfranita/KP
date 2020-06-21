@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Lotus</string>
+
+    <!-- Menu Bottom Sheet -->
+    <string name="title_home">Home</string>
+    <string name="reflection">Reflection</string>
+    <string name="tipitaka">Tipitaka</string>
+    <string name="meditation">Meditation</string>
+    <string name="calendar">Calendar</string>
+    <string name="title_activity_bottom_navigation">MainActivity</string>
+    <string name="title_notifications">Notification Title</string>
+    <string name="title_dashboard">Dashboard Title</string>
+    <string name="title_activity_main2">MainActivity</string>
+
+    <!-- Text Home-->
+
+    <!-- -->
+</resources>
