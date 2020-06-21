@@ -11,6 +11,10 @@
     <string name="title_notifications">Notification Title</string>
     <string name="title_dashboard">Dashboard Title</string>
     <string name="title_activity_main2">MainActivity</string>
+    <string name="explore">Explore</string>
+    <string name="notification">Notification</string>
+    <string name="direct_message">Direct Message</string>
+    <string name="profile">Profile</string>
 
     <!-- Text Home-->
 

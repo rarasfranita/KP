@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<!--    <item-->
+<!--        android:id="@+id/notification"-->
+<!--        android:icon="@drawable/ic_notification"-->
+<!--        android:title="@string/notification"-->
+<!--        android:contentDescription="halo"-->
+<!--        app:showAsAction="ifRoom" />-->
+
+    <item
+        android:id="@+id/explore"
+        android:icon="@drawable/ic_explore"
+        android:title="@string/explore"
+        android:contentDescription="Eksplor desc"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/direct_message"
+        android:title="@string/direct_message"
+        android:icon="@drawable/ic_direct_message"
+        android:contentDescription="DM Desc"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/profile"
+        android:title="@string/profile"
+        android:icon="@drawable/ic_profile"
+        android:contentDescription="DM Desc"
+        app:showAsAction="ifRoom" />
+</menu>

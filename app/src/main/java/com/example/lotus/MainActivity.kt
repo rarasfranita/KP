@@ -1,6 +1,7 @@
 package com.example.lotus
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
@@ -65,6 +66,7 @@ class MainActivity : AppCompatActivity() {
         btmNav.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener { item ->
             btmNav2.menu.findItem(R.id.navigation_calendar).setCheckable(false)
             setButtonNavChekable(btmNav, true)
+            Log.d("item", item.toString())
             when (item.itemId) {
                 R.id.navigation_meditation -> {
                     btmNav.menu.findItem(item.itemId).setChecked(true)
@@ -104,10 +106,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setButtonNavChekable(btmNav: BottomNavigationView, active: Boolean) {
-        btmNav.getMenu().findItem(R.id.navigation_meditation).setCheckable(active);
         btmNav.getMenu().findItem(R.id.navigation_reflection).setCheckable(active);
         btmNav.getMenu().findItem(R.id.navigation_home).setCheckable(active);
         btmNav.getMenu().findItem(R.id.navigation_tipitaka).setCheckable(active);
+        btmNav.getMenu().findItem(R.id.navigation_meditation).setCheckable(active);
+        Log.d("meditation",
+            btmNav.getMenu().findItem(R.id.navigation_meditation).isCheckable().toString()
+        )
+
+        Log.d("home",
+            btmNav.getMenu().findItem(R.id.navigation_home).isCheckable().toString()
+        )
     }
 
 }
