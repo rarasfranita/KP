@@ -1,0 +1,214 @@
+[
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/raw_img_2073.mp4.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/raw/img_2073.mp4"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/drawable_ic_notifications_black_24dp.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/drawable/ic_notifications_black_24dp.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/mipmap-hdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/menu_bottom_nav_menu.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/menu/bottom_nav_menu.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/drawable_ic_meditasi.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/drawable/ic_meditasi.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/layout_fragment_dashboard.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/layout/fragment_dashboard.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/layout_snippet_comments_toolbar.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/layout/snippet_comments_toolbar.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/drawable_ic_calendar.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/drawable/ic_calendar.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/layout_layout_view_post.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/layout/layout_view_post.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/drawable_ic_home.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/drawable/ic_home.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/mipmap-mdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/drawable_ic_kitab.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/drawable/ic_kitab.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/drawable_ic_direct_message.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/drawable/ic_direct_message.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/layout_activity_main.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/layout/activity_main.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/menu_top_app_bar_home.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/menu/top_app_bar_home.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/font_lato.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/font/lato.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/drawable_ic_send.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/drawable/ic_send.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/drawable-v24_backgorund_rounded.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/drawable-v24/backgorund_rounded.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/font_grandhotel_regular.ttf.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/font/grandhotel_regular.ttf"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/layout_fragment_view_comments.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/layout/fragment_view_comments.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/layout_fragment_notifications.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/layout/fragment_notifications.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/drawable_ic_profile.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/drawable/ic_profile.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/drawable_ic_home_black_24dp.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/drawable/ic_home_black_24dp.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/layout_fragment_view_post.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/layout/fragment_view_post.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/drawable_ic_share.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/drawable/ic_share.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/navigation_mobile_navigation.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/navigation/mobile_navigation.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/font_grand_hotel.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/font/grand_hotel.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/layout_layout_center_viewpager.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/layout/layout_center_viewpager.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/drawable_ic_dashboard_black_24dp.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/drawable/ic_dashboard_black_24dp.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/drawable_ic_add_white.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/drawable/ic_add_white.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/menu_bottom_nav_menu_2.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/menu/bottom_nav_menu_2.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/layout_layout_mainfeed_listitem.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/layout/layout_mainfeed_listitem.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/drawable_ic_explore.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/drawable/ic_explore.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/drawable_ic_ellipses.png.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/drawable/ic_ellipses.png"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/drawable_ic_love_red.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/drawable/ic_love_red.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/drawable_ic_outline_home_24.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/drawable/ic_outline_home_24.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/layout_bottom_sheet.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/layout/bottom_sheet.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/layout_fragment_home.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/layout/fragment_home.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/drawable_ic_notification.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/drawable/ic_notification.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/layout_snippet_post_toolbar.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/layout/snippet_post_toolbar.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/drawable_ic_love_white.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/drawable/ic_love_white.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/drawable_ic_backarrow.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/drawable/ic_backarrow.xml"
+    },
+    {
+        "merged": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/lint/intermediates/res/merged/debug/drawable_ic_renungan.xml.flat",
+        "source": "/home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/res/drawable/ic_renungan.xml"
+    }
+]

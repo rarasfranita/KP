@@ -6,19 +6,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import coil.api.load
-import coil.transform.CircleCropTransformation
 import com.example.lotus.R
 import com.example.lotus.models.Post
 import com.example.lotus.utils.FeedAdapter
-import com.example.lotus.utils.MainFeedListAdapter
-import org.json.JSONArray
 import kotlin.collections.ArrayList
 
 
@@ -29,7 +24,6 @@ class HomeFragment : Fragment() {
 
     private val mPhotos: ArrayList<ContactsContract.CommonDataKinds.Photo>? = null
     private val mPaginatedPhotos: ArrayList<ContactsContract.CommonDataKinds.Photo>? = null
-    private var adapter: MainFeedListAdapter? = null
     private var resultsCount = 0
 
     override fun onCreateView(
@@ -131,13 +125,13 @@ class HomeFragment : Fragment() {
 //                            .getPhoto_id()
 //                    )
                 }
-                adapter = activity?.let {
-                    MainFeedListAdapter(
-                        it,
-                        R.layout.layout_mainfeed_listitem,
-                        mPaginatedPhotos
-                    )
-                }
+//                adapter = activity?.let {
+//                    MainFeedListAdapter(
+//                        it,
+//                        R.layout.layout_mainfeed_listitem,
+//                        mPaginatedPhotos
+//                    )
+//                }
             } catch (e: IndexOutOfBoundsException) {
                 Log.e(
                     TAG,
