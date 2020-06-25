@@ -6,61 +6,84 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.eschao.android.widget.elasticlistview.ElasticListView
+import coil.api.load
+import coil.transform.CircleCropTransformation
 import com.example.lotus.R
+import com.example.lotus.models.Post
+import com.example.lotus.utils.FeedAdapter
 import com.example.lotus.utils.MainFeedListAdapter
-import com.nostra13.universalimageloader.core.ImageLoader
 import org.json.JSONArray
-import java.util.*
+import kotlin.collections.ArrayList
 
 
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
     private val TAG = "HomeFragment"
-    private val mContext: HomeFragment = this@HomeFragment
 
     private val mPhotos: ArrayList<ContactsContract.CommonDataKinds.Photo>? = null
     private val mPaginatedPhotos: ArrayList<ContactsContract.CommonDataKinds.Photo>? = null
-    private val mFollowing: ArrayList<String>? = null
-    private val recursionIterator = 0
-
-//        private mListView: ListView? =
-    private var mListView: ElasticListView? = null
     private var adapter: MainFeedListAdapter? = null
     private var resultsCount = 0
-//    private val mUserAccountSettings: ArrayList<UserAccountSettings>? = null
-
-    //    private ArrayList<UserStories> mAllUserStories = new ArrayList<>();
-    private val mMasterStoriesArray: JSONArray? = null
-
-    private val mRecyclerView: RecyclerView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         homeViewModel =
             ViewModelProviders.of(this).get(HomeViewModel::class.java)
         val v = inflater.inflate(R.layout.fragment_home, container, false)
-//        mListView = view!!.findViewById<View>(R.id.listView) as ElasticListView
 
-//        initListViewRefresh()
-//        getFollowing()
-        displayPhotos()
+        val homeFeed: RecyclerView = v.findViewById(R.id.rcHomeFeed)
+        loadFeed(homeFeed)
+
         listenAppToolbar(v)
 
         return v
     }
 
+    fun loadFeed(homeFeed: RecyclerView){
+        val list = ArrayList<Post>()
+        val listFeed = arrayOf(
+            "Aduh", "ganteng", "Kenapa"
+        )
+        homeFeed.setHasFixedSize(true)
+        homeFeed.layoutManager = LinearLayoutManager(context)
+        val urlPost = "https://storage.googleapis.com/fastwork-static/983f21e5-6a7b-44d4-ba88-bb90fdc1daac.jpg"
+        for (i in 0 until listFeed.size){
+            list.add(
+                Post(
+                    1,
+                    "Gatau",
+                    "Gatau",
+                    "Gatau",
+                    "Gatau",
+                    listFeed.get(i),
+                    urlPost,
+                    "https://storage.googleapis.com/fastwork-static/983f21e5-6a7b-44d4-ba88-bb90fdc1daac.jpg"
+                )
+            )
+
+            if (listFeed.size - 1 == i ){
+                val adapter = FeedAdapter(list)
+                adapter.notifyDataSetChanged()
+
+                homeFeed.adapter = adapter
+            }
+        }
+    }
+
     private fun listenAppToolbar(v: View){
         val toolbar: Toolbar = v.findViewById(R.id.appToolbar) as Toolbar
+        toolbar.setTitle("Lotus");
+        toolbar.setTitleTextAppearance(context, R.style.My_TextAppearance_Toolbar);
 
         toolbar.setNavigationOnClickListener {
         }
@@ -68,16 +91,12 @@ class HomeFragment : Fragment() {
         toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.explore -> {
-                    // Handle search icon press
-                    Log.d("Hello", "world")
                     true
                 }
                 R.id.direct_message -> {
-                    // Handle more item (inside overflow menu) press
                     true
                 }
                 R.id.profile -> {
-                    // Handle more item (inside overflow menu) press
                     true
                 }
                 else -> false
@@ -119,10 +138,6 @@ class HomeFragment : Fragment() {
                         mPaginatedPhotos
                     )
                 }
-                mListView?.setAdapter(adapter)
-
-                // Notify update is done
-                mListView?.notifyUpdated()
             } catch (e: IndexOutOfBoundsException) {
                 Log.e(
                     TAG,
@@ -137,39 +152,4 @@ class HomeFragment : Fragment() {
         }
     }
 
-//    fun displayMorePhotos() {
-//        Log.d(HomeFragment.TAG, "displayMorePhotos: displaying more photos")
-//        try {
-//            if (mPhotos.size > resultsCount && mPhotos.size > 0) {
-//                val iterations: Int
-//                iterations = if (mPhotos.size > resultsCount + 10) {
-//                    Log.d(
-//                        HomeFragment.TAG,
-//                        "displayMorePhotos: there are greater than 10 more photos"
-//                    )
-//                    10
-//                } else {
-//                    Log.d(
-//                        HomeFragment.TAG,
-//                        "displayMorePhotos: there is less than 10 more photos"
-//                    )
-//                    mPhotos.size - resultsCount
-//                }
-//
-//                //add the new photos to the paginated list
-//                for (i in resultsCount until resultsCount + iterations) {
-//                    mPaginatedPhotos.add(mPhotos.get(i))
-//                }
-//                resultsCount = resultsCount + iterations
-//                adapter.notifyDataSetChanged()
-//            }
-//        } catch (e: IndexOutOfBoundsException) {
-//            Log.e(
-//                HomeFragment.TAG,
-//                "displayPhotos: IndexOutOfBoundsException:" + e.message
-//            )
-//        } catch (e: NullPointerException) {
-//            Log.e(HomeFragment.TAG, "displayPhotos: NullPointerException:" + e.message)
-//        }
-//    }
 }

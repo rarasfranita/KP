@@ -20,82 +20,41 @@
             app:elevation="10dp"
             app:menu="@menu/top_app_bar_home"
             app:navigationIcon="@drawable/ic_notification"
-            app:title="string/page_title"
+            app:title="Lotus"
             />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="416dp"
-        android:layout_height="661dp"
-        android:layout_marginTop="8dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    <ProgressBar
+        android:id="@+id/newsfeedProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="bottom|center"
+        android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcHomeFeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-        tools:layout_editor_absoluteX="0dp">
-<!--        <RelativeLayout-->
+        ></androidx.recyclerview.widget.RecyclerView>
+
+<!--    <androidx.core.widget.NestedScrollView-->
+<!--        android:layout_width="416dp"-->
+<!--        android:layout_height="661dp"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"-->
+<!--        tools:layout_editor_absoluteX="0dp">-->
+<!--        <LinearLayout-->
 <!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:id="@+id/relLayout2"-->
-<!--            android:layout_below="@+id/relLayout1">-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical">-->
+<!--            <include layout="@layout/layout_mainfeed_listitem"></include>-->
+<!--        </LinearLayout>-->
 
-<!--            <include layout="@layout/layout_center_viewpager"/>-->
-<!--            <com.eschao.android.widget.elasticlistview.ElasticListView-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:paddingLeft="5dp"-->
-<!--                android:paddingRight="5dp"-->
-<!--                android:background="@null"-->
-<!--                android:cacheColorHint="#00000000"-->
-<!--                android:listSelector="#00000000"-->
-<!--                android:dividerHeight="1px"-->
-<!--                android:scrollbars="none"-->
-<!--                android:id="@+id/listView"-->
-<!--                android:overScrollMode="never"-->
-<!--                android:fadingEdge="none"-->
-<!--                android:divider="@null"-->
-<!--                />-->
-
-<!--        </RelativeLayout>-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <include layout="@layout/layout_mainfeed_listitem"></include>
-            <include layout="@layout/layout_mainfeed_listitem"></include>
-            <include layout="@layout/layout_mainfeed_listitem"></include>
-            <include layout="@layout/layout_mainfeed_listitem"></include>
-        </LinearLayout>
-
-        <!--        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_margin="0dp"-->
-        <!--            android:padding="0dp"-->
-        <!--            android:layout_height="match_parent">-->
-
-        <!--            <LinearLayout-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="match_parent"-->
-        <!--                android:orientation="vertical">-->
-
-        <!--                <androidx.recyclerview.widget.RecyclerView-->
-        <!--                    android:id="@+id/newsfeed1"-->
-        <!--                    android:layout_width="match_parent"-->
-        <!--                    android:background="#DCDEE3"-->
-        <!--                    android:layout_margin="0dp"-->
-        <!--                    android:padding="0dp"-->
-        <!--                    android:layout_height="wrap_content" />-->
-
-        <!--            </LinearLayout>-->
-
-        <!--        </RelativeLayout>-->
-        <!--        <ProgressBar-->
-        <!--            android:id="@+id/newsfeedProgressBar1"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_alignParentBottom="true"-->
-        <!--            android:layout_centerHorizontal="true"-->
-        <!--            android:layout_gravity="bottom|center"-->
-        <!--            android:visibility="gone" />-->
-    </androidx.core.widget.NestedScrollView>
+<!--    </androidx.core.widget.NestedScrollView>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

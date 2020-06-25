@@ -16,17 +16,12 @@ import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import com.example.lotus.R
 import com.example.lotus.models.Comment
+import com.example.lotus.models.Like
 import com.example.lotus.models.Photo
-import com.nostra13.universalimageloader.core.ImageLoader
-import de.hdodenhof.circleimageview.CircleImageView
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-
-/**
- * Created by User on 9/22/2017.
- */
 class MainFeedListAdapter(
     @NonNull context: Context,
     @LayoutRes resource: Int,
@@ -47,7 +42,7 @@ class MainFeedListAdapter(
     private var currentUsername = ""
 
     class ViewHolder {
-        var mprofileImage: CircleImageView? = null
+        var mprofileImage: ImageView? = null
         var likesString: String? = null
         var username: TextView? = null
         var timeDetla: TextView? = null
@@ -98,7 +93,7 @@ class MainFeedListAdapter(
             holder.timeDetla =
                 convertView.findViewById<View>(R.id.image_time_posted) as TextView
             holder.mprofileImage =
-                convertView.findViewById<View>(R.id.profile_photo) as CircleImageView
+                convertView.findViewById<View>(R.id.profile_photo) as ImageView
             convertView.tag = holder
         } else {
             holder = convertView.tag as ViewHolder
@@ -143,8 +138,8 @@ class MainFeedListAdapter(
         }
 
         //set the profile image
-        val imageLoader: ImageLoader = ImageLoader.getInstance()
-        imageLoader.displayImage(getItem(position)?.getImage_path(), holder.image)
+//        val imageLoader: ImageLoader = ImageLoader.getInstance()
+//        imageLoader.displayImage(getItem(position)?.getImage_path(), holder.image)
 
 
         //get the profile image and username
@@ -326,7 +321,7 @@ class MainFeedListAdapter(
     private fun addNewLike(holder: ViewHolder) {
         Log.d(TAG, "addNewLike: adding new like")
 //        val newLikeID: String = mReference.push().getKey()
-//        val like = Like()
+        val like = Like()
 //        like.setUser_id(FirebaseAuth.getInstance().getCurrentUser().getUid())
 //        mReference.child(mContext.getString(R.string.dbname_photos))
 //            .child(holder.photo.getPhoto_id())

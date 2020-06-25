@@ -27,4 +27,10 @@
         <item name="android:background">#FFFFFF</item>
     </style>
 
+    <style name="My_TextAppearance_Toolbar" parent="@style/TextAppearance.MaterialComponents.Headline6">
+        <item name="fontFamily">@font/grand_hotel</item>
+        <item name="android:fontFamily">@font/grand_hotel</item>
+        <item name="android:textSize">40sp</item>
+    </style>
+
 </resources>
