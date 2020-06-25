@@ -71,22 +71,18 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_meditation -> {
                     btmNav.menu.findItem(item.itemId).setChecked(true)
                     navController.navigate(item.itemId)
-                    true
                 }
                 R.id.navigation_home -> {
                     btmNav.menu.findItem(item.itemId).setChecked(true)
                     navController.navigate(item.itemId)
-                    true
                 }
                 R.id.navigation_reflection -> {
                     btmNav.menu.findItem(item.itemId).setChecked(true)
                     navController.navigate(item.itemId)
-                    true
                 }
                 R.id.navigation_tipitaka -> {
                     btmNav.menu.findItem(item.itemId).setChecked(true)
                     navController.navigate(item.itemId)
-                    true
                 }
             }
             false
@@ -98,7 +94,6 @@ class MainActivity : AppCompatActivity() {
                     btmNav2.menu.findItem(R.id.navigation_calendar).setCheckable(true)
                     setButtonNavChekable(btmNav, false)
                     navController.navigate(item.itemId)
-                    true
                 }
             }
             false
