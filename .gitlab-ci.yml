@@ -1,3 +1,5 @@
+only:
+    - tags
 image: openjdk:8-jdk
 
 variables:
@@ -29,6 +31,8 @@ lintDebug:
   stage: build
   script:
     - ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint
+  only:
+    - tags
 
 assembleDebug:
   stage: build
@@ -37,8 +41,12 @@ assembleDebug:
   artifacts:
     paths:
     - app/build/outputs/
+  only:
+    - tags
 
 debugTests:
   stage: test
   script:
     - ./gradlew -Pci --console=plain :app:testDebug
+  only:
+    - tags
