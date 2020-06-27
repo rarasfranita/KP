@@ -1,21 +1,22 @@
-package com.example.lotus
+package com.example.lotus.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
+import com.example.lotus.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity() {
+    private val TAG = "HomeActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,11 +26,19 @@ class MainActivity : AppCompatActivity() {
         }
         setContentView(R.layout.activity_main)
 
-        fabPostAction()
+        val fabPost = findViewById<View>(R.id.fab_post)
+
+        fabPost.setOnClickListener(View.OnClickListener { fabPostOnClick() })
         navigationMenuLogic()
     }
 
-    private fun fabPostAction() {
+    private fun fabPostOnClick() {
+        Log.d(TAG, "FabPostOnclick")
+//        val intent = Intent(this, ::class.java)
+//        startActivity(intent)
+    }
+
+    private fun navigationMenuLogic(){
         val llBottomSheet =
             findViewById<View>(R.id.bottom_sheet) as LinearLayout
 
@@ -39,8 +48,10 @@ class MainActivity : AppCompatActivity() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 if (BottomSheetBehavior.STATE_DRAGGING == newState) {
                     fab_post.animate().scaleX(0F).scaleY(0F).setDuration(100).start();
+                    fab_post.setOnClickListener(null)
                 } else if (BottomSheetBehavior.STATE_COLLAPSED == newState) {
                     fab_post.animate().scaleX(1F).scaleY(1F).setDuration(100).start();
+                    fab_post.setOnClickListener(View.OnClickListener { fabPostOnClick() })
                 }
             }
 
@@ -51,9 +62,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-    }
-
-    private fun navigationMenuLogic(){
         val btmNav =
             findViewById<BottomNavigationView>(R.id.bottom_navigation)
 

@@ -133,7 +133,7 @@ MERGED from [com.github.bumptech.glide:gifdecoder:4.6.1] /home/sipoke/.gradle/ca
 		ADDED from /home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/AndroidManifest.xml:8:9-35
 	android:theme
 		ADDED from /home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/AndroidManifest.xml:13:9-40
-activity#com.example.lotus.MainActivity
+activity#com.example.lotus.ui.home.MainActivity
 ADDED from /home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/AndroidManifest.xml:14:9-22:20
 	android:label
 		ADDED from /home/sipoke/AndroidStudioProjects/mobile-apps/app/src/main/AndroidManifest.xml:16:13-45

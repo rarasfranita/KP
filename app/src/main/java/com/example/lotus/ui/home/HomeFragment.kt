@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lotus.R
 import com.example.lotus.models.Post
-import com.example.lotus.utils.FeedAdapter
+import com.example.lotus.utils.PostFeedAdapter
 import kotlin.collections.ArrayList
 
 
@@ -66,7 +66,7 @@ class HomeFragment : Fragment() {
             )
 
             if (listFeed.size - 1 == i ){
-                val adapter = FeedAdapter(list)
+                val adapter = PostFeedAdapter(list)
                 adapter.notifyDataSetChanged()
 
                 homeFeed.adapter = adapter

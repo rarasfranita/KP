@@ -12,13 +12,13 @@
 
     <fragment
         android:id="@+id/navigation_reflection"
-        android:name="com.example.lotus.ui.dashboard.DashboardFragment"
-        tools:layout="@layout/fragment_dashboard" />
+        android:name="com.example.lotus.ui.profile.ProfileFragment"
+        tools:layout="@layout/fragment_profile" />
 
     <fragment
         android:id="@+id/navigation_meditation"
-        android:name="com.example.lotus.ui.dashboard.DashboardFragment"
-        tools:layout="@layout/fragment_dashboard" />
+        android:name="com.example.lotus.ui.profile.ProfileFragment"
+        tools:layout="@layout/fragment_profile" />
 
     <fragment
         android:id="@+id/navigation_tipitaka"
