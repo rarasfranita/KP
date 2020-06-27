@@ -1,6 +1,5 @@
 package com.example.lotus.ui.home
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,7 +10,6 @@ import com.example.lotus.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -47,11 +45,9 @@ class HomeActivity : AppCompatActivity() {
         bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 if (BottomSheetBehavior.STATE_DRAGGING == newState) {
-                    fab_post.animate().scaleX(0F).scaleY(0F).setDuration(100).start();
-                    fab_post.setOnClickListener(null)
+                    fab_post.hide()
                 } else if (BottomSheetBehavior.STATE_COLLAPSED == newState) {
-                    fab_post.animate().scaleX(1F).scaleY(1F).setDuration(100).start();
-                    fab_post.setOnClickListener(View.OnClickListener { fabPostOnClick() })
+                    fab_post.show()
                 }
             }
 
