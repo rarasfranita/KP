@@ -1,4 +1,4 @@
-package com.example.lotus.utils
+package com.example.lotus.ui.home
 
 import android.net.Uri
 import android.view.LayoutInflater
@@ -11,7 +11,6 @@ import coil.transform.CircleCropTransformation
 import com.asura.library.posters.Poster
 import com.asura.library.posters.RawVideo
 import com.asura.library.posters.RemoteImage
-import com.asura.library.posters.RemoteVideo
 import com.asura.library.views.PosterSlider
 import com.example.lotus.R
 import com.example.lotus.models.Post
@@ -21,7 +20,11 @@ import kotlinx.android.synthetic.main.layout_mainfeed_listitem.view.*
 class PostFeedAdapter(private val listPost: ArrayList<Post>) : RecyclerView.Adapter<PostFeedAdapter.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        return Holder(LayoutInflater.from(parent.context).inflate(R.layout.layout_mainfeed_listitem,parent,false))
+        return Holder(
+            LayoutInflater.from(
+                parent.context
+            ).inflate(R.layout.layout_mainfeed_listitem, parent, false)
+        )
     }
 
     override fun getItemCount(): Int = listPost?.size

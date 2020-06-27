@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lotus.R
 import com.example.lotus.models.Post
-import com.example.lotus.utils.PostFeedAdapter
 import kotlin.collections.ArrayList
 
 
