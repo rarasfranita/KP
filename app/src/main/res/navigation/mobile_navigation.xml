@@ -22,8 +22,8 @@
 
     <fragment
         android:id="@+id/navigation_tipitaka"
-        android:name="com.example.lotus.ui.notifications.NotificationsFragment"
-        tools:layout="@layout/fragment_notifications" />
+        android:name="com.example.lotus.ui.tipitaka.TipitakaFragment"
+        tools:layout="@layout/fragment_tipitaka" />
 
 
     <fragment
