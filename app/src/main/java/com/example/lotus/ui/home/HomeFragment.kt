@@ -1,5 +1,6 @@
 package com.example.lotus.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
@@ -13,7 +14,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lotus.R
 import com.example.lotus.models.Post
-import kotlin.collections.ArrayList
+import com.example.lotus.ui.notification.NotificationActivity
+import com.r0adkll.slidr.Slidr
+import com.r0adkll.slidr.model.SlidrConfig
+import com.r0adkll.slidr.model.SlidrInterface
+import com.r0adkll.slidr.model.SlidrPosition
 
 
 class HomeFragment : Fragment() {
@@ -39,8 +44,10 @@ class HomeFragment : Fragment() {
 
         listenAppToolbar(v)
 
+
         return v
     }
+
 
     fun loadFeed(homeFeed: RecyclerView){
         val list = ArrayList<Post>()
@@ -79,7 +86,9 @@ class HomeFragment : Fragment() {
         toolbar.setTitleTextAppearance(context, R.style.My_TextAppearance_Toolbar);
 
         toolbar.setNavigationOnClickListener {
+            startActivity(Intent(context, NotificationActivity::class.java))
         }
+
 
         toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
@@ -93,54 +102,6 @@ class HomeFragment : Fragment() {
                     true
                 }
                 else -> false
-            }
-        }
-    }
-
-    private fun displayPhotos() {
-//        mPaginatedPhotos = new ArrayList<>();
-        if (mPhotos != null) {
-            try {
-
-                //sort for newest to oldest
-//                Collections.sort(mPhotos,
-//                    Comparator<Any> { o1, o2 ->
-//                        o1.
-//                    })
-
-                //we want to load 10 at a time. So if there is more than 10, just load 10 to start
-                var iterations: Int = mPhotos.size
-                if (iterations > 10) {
-                    iterations = 10
-                }
-                //
-                resultsCount = 0
-                for (i in 0 until iterations) {
-                    mPaginatedPhotos?.add(mPhotos.get(i))
-                    resultsCount++
-//                    Log.d(
-//                        HomeFragment.TAG,
-//                        "displayPhotos: adding a photo to paginated list: " + mPhotos.get(i)
-//                            .getPhoto_id()
-//                    )
-                }
-//                adapter = activity?.let {
-//                    MainFeedListAdapter(
-//                        it,
-//                        R.layout.layout_mainfeed_listitem,
-//                        mPaginatedPhotos
-//                    )
-//                }
-            } catch (e: IndexOutOfBoundsException) {
-                Log.e(
-                    TAG,
-                    "displayPhotos: IndexOutOfBoundsException:" + e.message
-                )
-            } catch (e: NullPointerException) {
-                Log.e(
-                    TAG,
-                    "displayPhotos: NullPointerException:" + e.message
-                )
             }
         }
     }

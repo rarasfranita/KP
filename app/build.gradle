@@ -49,14 +49,9 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     //    library
-    implementation 'com.google.android.material:material:1.0.0-beta01'
-    implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
-    implementation 'com.android.support:appcompat-v7:30.0'
     implementation 'com.android.support:design:30.0'
-//    implementation 'de.hdodenhof:circleimageview:2.2.0'
-//    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
-//    implementation 'com.github.eschao:android-ElasticListView:v1.0'
     implementation("io.coil-kt:coil:0.9.1")
-    implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'com.github.mohan-dev1248:PosterSlider:1.0.2'
+    implementation 'com.squareup.picasso:picasso:2.71828' // Load image
+    implementation 'com.github.mohan-dev1248:PosterSlider:1.0.2' // media slider
+    implementation 'com.r0adkll:slidableactivity:2.1.0' // Slider activity
 }

@@ -11,6 +11,7 @@ import coil.transform.CircleCropTransformation
 import com.asura.library.posters.Poster
 import com.asura.library.posters.RawVideo
 import com.asura.library.posters.RemoteImage
+import com.asura.library.posters.RemoteVideo
 import com.asura.library.views.PosterSlider
 import com.example.lotus.R
 import com.example.lotus.models.Post
@@ -41,8 +42,9 @@ class PostFeedAdapter(private val listPost: ArrayList<Post>) : RecyclerView.Adap
                 posterSlider = findViewById(R.id.postSlider) as PosterSlider
                 val posters: MutableList<Poster> = ArrayList()
                 posters.add(RemoteImage(post.postpic))
-                val myUri = Uri.parse("https://www.youtube.com/embed/tgbNymZ7vqY?autoplay=1\"")
-                posters.add(RawVideo(R.raw.img_2073))
+
+                val myUri = Uri.parse("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")
+                posters.add(RemoteVideo(myUri))
                 posterSlider!!.setPosters(posters)
                 loadImageProfilePicturePost(profile_photo, post.propic)
             }
