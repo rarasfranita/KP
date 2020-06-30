@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
@@ -15,10 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.lotus.R
 import com.example.lotus.models.Post
 import com.example.lotus.ui.notification.NotificationActivity
-import com.r0adkll.slidr.Slidr
-import com.r0adkll.slidr.model.SlidrConfig
-import com.r0adkll.slidr.model.SlidrInterface
-import com.r0adkll.slidr.model.SlidrPosition
 
 
 class HomeFragment : Fragment() {
@@ -43,11 +40,15 @@ class HomeFragment : Fragment() {
         loadFeed(homeFeed)
 
         listenAppToolbar(v)
-
-
+        v!!.setOnTouchListener { v, event ->
+            Log.d(TAG, event.toString())
+            if (event.action == MotionEvent.ACTION_MOVE) {
+                Log.d(TAG, event.toString())
+            }
+            true
+        }
         return v
     }
-
 
     fun loadFeed(homeFeed: RecyclerView){
         val list = ArrayList<Post>()

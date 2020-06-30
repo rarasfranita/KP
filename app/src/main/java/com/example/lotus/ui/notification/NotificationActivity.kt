@@ -16,6 +16,8 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.lotus.R
 import com.r0adkll.slidr.Slidr
+import com.r0adkll.slidr.model.SlidrConfig
+import com.r0adkll.slidr.model.SlidrPosition
 
 class NotificationActivity : AppCompatActivity() {
     var TAG = "[Notification Activity]"
@@ -28,12 +30,11 @@ class NotificationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notification)
 
-        Slidr.attach(this)
-
-        createNotification()
+        onSlider()
+        createNotification(com.example.lotus.models.Notification("Your Notification", "This is love only for you"))
     }
 
-    private fun createNotification() {
+    private fun createNotification(data: com.example.lotus.models.Notification) {
         val id = 1
         val fullScreenIntent = Intent(this, NotificationActivity::class.java)
         val fullScreenPendingIntent = PendingIntent.getActivity(this, 0,
@@ -48,11 +49,19 @@ class NotificationActivity : AppCompatActivity() {
             .setColor(getResources().getColor(R.color.colorPrimary))
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setFullScreenIntent(fullScreenPendingIntent, true)
-
+            .build()
 
         with(NotificationManagerCompat.from(this)) {
-            notify(id, builder.build())
+            notify(id, builder)
         }
+
+    }
+
+    fun onSlider(){
+        val config = SlidrConfig.Builder()
+            .position(SlidrPosition.RIGHT)
+
+        Slidr.attach(this, config.build())
     }
 
 }

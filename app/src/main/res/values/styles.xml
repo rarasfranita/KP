@@ -32,5 +32,10 @@
         <item name="android:fontFamily">@font/grand_hotel</item>
         <item name="android:textSize">40sp</item>
     </style>
+    
+    <style name="SlidingActivity">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
 
 </resources>

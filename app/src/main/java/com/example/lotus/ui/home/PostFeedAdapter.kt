@@ -21,11 +21,14 @@ import kotlinx.android.synthetic.main.layout_mainfeed_listitem.view.*
 class PostFeedAdapter(private val listPost: ArrayList<Post>) : RecyclerView.Adapter<PostFeedAdapter.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
+
+
         return Holder(
             LayoutInflater.from(
                 parent.context
             ).inflate(R.layout.layout_mainfeed_listitem, parent, false)
         )
+
     }
 
     override fun getItemCount(): Int = listPost?.size
