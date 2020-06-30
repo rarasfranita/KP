@@ -25,6 +25,11 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="forget_password">Forget Password?</string>
+    <string name="profile_s_name">Profile\'s_name</string>
+    <string name="bio">Biography</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="postingan">Post</string>
+
 
     <!-- Text Home-->
 
