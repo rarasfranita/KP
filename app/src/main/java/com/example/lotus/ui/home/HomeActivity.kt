@@ -11,6 +11,7 @@ import androidx.navigation.findNavController
 import com.example.lotus.R
 import com.example.lotus.ui.login.LoginActivity
 import com.example.lotus.ui.notification.NotificationActivity
+import com.example.lotus.ui.CreatePost
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
@@ -43,8 +44,8 @@ class HomeActivity : AppCompatActivity() {
 
     private fun fabPostOnClick() {
         Log.d(TAG, "FabPostOnclick")
-//        val intent = Intent(this, ::class.java)
-//        startActivity(intent)
+        val intent = Intent(this, CreatePost::class.java)
+        startActivity(intent)
     }
 
     override fun onTouchEvent(touchEvent:MotionEvent):Boolean {

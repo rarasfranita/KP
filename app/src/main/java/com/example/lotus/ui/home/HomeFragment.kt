@@ -17,7 +17,6 @@ import com.example.lotus.R
 import com.example.lotus.models.Post
 import com.example.lotus.ui.notification.NotificationActivity
 
-
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
@@ -83,7 +82,6 @@ class HomeFragment : Fragment() {
 
     private fun listenAppToolbar(v: View){
         val toolbar: Toolbar = v.findViewById(R.id.appToolbar) as Toolbar
-        toolbar.setTitle("Lotus");
         toolbar.setTitleTextAppearance(context, R.style.My_TextAppearance_Toolbar);
 
         toolbar.setNavigationOnClickListener {
