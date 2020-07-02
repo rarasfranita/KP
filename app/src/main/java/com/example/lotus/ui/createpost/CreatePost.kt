@@ -72,7 +72,7 @@ class CreatePost : AppCompatActivity() {
     }
 
     fun recordVideo(view: View) {
-        dismisDialog(view)
+        dismissDialog(view)
         Intent(MediaStore.ACTION_VIDEO_CAPTURE)
             .putExtra(MediaStore.EXTRA_DURATION_LIMIT, 60)
             .also { takeVideoIntent ->
@@ -83,7 +83,7 @@ class CreatePost : AppCompatActivity() {
     }
 
     fun selectVideo(view: View) {
-        dismisDialog(view)
+        dismissDialog(view)
          Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
             .putExtra(MediaStore.EXTRA_DURATION_LIMIT, 60)
             .also { takeVideoIntent ->
@@ -123,8 +123,15 @@ class CreatePost : AppCompatActivity() {
         Log.d(TAG, "lenght ${mediaPostDatas.size}")
     }
 
-    fun dismisDialog(view: View) {
+    fun dismissDialog(view: View) {
         alertDialog.dismiss()
+    }
+
+    fun sendPost(view: View) {
+        val caption = view.findViewById<View>(R.id.eTextCaption)
+        if (mediaPostDatas.size <= 0 && caption == null){
+            Toast.makeText(this, R.string.alertNoDataPost, Toast.LENGTH_SHORT).show()
+        }
     }
 
 }

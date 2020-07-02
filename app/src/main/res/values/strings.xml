@@ -30,6 +30,7 @@
     <string name="uploadPhoto">Upload Photo</string>
     <string name="btnUploadVideo">Upload Video</string>
     <string name="cancel">Cancel</string>
+    <string name="alertNoDataPost">You haven\'t add any story or media.</string>
 
     <!-- Text Home-->
 

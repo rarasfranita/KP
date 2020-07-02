@@ -65,7 +65,7 @@
             android:textSize="15dp"
             android:paddingTop="30dp"
             android:gravity="end"
-            android:onClick="dismisDialog"
+            android:onClick="dismissDialog"
             android:textColor="@color/colorPrimary"></TextView>
     </LinearLayout>
 
