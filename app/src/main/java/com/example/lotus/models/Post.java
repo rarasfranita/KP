@@ -1,7 +1,5 @@
 package com.example.lotus.models;
 
-import android.widget.ImageView;
-
 public class Post {
     int id;
     String name, time, caption, likes, comments, postpic;

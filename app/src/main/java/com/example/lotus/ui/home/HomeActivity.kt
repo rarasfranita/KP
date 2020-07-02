@@ -1,5 +1,6 @@
 package com.example.lotus.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -7,6 +8,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.example.lotus.R
+import com.example.lotus.ui.CreatePost
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
@@ -32,8 +34,8 @@ class HomeActivity : AppCompatActivity() {
 
     private fun fabPostOnClick() {
         Log.d(TAG, "FabPostOnclick")
-//        val intent = Intent(this, ::class.java)
-//        startActivity(intent)
+        val intent = Intent(this, CreatePost::class.java)
+        startActivity(intent)
     }
 
     private fun navigationMenuLogic(){
