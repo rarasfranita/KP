@@ -25,6 +25,11 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="forget_password">Forget Password?</string>
+    <string name="create_post">Create Post</string>
+    <string name="appName">Lotus</string>
+    <string name="uploadPhoto">Upload Photo</string>
+    <string name="btnUploadVideo">Upload Video</string>
+    <string name="cancel">Cancel</string>
 
     <!-- Text Home-->
 

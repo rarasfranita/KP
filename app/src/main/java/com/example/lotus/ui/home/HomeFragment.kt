@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lotus.R
 import com.example.lotus.models.Post
-import kotlin.collections.ArrayList
 
 
 class HomeFragment : Fragment() {
@@ -75,7 +74,6 @@ class HomeFragment : Fragment() {
 
     private fun listenAppToolbar(v: View){
         val toolbar: Toolbar = v.findViewById(R.id.appToolbar) as Toolbar
-        toolbar.setTitle("Lotus");
         toolbar.setTitleTextAppearance(context, R.style.My_TextAppearance_Toolbar);
 
         toolbar.setNavigationOnClickListener {
