@@ -2,18 +2,20 @@ package com.example.lotus.models;
 
 public class Post {
     int id;
-    String name, time, caption, likes, comments, postpic;
-    String propic;
+    String name, time, caption, likes, comments, profPic;
+    String hashtag[];
+    MediaData media[];
 
-    public Post(int id, String name, String time, String caption, String likes, String comments, String postpic, String propic) {
+    public Post(int id, String name, String time, String caption, String likes, String comments, String profPic, String[] hashtag, MediaData[] media) {
         this.id = id;
         this.name = name;
         this.time = time;
         this.caption = caption;
         this.likes = likes;
         this.comments = comments;
-        this.postpic = postpic;
-        this.propic = propic;
+        this.profPic = profPic;
+        this.hashtag = hashtag;
+        this.media = media;
     }
 
     public int getId() {
@@ -64,19 +66,27 @@ public class Post {
         this.comments = comments;
     }
 
-    public String getPostpic() {
-        return postpic;
+    public String getProfPic() {
+        return profPic;
     }
 
-    public void setPostpic(String postpic) {
-        this.postpic = postpic;
+    public void setProfPic(String profPic) {
+        this.profPic = profPic;
     }
 
-    public String getPropic() {
-        return propic;
+    public String[] getHashtag() {
+        return hashtag;
     }
 
-    public void setPropic(String propic) {
-        this.propic = propic;
+    public void setHashtag(String[] hashtag) {
+        this.hashtag = hashtag;
+    }
+
+    public MediaData[] getMedia() {
+        return media;
+    }
+
+    public void setMedia(MediaData[] media) {
+        this.media = media;
     }
 }

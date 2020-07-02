@@ -6,18 +6,22 @@ import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.findNavController
 import com.example.lotus.R
 import com.example.lotus.ui.CreatePost
+import com.example.lotus.ui.detailpost.DetailPost
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.bottom_sheet.*
+import kotlinx.android.synthetic.main.fragment_home.*
 
 
 class HomeActivity : AppCompatActivity() {
     private val TAG = "HomeActivity"
-
+    private var manager: FragmentManager? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         try {
@@ -30,6 +34,8 @@ class HomeActivity : AppCompatActivity() {
 
         fabPost.setOnClickListener(View.OnClickListener { fabPostOnClick() })
         navigationMenuLogic()
+
+        manager = getSupportFragmentManager()
     }
 
     private fun fabPostOnClick() {
@@ -118,6 +124,15 @@ class HomeActivity : AppCompatActivity() {
         Log.d("home",
             btmNav.getMenu().findItem(R.id.navigation_home).isCheckable().toString()
         )
+    }
+
+    fun detailPost(view: View ) {
+        appBarLayout?.setVisibility(View.INVISIBLE)
+        bottom_sheet?.setVisibility(View.INVISIBLE)
+        fab_post?.setVisibility(View.INVISIBLE)
+        manager?.beginTransaction()
+            ?.replace(R.id.fragmentHome, DetailPost())?.commit()
+
     }
 
 }

@@ -59,7 +59,8 @@ class HomeFragment : Fragment() {
                     "Gatau",
                     listFeed.get(i),
                     urlPost,
-                    "https://storage.googleapis.com/fastwork-static/983f21e5-6a7b-44d4-ba88-bb90fdc1daac.jpg"
+                    null,
+                    null
                 )
             )
 

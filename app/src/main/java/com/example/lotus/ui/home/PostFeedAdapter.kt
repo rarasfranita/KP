@@ -40,11 +40,11 @@ class PostFeedAdapter(private val listPost: ArrayList<Post>) : RecyclerView.Adap
                 username.text = post.name
                 posterSlider = findViewById(R.id.postSlider) as PosterSlider
                 val posters: MutableList<Poster> = ArrayList()
-                posters.add(RemoteImage(post.postpic))
+                posters.add(RemoteImage("https://storage.googleapis.com/fastwork-static/983f21e5-6a7b-44d4-ba88-bb90fdc1daac.jpg"))
                 val myUri = Uri.parse("https://www.youtube.com/embed/tgbNymZ7vqY?autoplay=1\"")
                 posters.add(RawVideo(R.raw.img_2073))
                 posterSlider!!.setPosters(posters)
-                loadImageProfilePicturePost(profile_photo, post.propic)
+                loadImageProfilePicturePost(profile_photo, post.profPic)
             }
         }
 

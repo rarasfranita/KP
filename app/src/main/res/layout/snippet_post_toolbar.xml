@@ -33,7 +33,7 @@
                 android:textSize="20sp"
                 android:layout_toRightOf="@+id/backArrow"
                 android:layout_marginLeft="30dp"
-                android:text="Photo"
+                android:text="@string/post"
                 android:textColor="@android:color/black"
                 android:id="@+id/tvBackLabel"/>
 
