@@ -77,7 +77,6 @@ class HomeFragment : Fragment() {
 
     private fun listenAppToolbar(v: View){
         val toolbar: Toolbar = v.findViewById(R.id.appToolbar) as Toolbar
-        toolbar.setTitle("Lotus");
         toolbar.setTitleTextAppearance(context, R.style.My_TextAppearance_Toolbar);
 
         toolbar.setNavigationOnClickListener {

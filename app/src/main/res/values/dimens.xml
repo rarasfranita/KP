@@ -1,8 +1,9 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <dimen name="fab_margin">16dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+<<<<<<< HEAD
     <!--
     Because the window insets on round devices are larger than 15dp, this padding only applies
     to square screens.
@@ -15,4 +16,7 @@
     inner_frame_layout_padding (below variable) on round screens.
     -->
     <dimen name="inner_frame_layout_padding">5dp</dimen>
+=======
+    <dimen name="design_navigation_icon_size" tools:override="true">40dp</dimen>
+>>>>>>> c0d4dae82f97a2e09311e92a88e5cd02c3ada8f4
 </resources>

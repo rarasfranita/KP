@@ -25,6 +25,7 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="forget_password">Forget Password?</string>
+<<<<<<< HEAD
     <string name="title_activity_direct_message">DirectMessage</string>
     <!--
     This string is used for square devices and overridden by hello_world in
@@ -35,6 +36,13 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_main">MainActivity</string>
+=======
+    <string name="create_post">Create Post</string>
+    <string name="appName">Lotus</string>
+    <string name="uploadPhoto">Upload Photo</string>
+    <string name="btnUploadVideo">Upload Video</string>
+    <string name="cancel">Cancel</string>
+>>>>>>> c0d4dae82f97a2e09311e92a88e5cd02c3ada8f4
 
     <!-- Text Home-->
 

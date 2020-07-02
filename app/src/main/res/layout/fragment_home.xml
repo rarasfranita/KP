@@ -20,7 +20,7 @@
             app:elevation="10dp"
             app:menu="@menu/top_app_bar_home"
             app:navigationIcon="@drawable/ic_notification"
-            app:title="Lotus"
+            app:title="@string/appName"
             />
 
     </com.google.android.material.appbar.AppBarLayout>
