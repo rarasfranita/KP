@@ -5,6 +5,9 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.0"
+    dataBinding {
+        enabled = true
+    }
 
     defaultConfig {
         applicationId "com.example.lotus"
@@ -44,6 +47,8 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.2.2'
     implementation 'androidx.navigation:navigation-ui-ktx:2.2.2'
     implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'androidx.wear:wear:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -53,10 +58,11 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
     implementation 'com.android.support:appcompat-v7:30.0'
     implementation 'com.android.support:design:30.0'
-//    implementation 'de.hdodenhof:circleimageview:2.2.0'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
 //    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 //    implementation 'com.github.eschao:android-ElasticListView:v1.0'
     implementation("io.coil-kt:coil:0.9.1")
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.github.mohan-dev1248:PosterSlider:1.0.2'
+    compileOnly 'com.google.android.wearable:wearable:2.5.0'
 }

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:src="@drawable/ic_profile">
+    </de.hdodenhof.circleimageview.CircleImageView>
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@+id/profile_image"
+        android:text="Username"
+        android:fontFamily="@font/lato"
+        android:textColor="@color/black"
+        android:textSize="14sp">
+    </TextView>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/image_new_message"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_below="@+id/username"
+        android:layout_marginStart="223dp"
+        android:layout_marginLeft="-16dp"
+        android:layout_marginTop="-7dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="12dp"
+        android:layout_toEndOf="@+id/username"
+        android:src="@drawable/ic_profile"
+        app:civ_border_color="#F79543"
+        app:civ_border_width="12dp">
+    </de.hdodenhof.circleimageview.CircleImageView>
+
+    <TextView
+        android:id="@+id/message_last"
+        android:layout_below="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/profile_image"
+        android:textSize="14sp"
+        android:fontFamily="@font/lato"
+        android:layout_marginLeft="10dp"
+        android:padding="6dp"
+        android:maxLines="1"
+        android:text="@string/create_message">
+    </TextView>
+
+</RelativeLayout>

@@ -1,5 +1,6 @@
 package com.example.lotus.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lotus.R
 import com.example.lotus.models.Post
+import com.example.lotus.ui.direct_message.MainDMActivity
 import kotlin.collections.ArrayList
 
 
@@ -81,19 +83,12 @@ class HomeFragment : Fragment() {
         toolbar.setNavigationOnClickListener {
         }
 
-        toolbar.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.explore -> {
-                    true
-                }
-                R.id.direct_message -> {
-                    true
-                }
-                R.id.profile -> {
-                    true
-                }
-                else -> false
+        toolbar.setOnMenuItemClickListener(){
+            when (it.itemId){
+                R.id.direct_message ->
+                    toolbar.context.startActivity(Intent(context, MainDMActivity::class.java))
             }
+            true
         }
     }
 
