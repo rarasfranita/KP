@@ -1,4 +1,155 @@
-package com.example.lotus.ui.detailpost
+package matrixsystems.nestedexpandablerecyclerview
 
-class CommentAdapter {
+import android.content.Context
+import android.text.Html
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.example.lotus.R
+import com.example.lotus.models.CommentRowModel
+import kotlinx.android.synthetic.main.comment_parent.view.*
+
+class RowAdapter (val context: Context, var commentRowModels: MutableList<CommentRowModel>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private var actionLock = false
+
+    class CommentParentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        internal var textComment: TextView
+        internal var like: TextView
+        internal var time: TextView
+        internal var avatar: ImageView
+
+        init {
+            this.textComment = itemView.findViewById(R.id.textCommentParent) as TextView
+            this.like = itemView.findViewById(R.id.textLikeComentParent) as TextView
+            this.time = itemView.findViewById(R.id.textTimeCommentParent) as TextView
+            this.avatar = itemView.findViewById(R.id.imageAvatarCommentParent) as ImageView
+        }
+    }
+
+    class CommentChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        internal var textComment: TextView
+        internal var like: TextView
+        internal var time: TextView
+        internal var avatar: ImageView
+
+        init {
+            this.textComment = itemView.findViewById(R.id.textCommentChild) as TextView
+            this.like = itemView.findViewById(R.id.textLikeComentChild) as TextView
+            this.time = itemView.findViewById(R.id.textTimeCommentChild) as TextView
+            this.avatar = itemView.findViewById(R.id.imageAvatarCommentChild) as ImageView
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        val type = commentRowModels[position].type
+        return type
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val viewHolder: RecyclerView.ViewHolder = when (viewType) {
+            CommentRowModel.PARENT -> CommentParentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_parent, parent, false))
+            CommentRowModel.CHILD -> CommentChildViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_child, parent, false))
+            else -> CommentParentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_parent, parent, false))
+        }
+        return viewHolder
+    }
+
+
+    override fun onBindViewHolder(p0: RecyclerView.ViewHolder, p1: Int) {
+        val row = commentRowModels[p1]
+
+        when(row.type){
+            CommentRowModel.PARENT -> {
+                (p0 as CommentParentViewHolder).textComment.setText(Html.fromHtml("<b>" + row.parent.username +"</b> " + row.parent.comment))
+                p0.like.setText(row.parent.like)
+                p0.time.setText(row.parent.time)
+                if(row.parent.childComment == null || row.parent.childComment!!.size == 0) {
+                    p0.itemView.textShowReplayComment.visibility = View.GONE
+                }
+                else {
+                    if(p0.itemView.textShowReplayComment.visibility == View.GONE){
+                        p0.itemView.textShowReplayComment.visibility = View.VISIBLE
+                    }
+
+                    if (row.isExpanded) {
+                        p0.itemView.textShowReplayComment.text = "Show less"
+                    }else{
+                        p0.itemView.textShowReplayComment.text = "Load more replies"
+                    }
+
+                    p0.itemView.textShowReplayComment.setOnClickListener {
+                        if (!actionLock) {
+                            actionLock = true
+                            if (row.isExpanded) {
+                                row.isExpanded = false
+                                collapse(p1)
+                            } else {
+                                row.isExpanded = true
+                                expand(p1)
+                            }
+                        }
+                    }
+                }
+            }
+            CommentRowModel.CHILD -> {
+                (p0 as CommentChildViewHolder).textComment.setText(Html.fromHtml("<b>" + row.child.username +"</b> " + row.child.comment))
+                p0.like.setText(row.child.like)
+                p0.time.setText(row.child.time)
+            }
+        }
+    }
+
+
+    fun expand(position: Int) {
+        var nextPosition = position
+        val row = commentRowModels[position]
+
+        when (row.type) {
+            CommentRowModel.PARENT -> {
+                for (state in row.parent.childComment!!) {
+                    commentRowModels.add(++nextPosition, CommentRowModel(CommentRowModel.CHILD, state))
+                }
+                notifyDataSetChanged()
+            }
+        }
+        actionLock = false
+    }
+
+    fun collapse(position: Int) {
+        Log.d("Cek collapse", position.toString())
+        val row = commentRowModels[position]
+        val nextPosition = position + 1
+
+        when (row.type) {
+
+            CommentRowModel.PARENT -> {
+                outerloop@ while (true) {
+                    if (nextPosition == commentRowModels.size || commentRowModels.get(nextPosition).type === CommentRowModel.PARENT) {
+                        break@outerloop
+                    }
+                    commentRowModels.removeAt(nextPosition)
+                }
+                notifyDataSetChanged()
+            }
+
+            CommentRowModel.CHILD -> {
+                outerloop@ while (true) {
+                    if (nextPosition == commentRowModels.size || commentRowModels.get(nextPosition).type === CommentRowModel.PARENT || commentRowModels.get(nextPosition).type === CommentRowModel.CHILD
+                    ) {
+                        break@outerloop
+                    }
+                    commentRowModels.removeAt(nextPosition)
+                }
+                notifyDataSetChanged()
+            }
+        }
+        actionLock = false
+    }
+
+    override fun getItemCount() = commentRowModels.size
+
 }

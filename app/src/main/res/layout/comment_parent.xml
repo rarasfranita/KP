@@ -42,6 +42,7 @@
             android:layout_height="wrap_content"
             android:text="4 likes"
             android:textSize="10dp"
+            android:textStyle="bold"
             android:id="@+id/textLikeComentParent"
             android:paddingLeft="10dp"
             android:layout_toRightOf="@+id/textTimeCommentParent"/>
@@ -51,8 +52,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/replyCommentParent"
             android:layout_toRightOf="@+id/textLikeComentParent"
-            android:text="@string/replay"
+            android:text="@string/reply"
             android:textSize="10dp"
+            android:textStyle="bold"
             android:paddingLeft="10dp"/>
     </RelativeLayout>
 

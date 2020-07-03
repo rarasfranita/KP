@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingLeft="20dp"
-    android:paddingTop="20dp">
+    android:paddingTop="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,6 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="4 likes"
+            android:textStyle="bold"
             android:textSize="10dp"
             android:id="@+id/textLikeComentChild"
             android:paddingLeft="10dp"
@@ -51,7 +52,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/replyCommentChild"
             android:layout_toRightOf="@+id/textLikeComentChild"
-            android:text="@string/replay"
+            android:text="@string/reply"
+            android:textStyle="bold"
             android:textSize="10dp"
             android:paddingLeft="10dp"/>
     </RelativeLayout>

@@ -2,6 +2,7 @@ package com.example.lotus.ui.detailpost
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lotus.R
 import com.example.lotus.models.*
+import kotlinx.android.synthetic.main.layout_detail_post.view.*
 import matrixsystems.nestedexpandablerecyclerview.RowAdapter
 
 private const val ARG_PARAM1 = "param1"
@@ -43,22 +45,10 @@ class DetailPost : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val v = inflater.inflate(R.layout.fragment_detail_post, container, false)
+
         setView(v)
-
-        recyclerView = v.findViewById(R.id.recycler_view)
-        rows = mutableListOf()
-        val context: Context = this.requireContext()
-        rowAdapter = RowAdapter(context, rows)
-
-        recyclerView.layoutManager = LinearLayoutManager(
-            context,
-            RecyclerView.VERTICAL,
-            false
-        )
-
-        recyclerView.adapter = rowAdapter
-
-        populateData()
+        initRecyclerView(v)
+        sendComment(v)
         return v
     }
 
@@ -77,15 +67,29 @@ class DetailPost : Fragment() {
         time.text = postData.time
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            DetailPost().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    fun initRecyclerView(v: View){
+        recyclerView = v.findViewById(R.id.recycler_view)
+        rows = mutableListOf()
+        val context: Context = this.requireContext()
+        rowAdapter = RowAdapter(context, rows)
+
+        recyclerView.layoutManager = LinearLayoutManager(
+            context,
+            RecyclerView.VERTICAL,
+            false
+        )
+
+        recyclerView.adapter = rowAdapter
+
+        populateData()
+    }
+
+    fun sendComment(v: View){
+        val btnSend = v.findViewById<View>(R.id.imageSendComment)
+        val s = v.inputComment.text
+        btnSend.setOnClickListener{
+            Log.d("Comment: ", s.toString())
+        }
     }
 
     fun populateData(){

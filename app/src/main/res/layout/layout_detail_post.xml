@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="10dp"
     android:background="@color/white">
 
-   <androidx.core.widget.NestedScrollView
+   <ScrollView
        android:layout_width="match_parent"
-       android:layout_height="match_parent">
+       android:layout_height="match_parent"
+       android:id="@+id/scrollViewPost"
+       android:paddingBottom="40dp">
       <RelativeLayout
           android:layout_width="match_parent"
           android:layout_height="match_parent"
@@ -38,8 +39,6 @@
                 android:layout_toRightOf="@+id/imageAvatarPost"
                 android:text="Lotus Check"
                 android:textColor="@android:color/black" />
-
-
             <ImageView
                 android:id="@+id/ivEllipsesPost"
                 android:layout_width="30dp"
@@ -196,11 +195,45 @@
          </RelativeLayout>
 
       </RelativeLayout>
-   </androidx.core.widget.NestedScrollView>
+   </ScrollView>
 
+   <LinearLayout android:id="@+id/footerCreateComment"
+       android:layout_alignParentBottom="true"
+       android:layout_height="wrap_content"
+       android:layout_width="fill_parent"
+       android:background="@color/white"
+       android:orientation="horizontal"
+       android:paddingLeft="20dp"
+       android:paddingRight="20dp"
+       android:paddingTop="5dp"
+       android:paddingBottom="5dp">
+      <ImageView
+          android:layout_width="30dp"
+          android:layout_height="match_parent"
+          android:src="@drawable/ic_profile"/>
 
+      <EditText
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:id="@+id/inputComment"
+          android:hint="Add your comment"
+          android:background="@null"
+          android:paddingLeft="10dp"
+          android:textColor="@color/black76"
+          android:gravity="center_vertical"
+          android:textSize="12dp"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+      <ImageView
+          android:layout_width="match_parent"
+          android:layout_height="30dp"
+          android:layout_marginLeft="-40dp"
+          android:src="@drawable/ic_send"
+          android:layout_gravity="center_vertical"
+          android:id="@+id/imageSendComment"
+         />
+   </LinearLayout>
+
+</RelativeLayout>
 
 
 
