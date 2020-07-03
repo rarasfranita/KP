@@ -132,7 +132,14 @@ class HomeActivity : AppCompatActivity() {
         fab_post?.setVisibility(View.INVISIBLE)
         manager?.beginTransaction()
             ?.replace(R.id.fragmentHome, DetailPost())?.commit()
+    }
 
+    fun backToHome(view: View) {
+        appBarLayout?.setVisibility(View.VISIBLE)
+        bottom_sheet?.setVisibility(View.VISIBLE)
+        fab_post?.setVisibility(View.VISIBLE)
+        manager?.beginTransaction()
+            ?.replace(R.id.fragmentHome, HomeFragment())?.commit()
     }
 
 }

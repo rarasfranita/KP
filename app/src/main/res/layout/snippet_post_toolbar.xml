@@ -23,7 +23,8 @@
                 android:layout_centerVertical="true"
                 android:id="@+id/backArrow"
                 android:src="@drawable/ic_backarrow"
-                android:tint="@android:color/black"/>
+                android:tint="@android:color/black"
+                android:onClick="backToHome"/>
 
 
             <TextView
