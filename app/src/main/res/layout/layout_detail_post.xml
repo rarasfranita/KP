@@ -9,7 +9,7 @@
        android:layout_width="match_parent"
        android:layout_height="match_parent"
        android:id="@+id/scrollViewPost"
-       android:paddingBottom="40dp">
+       android:paddingBottom="50dp">
       <RelativeLayout
           android:layout_width="match_parent"
           android:layout_height="match_parent"
@@ -28,6 +28,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
+                android:background="@drawable/ic_profile"
                 android:scaleType="centerCrop"/>
 
             <TextView
@@ -37,8 +38,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/imageAvatarPost"
-                android:text="Lotus Check"
-                android:textColor="@android:color/black" />
+                android:text="Lotus Check"/>
             <ImageView
                 android:id="@+id/ivEllipsesPost"
                 android:layout_width="30dp"
@@ -50,39 +50,83 @@
 
          </RelativeLayout>
 
-         <com.example.lotus.utils.DynamicSquareLayout
-             android:layout_height="wrap_content"
+         <RelativeLayout
              android:layout_width="match_parent"
-             android:id="@+id/mediaWrap"
+             android:layout_height="wrap_content"
              android:layout_below="@id/relLayout1"
+             android:id="@+id/relLayoutPost"
              android:paddingLeft="10dp"
-             android:paddingRight="10dp">
+             android:paddingRight="10dp"
+             >
+            <com.example.lotus.utils.DynamicSquareLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:id="@+id/mediaWrap"
+               >
+               <com.google.android.material.card.MaterialCardView
+                   android:id="@+id/cardPostMedia"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   app:cardCornerRadius="10pt"
+                   app:cardElevation="3dp"
+                   app:cardUseCompatPadding="true"
+                   android:layout_centerHorizontal="true">
+
+                  <com.asura.library.views.PosterSlider
+                      android:id="@+id/mediaPost"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:background="@color/colorAccent"
+                      android:scaleType="centerCrop"
+                      app:defaultIndicator="circle"/>
+
+               </com.google.android.material.card.MaterialCardView>
+            </com.example.lotus.utils.DynamicSquareLayout>
+
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card1"
+                android:id="@+id/cardPostText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:cardCornerRadius="10pt"
                 app:cardElevation="3dp"
                 app:cardUseCompatPadding="true"
-                app:cardBackgroundColor="@color/colorAccent"
                 android:layout_centerHorizontal="true">
 
-               <com.asura.library.views.PosterSlider
-                   android:id="@+id/mediaPost"
+               <LinearLayout
                    android:layout_width="match_parent"
                    android:layout_height="match_parent"
-                   android:background="@color/colorAccent"
-                   android:scaleType="centerCrop"
-                   app:defaultIndicator="circle"/>
+                  android:orientation="vertical">
+                  <TextView
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:text="Hello world"
+                      android:id="@+id/textStatusDetail"
+                      android:paddingTop="20dp"
+                      android:paddingLeft="20dp"
+                      android:paddingRight="20dp"
+                      android:background="@color/white"/>
+
+                  <TextView
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_below="@+id/textStatusDetail"
+                      android:textColor="@color/colorPrimary"
+                      android:id="@+id/textHashtagPost"
+                      android:paddingBottom="20dp"
+                      android:paddingLeft="20dp"
+                      android:paddingRight="20dp"/>
+               </LinearLayout>
+
+
+
             </com.google.android.material.card.MaterialCardView>
-         </com.example.lotus.utils.DynamicSquareLayout>
 
-
+         </RelativeLayout>
          <LinearLayout
              android:id="@+id/relLayout2"
              android:layout_width="match_parent"
              android:layout_height="50dp"
-             android:layout_below="@+id/mediaWrap"
+             android:layout_below="@+id/relLayoutPost"
              android:background="@android:color/white">
 
             <RelativeLayout
@@ -90,19 +134,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="20dp">
+
                <ImageView
-                   android:id="@+id/icLikeWhitePost"
-                   android:layout_width="wrap_content"
+                   android:id="@+id/icLikeTrue"
+                   android:layout_width="25dp"
                    android:layout_height="50dp"
-                   android:src="@drawable/ic_like_inactive"/>
+                   android:src="@drawable/ic_like_true"
+                   android:visibility="gone"/>
+
+               <ImageView
+                   android:id="@+id/icLikeFalse"
+                   android:layout_width="25dp"
+                   android:layout_height="50dp"
+                   android:src="@drawable/ic_like_false"/>
 
                <TextView
                    android:layout_width="wrap_content"
                    android:layout_height="50dp"
                    android:id="@+id/textIctLikesPost"
                    android:text="1.245"
-                   android:gravity="center_vertical"
-                   android:layout_toRightOf="@+id/icLikeWhitePost"/>
+                   android:paddingLeft="30dp"
+                   android:gravity="center_vertical"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -116,9 +168,7 @@
                    android:layout_width="25dp"
                    android:layout_height="50dp"
                    android:layout_centerVertical="true"
-                   android:src="@drawable/ic_direct_message"
-                   android:foregroundGravity=""
-                   android:visibility="visible" />
+                   android:src="@drawable/ic_comment" />
 
                <TextView
                    android:layout_width="wrap_content"
@@ -167,22 +217,31 @@
                 android:textColor="@color/black76" />
 
             <TextView
-                android:id="@+id/textTimePost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textCaption"
-                android:layout_marginTop="10dp"
-                android:textSize="10dp"
-                android:text="3 Days ago"
-                android:textColor="@android:color/darker_gray" />
+               android:layout_below="@+id/textCaption"
+               android:textColor="@color/colorPrimary"
+               android:id="@+id/textHashtag"/>
+
 
          </RelativeLayout>
+
+         <TextView
+             android:id="@+id/textTimePost"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_below="@+id/relLayout3"
+             android:layout_marginBottom="10dp"
+             android:layout_marginLeft="20dp"
+             android:textSize="10dp"
+             android:text="3 Days ago"
+             android:textColor="@android:color/darker_gray" />
 
          <RelativeLayout
              android:id="@+id/relLayout4"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             android:layout_below="@+id/relLayout3"
+             android:layout_below="@+id/textTimePost"
              android:background="@android:color/white"
              android:paddingRight="20dp"
              android:paddingLeft="20dp">
@@ -214,14 +273,14 @@
 
       <EditText
           android:layout_width="match_parent"
-          android:layout_height="match_parent"
+          android:layout_height="40dp"
           android:id="@+id/inputComment"
           android:hint="Add your comment"
           android:background="@null"
           android:paddingLeft="10dp"
           android:textColor="@color/black76"
           android:gravity="center_vertical"
-          android:textSize="12dp"/>
+          />
 
       <ImageView
           android:layout_width="match_parent"
