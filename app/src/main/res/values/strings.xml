@@ -42,6 +42,7 @@
     <string name="cancel">Cancel</string>
     <string name="title_activity_main_d_m">MainActivityDM</string>
     <string name="messages">Messages</string>
+    <string name="alertNoDataPost">You haven\'t add any story or media.</string>
 
     <!-- Text Home-->
 
