@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_dm"
+    app:startDestination="@id/listMessages">
+
+
+    <fragment
+        android:id="@+id/listMessages"
+        android:name="com.example.lotus.ui.DM.ListMessages"
+        android:label="ListMessages"
+        tools:layout="@layout/fragment_list_messages">
+        <action
+            android:id="@+id/action_listMessages_to_newMessageFragment"
+            app:destination="@id/newMessageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newMessageFragment"
+        android:name="com.example.lotus.ui.DM.NewMessageFragment"
+        android:label="fragment_new_message"
+        tools:layout="@layout/fragment_new_message" >
+        <action
+            android:id="@+id/action_newMessageFragment_to_listMessages"
+            app:destination="@id/listMessages" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.example.lotus.ui.DM.ChannelFragment"
+        android:label="ChatFragment"
+        tools:layout="@layout/fragment_channel">
+        <action
+            android:id="@+id/action_chatFragment_to_newMessageFragment"
+            app:destination="@id/newMessageFragment" />
+        <action
+            android:id="@+id/action_chatFragment_to_nav_channel"
+            app:destination="@id/nav_channel" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_channel"
+        android:name="com.example.whatsappclone.ui.channel.ChannelFragment"
+        android:label="fragment_channel"
+        tools:layout="@layout/fragment_channel" >
+        <argument
+            android:name="channel_type"
+            app:argType="string" />
+        <argument
+            android:name="channel_id"
+            app:argType="string" />
+    </fragment>
+</navigation>

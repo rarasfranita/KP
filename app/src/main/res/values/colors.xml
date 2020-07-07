@@ -11,4 +11,8 @@
     <color name="creme">#FCDECE</color>
     <color name="black">#000000</color>
     <color name="black76">#333333</color>
+
+    <color name="message_yours">#EAEAEA</color>
+    <color name="message_theirs">#FFFFFF</color>
+
 </resources>

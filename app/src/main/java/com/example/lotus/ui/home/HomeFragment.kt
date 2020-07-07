@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lotus.R
 import com.example.lotus.models.Post
-import com.example.lotus.ui.direct_message.MainDMActivity
+import com.example.lotus.ui.DM.MainActivityDM
 import kotlin.collections.ArrayList
 
 
@@ -77,7 +77,7 @@ class HomeFragment : Fragment() {
 
     private fun listenAppToolbar(v: View){
         val toolbar: Toolbar = v.findViewById(R.id.appToolbar) as Toolbar
-        toolbar.setTitleTextAppearance(context, R.style.My_TextAppearance_Toolbar);
+        toolbar.setTitleTextAppearance(context, R.style.My_TextAppearance_Toolbar)
 
         toolbar.setNavigationOnClickListener {
         }
@@ -85,7 +85,7 @@ class HomeFragment : Fragment() {
         toolbar.setOnMenuItemClickListener(){
             when (it.itemId){
                 R.id.direct_message ->
-                    toolbar.context.startActivity(Intent(context, MainDMActivity::class.java))
+                    toolbar.context.startActivity(Intent(context, MainActivityDM::class.java))
             }
             true
         }
