@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="20dp"
+    android:paddingTop="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/layout1">
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/imageAvatarCommentChild"
+            android:src="@drawable/ic_profile"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:paddingRight="20dp"
+            android:text="ini komentar pedas netijen"
+            android:id="@+id/textCommentChild" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout1"
+        android:paddingLeft="30dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4 Minutes"
+            android:textSize="10dp"
+            android:id="@+id/textTimeCommentChild"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4 likes"
+            android:textStyle="bold"
+            android:textSize="10dp"
+            android:id="@+id/textLikeComentChild"
+            android:paddingLeft="10dp"
+            android:layout_toRightOf="@+id/textTimeCommentChild"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/replyCommentChild"
+            android:layout_toRightOf="@+id/textLikeComentChild"
+            android:text="@string/reply"
+            android:textStyle="bold"
+            android:textSize="10dp"
+            android:paddingLeft="10dp"/>
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

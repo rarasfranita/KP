@@ -47,8 +47,8 @@
         android:orientation="horizontal"
         android:padding="10dp">
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_marginLeft="5dp"
             android:src="@drawable/ic_profile"></ImageView>
 
@@ -60,7 +60,7 @@
             android:gravity="top|left"
             android:background="@null"
             android:maxLength="400"
-            android:hint="Tell the story about goodness..." />
+            android:hint="@string/hint_caption" />
     </LinearLayout>
 
 
