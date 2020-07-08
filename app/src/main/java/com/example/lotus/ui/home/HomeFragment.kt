@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lotus.R
 import com.example.lotus.models.Post
-import com.example.lotus.ui.DM.MainActivityDM
+import com.example.lotus.ui.dm.MainActivityDM
 import kotlin.collections.ArrayList
 
 

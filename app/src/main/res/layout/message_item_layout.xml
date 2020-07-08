@@ -53,7 +53,7 @@
         android:layout_marginLeft="10dp"
         android:padding="6dp"
         android:maxLines="1"
-        android:text="@string/create_message">
+        android:text="Message">
     </TextView>
 
 </RelativeLayout>
