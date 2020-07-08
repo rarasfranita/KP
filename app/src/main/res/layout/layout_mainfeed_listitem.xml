@@ -1,42 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@android:color/white">
 
         <RelativeLayout
             android:id="@+id/relLayout1"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="50dp"
+            android:gravity="center_horizontal">
 
             <ImageView
-                android:id="@+id/profile_photo"
+                android:id="@+id/imageAvatarFeed"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
+                android:background="@drawable/ic_profile"
                 android:scaleType="centerCrop"/>
 
-
             <TextView
-                android:id="@+id/username"
+                android:id="@+id/textUsernameFeed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/profile_photo"
-                android:text="Lotus Check"
-                android:textColor="@android:color/black" />
-
-
+                android:layout_toRightOf="@+id/imageAvatarFeed"
+                android:text="Lotus Check"/>
             <ImageView
-                android:id="@+id/ivEllipses"
+                android:id="@+id/ivEllipsesPost"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
@@ -46,69 +45,154 @@
 
         </RelativeLayout>
 
-        <com.asura.library.views.PosterSlider
-            android:background="@color/colorAccent"
-            android:id="@+id/postSlider"
-            android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:layout_below="@id/relLayout1"
-            app:defaultIndicator="circle"
-            android:scaleType="centerCrop" />
-
         <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/relLayout1"
+            android:id="@+id/relLayoutPost"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            >
+            <com.example.lotus.utils.DynamicSquareLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:id="@+id/mediaWrap"
+                >
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardPostMedia"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardCornerRadius="10pt"
+                    app:cardElevation="3dp"
+                    app:cardUseCompatPadding="true"
+                    android:layout_centerHorizontal="true">
+
+                    <com.asura.library.views.PosterSlider
+                        android:id="@+id/postSlider"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorAccent"
+                        android:scaleType="centerCrop"
+                        app:defaultIndicator="circle"/>
+
+                </com.google.android.material.card.MaterialCardView>
+            </com.example.lotus.utils.DynamicSquareLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardPostText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="7pt"
+                app:cardElevation="3dp"
+                app:cardUseCompatPadding="true"
+                android:layout_centerHorizontal="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Hello world"
+                        android:id="@+id/textStatusDetail"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:background="@color/white"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/textStatusDetail"
+                        android:textColor="@color/colorPrimary"
+                        android:id="@+id/textHashtagFeed"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"/>
+                </LinearLayout>
+
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </RelativeLayout>
+        <LinearLayout
             android:id="@+id/relLayout2"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_below="@+id/postSlider"
+            android:layout_below="@+id/relLayoutPost"
             android:background="@android:color/white">
 
             <RelativeLayout
-                android:id="@+id/heartLayout"
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                android:background="@android:color/white">
+                android:id="@+id/likeLayoutFeed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp">
 
                 <ImageView
-                    android:id="@+id/love_red"
+                    android:id="@+id/icLikeTrueFeed"
                     android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="20dp"
-                    android:src="@drawable/ic_love_red"
-                    android:tint="@android:color/holo_red_dark"
-                    android:visibility="invisible" />
+                    android:layout_height="50dp"
+                    android:src="@drawable/ic_like_true"
+                    android:visibility="gone"/>
 
                 <ImageView
-                    android:id="@+id/love_white"
+                    android:id="@+id/icLikeFalseFeed"
                     android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="20dp"
-                    android:src="@drawable/ic_love_white"
-                    android:tint="@android:color/darker_gray"
-                    android:visibility="visible" />
+                    android:layout_height="50dp"
+                    android:src="@drawable/ic_like_false"/>
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:id="@+id/textIctLikesFeed"
+                    android:text="0"
+                    android:paddingLeft="30dp"
+                    android:gravity="center_vertical"/>
             </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/comment_post"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/heartLayout"
-                android:src="@drawable/ic_direct_message"
-                android:visibility="visible" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_toRightOf="@+id/likeLayoutFeed"
+                android:paddingLeft="20dp">
+                <ImageView
+                    android:id="@+id/icCommentFeed"
+                    android:layout_width="25dp"
+                    android:layout_height="50dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_comment" />
 
-            <ImageView
-                android:id="@+id/share_post"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="18dp"
-                android:layout_toRightOf="@+id/comment_post"
-                android:src="@drawable/ic_share"
-                android:visibility="visible" />
-        </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:id="@+id/textIcCommentFeed"
+                    android:text="0"
+                    android:gravity="center"
+                    android:paddingLeft="5dp"
+                    android:layout_toRightOf="@+id/icCommentFeed"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="end"
+                android:paddingRight="20dp">
+                <ImageView
+                    android:id="@+id/icSharePost"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="18dp"
+                    android:src="@drawable/ic_share"
+                    android:visibility="visible"
+                    />
+            </RelativeLayout>
+
+
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/relLayout3"
@@ -116,46 +200,61 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/relLayout2"
             android:background="@android:color/white"
-            android:padding="20dp">
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp">
 
             <TextView
-                android:id="@+id/image_likes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Liked by h, b, c and 30 others"
-                android:textColor="@android:color/black" />
-
-            <TextView
-                android:id="@+id/image_caption"
+                android:id="@+id/textCaptionFeed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/image_likes"
-                android:layout_marginTop="15dp"
-                android:text="lotus.test moutains #earthporn #mountains"
-                android:textColor="@android:color/black" />
+                android:text="this is caption"
+                android:textColor="@color/black76" />
 
             <TextView
-                android:id="@+id/image_comments_link"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/image_caption"
-                android:layout_marginTop="15dp"
-                android:text="View all 3 comments"
-                android:textColor="@android:color/darker_gray"
-                android:onClick="detailPost"/>
+                android:layout_below="@+id/textCaptionFeed"
+                android:textColor="@color/colorPrimary"
+                android:id="@+id/textHashtag2"/>
 
-            <TextView
-                android:id="@+id/image_time_posted"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/image_comments_link"
-                android:layout_marginTop="15dp"
-                android:text="3 DAYS AGO"
-                android:textColor="@android:color/darker_gray" />
 
         </RelativeLayout>
 
+        <TextView
+            android:id="@+id/textTimeFeed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/relLayout3"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:textSize="10dp"
+            android:text="3 Days ago"
+            android:textColor="@android:color/darker_gray" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View all comments"
+            android:layout_marginLeft="20dp"
+            android:id="@+id/viewAllComment"
+            android:layout_below="@id/textTimeFeed"/>
     </RelativeLayout>
 
 </RelativeLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

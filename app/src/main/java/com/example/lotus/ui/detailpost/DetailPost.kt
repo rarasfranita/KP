@@ -70,7 +70,7 @@ class DetailPost : Fragment() {
         initRecyclerView(v)
         sendComment(v)
         listenCommentIcon(v)
-        listentLikeIcon(v)
+        listenLikeIcon(v)
 
         return v
     }
@@ -88,7 +88,7 @@ class DetailPost : Fragment() {
         })
     }
 
-    fun listentLikeIcon(view: View){
+    fun listenLikeIcon(view: View){
         val likeIcon = view.findViewById<RelativeLayout>(R.id.likeLayoutPost)
         likeIcon.setOnClickListener {
             if(likeStatus == true){
