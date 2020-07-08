@@ -141,7 +141,8 @@
                 android:layout_below="@+id/image_caption"
                 android:layout_marginTop="15dp"
                 android:text="View all 3 comments"
-                android:textColor="@android:color/darker_gray" />
+                android:textColor="@android:color/darker_gray"
+                android:onClick="detailPost"/>
 
             <TextView
                 android:id="@+id/image_time_posted"
