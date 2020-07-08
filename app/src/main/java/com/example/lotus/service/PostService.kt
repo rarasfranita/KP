@@ -48,7 +48,6 @@ class PostService {
 
         delay(1000)
         if (dataFeed != null){
-            Log.d("COk data", dataFeed.toString())
             return dataFeed
         }
 

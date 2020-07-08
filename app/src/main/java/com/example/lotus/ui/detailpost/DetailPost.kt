@@ -94,7 +94,6 @@ class DetailPost : Fragment() {
             if(likeStatus == true){
                 likeStatus = false
                 likeCount--
-                Log.d("Like count:", likeCount.toString())
                 setLike(view, likeStatus, likeCount)
 //                Add logic to hit end point like
             }else {
