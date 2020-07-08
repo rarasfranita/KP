@@ -43,6 +43,8 @@ class DetailPost : Fragment() {
     var postData: Post? = null
 
     var likeStatus: Boolean? = false
+    var likeCount: Int = 0
+    var commentCount: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +63,8 @@ class DetailPost : Fragment() {
         }
 
         likeStatus = postData?.like
+        likeCount = postData?.likesCount!!
+        commentCount = postData?.commentsCount!!
 
         setView(v)
         initRecyclerView(v)
@@ -89,11 +93,14 @@ class DetailPost : Fragment() {
         likeIcon.setOnClickListener {
             if(likeStatus == true){
                 likeStatus = false
-                setLike(view, likeStatus)
+                likeCount--
+                Log.d("Like count:", likeCount.toString())
+                setLike(view, likeStatus, likeCount)
 //                Add logic to hit end point like
             }else {
                 likeStatus = true
-                setLike(view, likeStatus)
+                likeCount++
+                setLike(view, likeStatus, likeCount)
 //                Add logic to hit endpont dislike
             }
         }
@@ -102,20 +109,21 @@ class DetailPost : Fragment() {
     fun setView(view: View){
         val username :TextView = view.findViewById<View>(R.id.textUsernamePost) as TextView
         val caption : TextView = view.findViewById<View>(R.id.textCaption) as TextView
-        val like : TextView = view.findViewById<View>(R.id.textIctLikesPost) as TextView
         val ava : ImageView = view.findViewById<View>(R.id.imageAvatarPost) as ImageView
         val comment: TextView = view.findViewById<View>(R.id.textIcCommentPost) as TextView
         val time: TextView = view.findViewById<View>(R.id.textTimePost) as TextView
 
         username.text = postData?.username
-        like.text = postData?.likesCount.toString()
         caption.text = postData?.text
-        comment.text = postData?.commentsCount.toString()
+
+        if (commentCount > 0){
+            comment.text = commentCount.toString()
+        }
 
         setMediaPost(view, postData?.media, postData?.text)
         setProfilePicture(ava, postData?.profilePicture)
         setTimePost(time, postData?.date)
-        setLike(view, postData?.like)
+        setLike(view, postData?.like, likeCount)
     }
 
     private fun setMediaPost(view: View, medias: ArrayList<MediaData>?, text: String?){
@@ -126,15 +134,15 @@ class DetailPost : Fragment() {
         posterSlider = view.findViewById(R.id.mediaPost)
         val posters: MutableList<Poster> = ArrayList()
 
-        if (medias?.size!! > 1) {
+        if (medias?.size!! > 0) {
             postText.visibility = View.GONE
             posterSlider?.visibility = View.VISIBLE
             val tagCaption = view.findViewById<TextView>(R.id.textHashtag)
             setHashTag(tagCaption, postData?.tag)
             for (media in medias) {
-                if (media.type == "image") {
+                if (media.type == getString(R.string.image)) {
                     posters.add(RemoteImage(media.link))
-                } else if (media.type == "video") {
+                } else if (media.type == getString(R.string.video)) {
                     val videoURI = Uri.parse(media.link)
                     posters.add(RemoteVideo(videoURI))
                 }
@@ -154,7 +162,7 @@ class DetailPost : Fragment() {
 
     private fun setProfilePicture(v: ImageView, image: String?){
         if (image != null) {
-            v.load("image"){
+            v.load(image){
                 crossfade(true)
                 crossfade(300)
                 transformations(CircleCropTransformation())
@@ -195,9 +203,10 @@ class DetailPost : Fragment() {
         }
     }
 
-    fun setLike(view: View, likeStatus: Boolean?){
+    fun setLike(view: View, likeStatus: Boolean?, likeCount: Int){
         val iconLikeTrue = view.findViewById<ImageView>(R.id.icLikeTrue)
         val iconLikeFalse = view.findViewById<ImageView>(R.id.icLikeFalse)
+        val textLikeCount = view.findViewById<TextView>(R.id.textIctLikesPost)
 
         if (likeStatus == true){
             iconLikeTrue.visibility = View.VISIBLE
@@ -206,6 +215,8 @@ class DetailPost : Fragment() {
             iconLikeTrue.visibility = View.GONE
             iconLikeFalse.visibility = View.VISIBLE
         }
+
+        textLikeCount.text = likeCount.toString()
     }
 
     fun setHashTag(view: TextView, tags: ArrayList<String>?){

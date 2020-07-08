@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -57,7 +56,6 @@ class HomeActivity : AppCompatActivity() {
     }
 
     fun getFeedsData(){
-
         AndroidNetworking.get(EnvService.ENV_API + "/feeds/testaccount1/-1")
             .addHeaders("Authorization", "Bearer " + token)
             .setTag(this)
@@ -67,7 +65,6 @@ class HomeActivity : AppCompatActivity() {
                 Respons::class.java,
                 object : ParsedRequestListener<Respons> {
                     override fun onResponse(respon: Respons) {
-                        Log.d("Respon Code: ", respon.code.toString())
                         val gson = Gson()
                         if (respon.code.toString() == "200") {
                             for (res in respon.data) {
@@ -75,9 +72,12 @@ class HomeActivity : AppCompatActivity() {
                                 val dataJson = gson.fromJson(strRes, Post::class.java)
                                 dataFeed.add(dataJson)
                             }
+
                             loadFeed(dataFeed, findViewById(R.id.rcHomeFeed))
+
                         }else {
-                            Toast.makeText(this@HomeActivity, "Error ${respon.code}", Toast.LENGTH_SHORT)
+//                            TODO: Create error page and show what the error
+//                            Toast.makeText(coroutineContext(), "Error ${respon.code}", Toast.LENGTH_SHORT)
                         }
                     }
 
@@ -175,7 +175,7 @@ class HomeActivity : AppCompatActivity() {
         btmNav.getMenu().findItem(R.id.navigation_home).setCheckable(active);
         btmNav.getMenu().findItem(R.id.navigation_tipitaka).setCheckable(active);
         btmNav.getMenu().findItem(R.id.navigation_meditation).setCheckable(active);
-    }
+      }
 
     fun detailPost(item: Post) {
         val bundle = Bundle()

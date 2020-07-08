@@ -38,6 +38,9 @@
     <string name="now">Now</string>
     <string name="date_format">dd MMMM yyyy</string>
     <string name="date_format_full">yyyy-MM-dd\'T\'HH:mm:ssX</string>
+    <string name="hint_caption">Tell the story about goodness...</string>
+    <string name="image">image</string>
+    <string name="video">video</string>
 
     <!-- Text Home-->
 

@@ -8,8 +8,8 @@ public class Post(
     val username: String?,
     val profilePicture: String?,
     val name: String?,
-    val likesCount: String?,
-    val commentsCount: String?,
+    val likesCount: Int?,
+    val commentsCount: Int?,
     val views: String?,
     val date: String?,
     val text: String?,
@@ -22,8 +22,8 @@ public class Post(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
+        parcel.readInt(),
+        parcel.readInt(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -37,8 +37,8 @@ public class Post(
         parcel.writeString(username)
         parcel.writeString(profilePicture)
         parcel.writeString(name)
-        parcel.writeString(likesCount)
-        parcel.writeString(commentsCount)
+        parcel.writeInt(likesCount as Int)
+        parcel.writeInt(commentsCount as Int)
         parcel.writeString(views)
         parcel.writeString(date)
         parcel.writeString(text)

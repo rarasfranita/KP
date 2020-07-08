@@ -7,14 +7,17 @@ import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.ParsedRequestListener
 import com.example.lotus.models.Post
 import com.example.lotus.models.Respons
+import com.google.gson.Gson
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.delay
 
 class PostService {
     private val token = "5f02b3361718f5360aeff6d2"
 
-    public fun getPostsHome(): MutableList<Post>?{
-        var postData: MutableList<Post>? = null
+    suspend fun getPostsHome(): ArrayList<Post>{
+        var dataFeed = ArrayList<Post>()
 
-        AndroidNetworking.get(EnvService.ENV_API + "/feeds/testaccount/-1")
+        AndroidNetworking.get(EnvService.ENV_API + "/feeds/testaccount1/-1")
             .addHeaders("Authorization", "Bearer " + token)
             .setTag(this)
             .setPriority(Priority.LOW)
@@ -23,24 +26,48 @@ class PostService {
                 Respons::class.java,
                 object : ParsedRequestListener<Respons> {
                     override fun onResponse(respon: Respons) {
-                        // do anything with response
-//                        Log.d("Hello sayang", respon.code.toString())
-//                        Log.d("Hello sayang2", respon.data.toString())
+                        val gson = Gson()
+                        if (respon.code.toString() == "200") {
+                            for (res in respon.data) {
+                                val strRes = gson.toJson(res)
+                                val dataJson = gson.fromJson(strRes, Post::class.java)
+                                dataFeed.add(dataJson)
+                            }
 
-                        if (respon.code == 200) {
-
-                            postData = respon.data as MutableList<Post>
-                            Log.d("HAlo sayang lagi", postData.toString())
+                        }else {
+//                            TODO: Create error page and show what the error
+//                            Toast.makeText(coroutineContext(), "Error ${respon.code}", Toast.LENGTH_SHORT)
                         }
                     }
 
                     override fun onError(anError: ANError) {
-                        Log.d("Error hud", anError.toString())
-
+                        Log.d("Errornya disini kah?", anError.toString())
+                        // Next go to error page (Popup error)
                     }
                 })
 
-        Log.d("Return data huda", postData.toString())
-        return postData
+        delay(1000)
+        if (dataFeed != null){
+            Log.d("COk data", dataFeed.toString())
+            return dataFeed
+        }
+
+        throw CancellationException("Can't get data")
+    }
+
+    suspend fun like(){
+        // TODO connect BE to like
+    }
+
+    suspend fun dislike(){
+        // TODO connect BE to dislike
+    }
+
+    suspend fun sendComment(){
+        // TODO send comment to BE
+    }
+
+    suspend fun getComment(){
+        // TODO get comment from BE
     }
 }
