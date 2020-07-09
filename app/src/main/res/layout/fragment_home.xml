@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment">
+    tools:context=".ui.home.HomeFragment"
+    android:id="@+id/fragmentHome">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -20,20 +21,11 @@
             app:elevation="10dp"
             app:menu="@menu/top_app_bar_home"
             app:navigationIcon="@drawable/ic_notification"
-            app:title="Lotus"
+            app:title="@string/appName"
             />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
-<!--    <ProgressBar-->
-<!--        android:id="@+id/newsfeedProgressBar"-->
-<!--        android:layout_width="20dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignParentBottom="true"-->
-<!--        android:layout_centerHorizontal="true"-->
-<!--        android:layout_gravity="bottom|center"-->
-<!--        android:visibility="gone" />-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcHomeFeed"
@@ -42,20 +34,5 @@
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
         ></androidx.recyclerview.widget.RecyclerView>
 
-<!--    <androidx.core.widget.NestedScrollView-->
-<!--        android:layout_width="416dp"-->
-<!--        android:layout_height="661dp"-->
-<!--        android:layout_marginTop="8dp"-->
-<!--        app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"-->
-<!--        tools:layout_editor_absoluteX="0dp">-->
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="vertical">-->
-<!--            <include layout="@layout/layout_mainfeed_listitem"></include>-->
-<!--        </LinearLayout>-->
-
-<!--    </androidx.core.widget.NestedScrollView>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

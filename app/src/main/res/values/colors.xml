@@ -11,4 +11,8 @@
     <color name="creme">#FCDECE</color>
     <color name="black">#000000</color>
     <color name="black76">#333333</color>
+
+    <!--  Coloring library cropping image for upload  -->
+    <color name="ucrop_color_toolbar">@color/colorPrimary</color>
+    <color name="ucrop_color_widget_active">@color/colorPrimary</color>
 </resources>
