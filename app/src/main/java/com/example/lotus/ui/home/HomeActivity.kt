@@ -89,12 +89,12 @@ class HomeActivity : AppCompatActivity() {
     }
 
     fun loadFeed(data: ArrayList<Post>, homeFeed: RecyclerView){
-        homeFeed.setHasFixedSize(true)
-        homeFeed.layoutManager = LinearLayoutManager(this)
         val adapter = PostFeedAdapter(data, this)
         adapter.notifyDataSetChanged()
 
         homeFeed.adapter = adapter
+        homeFeed.setHasFixedSize(true)
+        homeFeed.layoutManager = LinearLayoutManager(this)
     }
 
     private fun fabPostOnClick() {

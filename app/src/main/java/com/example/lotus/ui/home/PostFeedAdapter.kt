@@ -30,7 +30,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class PostFeedAdapter(private val listPost: MutableList<Post>, val context: Context) : RecyclerView.Adapter<PostFeedAdapter.Holder>() {
+class PostFeedAdapter(private val listPost: ArrayList<Post>, val context: Context) : RecyclerView.Adapter<PostFeedAdapter.Holder>() {
     var mContext: Context? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -80,7 +80,7 @@ class PostFeedAdapter(private val listPost: MutableList<Post>, val context: Cont
                 val time: TextView = view.findViewById<View>(R.id.textTimeFeed) as TextView
 
                 username.text = post?.username
-                caption.text = post?.text
+//                caption.text = post?.text
 
                 if (commentCount > 0){
                     comment.text = commentCount.toString()
@@ -106,8 +106,9 @@ class PostFeedAdapter(private val listPost: MutableList<Post>, val context: Cont
             if (medias?.size!! > 0) {
                 postText.visibility = View.GONE
                 posterSlider?.visibility = View.VISIBLE
-                val tagCaption = view.findViewById<TextView>(R.id.textHashtag2)
-                setHashTag(tagCaption, postData?.tag)
+
+                setCaption(view, text)
+
                 for (media in medias) {
                     if (media.type == "image") {
                         posters.add(RemoteImage(media.link))
@@ -118,20 +119,18 @@ class PostFeedAdapter(private val listPost: MutableList<Post>, val context: Cont
                 }
                 posterSlider!!.setPosters(posters)
             } else {
-                val tagCaption = view.findViewById<TextView>(R.id.textHashtagFeed)
-
-                setHashTag(tagCaption, postData?.tag)
+                val tag = view.findViewById<TextView>(R.id.textHashtagFeed)
+                val postTextView = view.findViewById<TextView>(R.id.textStatusDetail)
 
                 postText.visibility = View.VISIBLE
                 postMedia.visibility = View.GONE
                 caption.visibility = View.GONE
-                val postTextView = view.findViewById<TextView>(R.id.textStatusDetail)
 
                 if (text?.length!! > 249) {
+                    Log.d("With More", postData?.tag.toString())
                     val cutCaption = text?.removeRange(249, text.length)
                     val caption = "$cutCaption... more"
                     val spannableString = SpannableString(caption)
-                    val tag = view.findViewById<TextView>(R.id.textHashtagFeed)
                     val clickableSpan = object : ClickableSpan() {
                         override fun onClick(p0: View) {
                             if (mContext is HomeActivity) {
@@ -144,21 +143,71 @@ class PostFeedAdapter(private val listPost: MutableList<Post>, val context: Cont
                     spannableString.setSpan(clickableSpan, caption.length - 4, caption.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                     postTextView.text = spannableString
                     tag.visibility = View.GONE
-                }else{
+                } else {
+                    Log.d("No More $text", postData?.tag.toString())
+                    setHashTag(tag, postData?.tag)
                     postTextView.text = text
                 }
 
             }
         }
 
-        fun setHashTag(view: TextView, tags: ArrayList<String>?){
-            if (tags != null) {
-                var hashTag: String = ""
-                for (tag in tags){
-                    hashTag += "#$tag "
+        fun setCaption (view: View, text: String?){
+            val tagView = view.findViewById<TextView>(R.id.textHashtagFeed)
+            val captionView = view.findViewById<TextView>(R.id.textCaptionFeed)
+
+            if (text?.length!! > 99) {
+                val cutCaption = text?.removeRange(99, text.length)
+                val caption = "$cutCaption... more"
+                val spannableString = SpannableString(caption)
+                val clickableSpan = object : ClickableSpan() {
+                    override fun onClick(p0: View) {
+                        if (mContext is HomeActivity) {
+                            postData?.let { (mContext as HomeActivity).detailPost(it) }
+                        }
+                    }
                 }
-                view.text = hashTag
+
+                captionView.setMovementMethod(LinkMovementMethod.getInstance());
+                spannableString.setSpan(clickableSpan, caption.length - 4, caption.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                captionView.text = spannableString
+                tagView.visibility = View.GONE
             }else{
+                setHashTag(tagView, postData?.tag)
+                captionView.text = text
+            }
+        }
+
+        fun setHashTag(view: TextView, tags: ArrayList<String>?){
+            if (tags?.size!! > 0 ) {
+                var hashTag: String = ""
+                var anyMore = false
+
+                for ((i, tag) in tags.withIndex()){
+                    hashTag += "#$tag "
+                    if (i == 5){
+                        val tagMore = "$hashTag... more"
+                        val spannableString = SpannableString(tagMore)
+                        val clickableSpan = object : ClickableSpan() {
+                            override fun onClick(p0: View) {
+                                if (mContext is HomeActivity) {
+                                    postData?.let { (mContext as HomeActivity).detailPost(it) }
+                                }
+                            }
+                        }
+
+                        view.setMovementMethod(LinkMovementMethod.getInstance());
+                        spannableString.setSpan(clickableSpan, tagMore.length - 4, tagMore.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        view.text = spannableString
+                        anyMore = true
+                        break
+                    }
+                }
+                if (!anyMore){
+                    view.text = hashTag
+                }
+            }else{
+                Log.d("$view", "GOne sih harusnya")
                 view.visibility = View.GONE
             }
         }

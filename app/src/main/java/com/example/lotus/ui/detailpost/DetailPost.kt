@@ -64,7 +64,7 @@ class DetailPost : Fragment() {
 
         likeStatus = postData?.like
         likeCount = postData?.likesCount!!
-        commentCount = postData?.commentsCount!!
+        commentCount = postData?.comments!!
 
         setView(v)
         initRecyclerView(v)
