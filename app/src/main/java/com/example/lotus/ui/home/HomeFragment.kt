@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.lotus.R
+import kotlinx.android.synthetic.main.fragment_home.*
 
 
 class HomeFragment : Fragment() {
@@ -42,23 +43,18 @@ class HomeFragment : Fragment() {
         toolbar.setLogo(R.drawable.ic_notification)
 
         toolbar.setNavigationOnClickListener {
-//            rcHomeFeed.smoothScrollToPosition(0);
-            Log.d("Click", "LOFOOOOG" )
-
+            rcHomeFeed.smoothScrollToPosition(0);
         }
 
         val logoView: View? = getToolbarLogoIcon(toolbar)
         logoView?.setOnClickListener{
             // TODO Route to Notification
-            Log.d("Click", "Sni" )
 
         }
 
         toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.explore -> {
-                    Log.d("Click", "COKKKK" )
-
                     true
                 }
                 R.id.direct_message -> {

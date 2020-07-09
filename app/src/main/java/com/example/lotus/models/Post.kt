@@ -9,7 +9,7 @@ public class Post(
     val profilePicture: String?,
     val name: String?,
     val likesCount: Int?,
-    val comments: Int?,
+    val commentsCount: Int?,
     val views: String?,
     val date: String?,
     val text: String?,
@@ -38,7 +38,7 @@ public class Post(
         parcel.writeString(profilePicture)
         parcel.writeString(name)
         parcel.writeInt(likesCount as Int)
-        parcel.writeInt(comments as Int)
+        parcel.writeInt(commentsCount as Int)
         parcel.writeString(views)
         parcel.writeString(date)
         parcel.writeString(text)

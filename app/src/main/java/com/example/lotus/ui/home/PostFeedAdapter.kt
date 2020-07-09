@@ -127,7 +127,6 @@ class PostFeedAdapter(private val listPost: ArrayList<Post>, val context: Contex
                 caption.visibility = View.GONE
 
                 if (text?.length!! > 249) {
-                    Log.d("With More", postData?.tag.toString())
                     val cutCaption = text?.removeRange(249, text.length)
                     val caption = "$cutCaption... more"
                     val spannableString = SpannableString(caption)
@@ -144,7 +143,6 @@ class PostFeedAdapter(private val listPost: ArrayList<Post>, val context: Contex
                     postTextView.text = spannableString
                     tag.visibility = View.GONE
                 } else {
-                    Log.d("No More $text", postData?.tag.toString())
                     setHashTag(tag, postData?.tag)
                     postTextView.text = text
                 }
@@ -155,7 +153,6 @@ class PostFeedAdapter(private val listPost: ArrayList<Post>, val context: Contex
         fun setCaption (view: View, text: String?){
             val tagView = view.findViewById<TextView>(R.id.textHashtagFeed)
             val captionView = view.findViewById<TextView>(R.id.textCaptionFeed)
-
             if (text?.length!! > 99) {
                 val cutCaption = text?.removeRange(99, text.length)
                 val caption = "$cutCaption... more"
@@ -173,12 +170,14 @@ class PostFeedAdapter(private val listPost: ArrayList<Post>, val context: Contex
                 captionView.text = spannableString
                 tagView.visibility = View.GONE
             }else{
-                setHashTag(tagView, postData?.tag)
+                val tagCaption = view.findViewById<TextView>(R.id.textHashtag2)
+                setHashTag(tagCaption, postData?.tag)
                 captionView.text = text
             }
         }
 
         fun setHashTag(view: TextView, tags: ArrayList<String>?){
+
             if (tags?.size!! > 0 ) {
                 var hashTag: String = ""
                 var anyMore = false
@@ -203,11 +202,11 @@ class PostFeedAdapter(private val listPost: ArrayList<Post>, val context: Contex
                         break
                     }
                 }
+
                 if (!anyMore){
                     view.text = hashTag
                 }
             }else{
-                Log.d("$view", "GOne sih harusnya")
                 view.visibility = View.GONE
             }
         }

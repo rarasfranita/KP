@@ -7,39 +7,34 @@
     tools:context=".ui.home.HomeFragment"
     android:id="@+id/fragmentHome">
 
-    <RelativeLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="100dp">
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayout"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints"
+        app:elevation="0dp">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/appToolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:ignore="MissingConstraints"
-            app:elevation="0dp">
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/white"
+            app:menu="@menu/top_app_bar_home"
+            app:navigationIcon="@drawable/ic_logo_small"
+            app:contentInsetStartWithNavigation="0dp"
+            app:contentInsetStart="0dp"
+            />
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/appToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@android:color/white"
-                app:menu="@menu/top_app_bar_home"
-                app:navigationIcon="@drawable/ic_logo_small"
-                app:contentInsetStartWithNavigation="0dp"
-                app:contentInsetStart="0dp"
-                />
-
-        </com.google.android.material.appbar.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcHomeFeed"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="?attr/actionBarSize"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-            ></androidx.recyclerview.widget.RecyclerView>
-    </RelativeLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcHomeFeed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+        android:paddingBottom="150dp"
+        ></androidx.recyclerview.widget.RecyclerView>
 
 
 
