@@ -36,6 +36,7 @@ class HomeActivity : AppCompatActivity() {
     private val token = "5f02b3361718f5360aeff6d2"
     var dataFeed = ArrayList<Post>()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         try {
