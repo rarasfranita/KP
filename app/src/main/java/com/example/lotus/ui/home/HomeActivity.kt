@@ -56,7 +56,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     fun getFeedsData(){
-        AndroidNetworking.get(EnvService.ENV_API + "/feeds/testaccount1/-1")
+        AndroidNetworking.get(EnvService.ENV_API + "/feeds/testaccount/-1")
             .addHeaders("Authorization", "Bearer " + token)
             .setTag(this)
             .setPriority(Priority.LOW)
@@ -89,12 +89,12 @@ class HomeActivity : AppCompatActivity() {
     }
 
     fun loadFeed(data: ArrayList<Post>, homeFeed: RecyclerView){
-        homeFeed.setHasFixedSize(true)
-        homeFeed.layoutManager = LinearLayoutManager(this)
         val adapter = PostFeedAdapter(data, this)
         adapter.notifyDataSetChanged()
 
         homeFeed.adapter = adapter
+        homeFeed.setHasFixedSize(true)
+        homeFeed.layoutManager = LinearLayoutManager(this)
     }
 
     private fun fabPostOnClick() {
