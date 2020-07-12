@@ -2,6 +2,7 @@ package com.example.lotus.ui.detailpost
 
 import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -25,6 +26,7 @@ import com.asura.library.posters.RemoteVideo
 import com.asura.library.views.PosterSlider
 import com.example.lotus.R
 import com.example.lotus.models.*
+import com.example.lotus.ui.CreatePost
 import kotlinx.android.synthetic.main.layout_detail_post.view.*
 import matrixsystems.nestedexpandablerecyclerview.RowAdapter
 import java.text.SimpleDateFormat
@@ -42,7 +44,7 @@ class DetailPost : Fragment() {
 
     var postData: Post? = null
 
-    var likeStatus: Boolean? = false
+    var likeStatus: Int? = 0
     var likeCount: Int = 0
     var commentCount: Int = 0
 
@@ -59,10 +61,10 @@ class DetailPost : Fragment() {
 
         val bundle = this.arguments
         if (bundle != null) {
-            postData = bundle.getParcelable<Post>("data")
+            postData = bundle.getParcelable("data")
         }
 
-        likeStatus = postData?.like
+        likeStatus = postData?.liked
         likeCount = postData?.likesCount!!
         commentCount = postData?.commentsCount!!
 
@@ -71,6 +73,7 @@ class DetailPost : Fragment() {
         sendComment(v)
         listenCommentIcon(v)
         listentLikeIcon(v)
+        listenRepostIcon(v)
 
         return v
     }
@@ -91,17 +94,32 @@ class DetailPost : Fragment() {
     fun listentLikeIcon(view: View){
         val likeIcon = view.findViewById<RelativeLayout>(R.id.likeLayoutPost)
         likeIcon.setOnClickListener {
-            if(likeStatus == true){
-                likeStatus = false
+            if(likeStatus.toString() == "1"){
+                likeStatus = 0
                 likeCount--
                 setLike(view, likeStatus, likeCount)
 //                Add logic to hit end point like
             }else {
-                likeStatus = true
+                likeStatus = 1
                 likeCount++
                 setLike(view, likeStatus, likeCount)
 //                Add logic to hit endpont dislike
             }
+        }
+    }
+
+    fun listenRepostIcon(view: View){
+        val repostIcon = view.findViewById<ImageView>(R.id.icSharePost)
+        repostIcon.setOnClickListener{
+            val intent = Intent(this.activity, CreatePost::class.java)
+
+            intent.putExtra("Extra", "DetailPost")
+            intent.putExtra("Media", postData?.media)
+            intent.putExtra("Text", postData?.text)
+            intent.putExtra("postID", postData?.postId)
+            intent.putExtra("Username", postData?.username)
+            intent.putExtra("Tags", postData?.tag)
+            startActivity(intent)
         }
     }
 
@@ -122,7 +140,7 @@ class DetailPost : Fragment() {
         setMediaPost(view, postData?.media, postData?.text)
         setProfilePicture(ava, postData?.profilePicture)
         setTimePost(time, postData?.date)
-        setLike(view, postData?.like, likeCount)
+        setLike(view, postData?.liked, likeCount)
     }
 
     private fun setMediaPost(view: View, medias: ArrayList<MediaData>?, text: String?){
@@ -202,12 +220,12 @@ class DetailPost : Fragment() {
         }
     }
 
-    fun setLike(view: View, likeStatus: Boolean?, likeCount: Int){
+    fun setLike(view: View, likeStatus: Int?, likeCount: Int){
         val iconLikeTrue = view.findViewById<ImageView>(R.id.icLikeTrue)
         val iconLikeFalse = view.findViewById<ImageView>(R.id.icLikeFalse)
         val textLikeCount = view.findViewById<TextView>(R.id.textIctLikesPost)
 
-        if (likeStatus == true){
+        if (likeStatus.toString() == "1"){
             iconLikeTrue.visibility = View.VISIBLE
             iconLikeFalse.visibility = View.GONE
         }else {

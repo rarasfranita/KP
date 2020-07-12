@@ -9,14 +9,15 @@ import android.widget.ImageView
 import android.widget.MediaController
 import android.widget.VideoView
 import androidx.recyclerview.widget.RecyclerView
+import coil.api.load
 import com.example.lotus.R
 import com.example.lotus.models.MediaData
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.layout_list_preview_post.view.*
 
 
-class PreviewRepostPostAdapter(private val listMedia: ArrayList<MediaData>) :
-    RecyclerView.Adapter<PreviewRepostPostAdapter.ViewHolder>() {
+class PreviewRepostAdapter(private val listMedia: ArrayList<MediaData>) :
+    RecyclerView.Adapter<PreviewRepostAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -49,7 +50,6 @@ class PreviewRepostPostAdapter(private val listMedia: ArrayList<MediaData>) :
 
         fun bindFeed(post: MediaData){
             itemView.apply {
-                Log.d("COK DATA", post.toString())
                 val image: ImageView = itemView.findViewById(R.id.imagePreviewPost)
                 val video: VideoView = itemView.findViewById(R.id.videoPreviewPost)
                 val delete: FloatingActionButton = itemView.findViewById(R.id.fabDeleteMedia)
@@ -59,9 +59,7 @@ class PreviewRepostPostAdapter(private val listMedia: ArrayList<MediaData>) :
                 if (post.type =="image"){
                     video.setVisibility(View.INVISIBLE)
                     image.setVisibility(View.VISIBLE)
-                    val uri = Uri.parse(post.link)
-                    imagePreviewPost.setImageURI(uri)
-
+                    imagePreviewPost.load(post.link){}
                 } else if (post.type == "video") {
                     video.setVisibility(View.VISIBLE)
                     image.setVisibility(View.INVISIBLE)
