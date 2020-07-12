@@ -10,12 +10,10 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.lotus.R
-<<<<<<< HEAD
-import com.example.lotus.models.Post
 import com.example.lotus.ui.dm.MainActivityDM
+import com.example.lotus.ui.explore.general.GeneralActivity
+import com.example.lotus.ui.explore.hashtag.HashtagActivity
 import kotlin.collections.ArrayList
-=======
->>>>>>> bad00be9e982feb26d17470738f804032427bfa7
 
 
 class HomeFragment : Fragment() {
@@ -52,6 +50,14 @@ class HomeFragment : Fragment() {
             when (it.itemId){
                 R.id.direct_message ->
                     toolbar.context.startActivity(Intent(context, MainActivityDM::class.java))
+            }
+            when (it.itemId){
+                R.id.explore ->
+                    toolbar.context.startActivity(Intent(context, GeneralActivity::class.java))
+            }
+            when (it.itemId){
+                R.id.profile ->
+                    toolbar.context.startActivity(Intent(context, HashtagActivity::class.java))
             }
             true
         }

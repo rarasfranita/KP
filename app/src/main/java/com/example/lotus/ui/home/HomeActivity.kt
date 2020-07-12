@@ -21,6 +21,7 @@ import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
 import com.example.lotus.ui.CreatePost
 import com.example.lotus.ui.detailpost.DetailPost
+import com.example.lotus.ui.explore.general.model.Data
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
@@ -33,7 +34,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 class HomeActivity : AppCompatActivity() {
     private val TAG = "HomeActivity"
     private var manager: FragmentManager? = null
-    private val token = "5f02b3361718f5360aeff6d2"
+    private val token = "5f0697c5f165da1a2cc6d3f0"
     var dataFeed = ArrayList<Post>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -178,6 +179,20 @@ class HomeActivity : AppCompatActivity() {
       }
 
     fun detailPost(item: Post) {
+        val bundle = Bundle()
+        bundle.putParcelable("data", item)
+        val dataPost = DetailPost()
+        dataPost.arguments = bundle
+        appBarLayout?.setVisibility(View.INVISIBLE)
+        bottom_sheet?.setVisibility(View.INVISIBLE)
+        fab_post?.setVisibility(View.INVISIBLE)
+        manager?.beginTransaction()
+            ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            ?.replace(R.id.fragmentHome, dataPost)
+            ?.commit()
+    }
+
+    fun detailPostFromExplore(item: Data) {
         val bundle = Bundle()
         bundle.putParcelable("data", item)
         val dataPost = DetailPost()

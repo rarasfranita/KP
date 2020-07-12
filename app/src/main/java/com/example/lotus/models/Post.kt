@@ -22,8 +22,8 @@ public class Post(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readInt(),
-        parcel.readInt(),
+        parcel.readValue(Int::class.java.classLoader) as? Int,
+        parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -33,20 +33,12 @@ public class Post(
     ) {
     }
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(username)
-        parcel.writeString(profilePicture)
-        parcel.writeString(name)
-        parcel.writeInt(likesCount as Int)
-        parcel.writeInt(commentsCount as Int)
-        parcel.writeString(views)
-        parcel.writeString(date)
-        parcel.writeString(text)
-        parcel.writeValue(like)
+    override fun writeToParcel(p0: Parcel?, p1: Int) {
+        TODO("Not yet implemented")
     }
 
     override fun describeContents(): Int {
-        return 0
+        TODO("Not yet implemented")
     }
 
     companion object CREATOR : Parcelable.Creator<Post> {
@@ -58,5 +50,4 @@ public class Post(
             return arrayOfNulls(size)
         }
     }
-
 }

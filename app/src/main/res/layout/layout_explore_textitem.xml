@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tagarText1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="#ini hastag"
+            android:textColor="@android:color/black" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white">
+
+            <RelativeLayout
+                android:id="@+id/relLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_horizontal">
+
+                <ImageView
+                    android:id="@+id/imageAvatar1"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/ic_profile"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    android:id="@+id/textUsername1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/imageAvatar1"
+                    android:text="Lotus Check" />
+
+                <ImageView
+                    android:id="@+id/ivEllipses1"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/ic_ellipses" />
+
+            </RelativeLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardPostText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="7pt"
+                android:layout_below="@+id/relLayout1"
+                app:cardElevation="3dp"
+                app:cardUseCompatPadding="true"
+                android:layout_centerHorizontal="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Hello world"
+                        android:id="@+id/textStatusDetail"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:background="@color/white"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/textStatusDetail"
+                        android:textColor="@color/colorPrimary"
+                        android:id="@+id/textHashtagFeed"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"/>
+                </LinearLayout>
+
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <LinearLayout
+                android:id="@+id/relLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@+id/cardPostText"
+                android:background="@android:color/white">
+
+                <RelativeLayout
+                    android:id="@+id/likeLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp">
+
+                    <ImageView
+                        android:id="@+id/icLikeTrue1"
+                        android:layout_width="25dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_like_true"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/icLikeFalse1"
+                        android:layout_width="25dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_like_false" />
+
+                    <TextView
+                        android:id="@+id/textIctLikes1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="30dp"
+                        android:text="0" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/likeLayout"
+                    android:gravity="left"
+                    android:paddingLeft="20dp">
+
+                    <ImageView
+                        android:id="@+id/icComment"
+                        android:layout_width="25dp"
+                        android:layout_height="50dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_comment" />
+
+                    <TextView
+                        android:id="@+id/textIcCommentPost"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_toRightOf="@+id/icComment"
+                        android:gravity="center"
+                        android:paddingLeft="5dp"
+                        android:text="0" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="end"
+                    android:paddingRight="20dp">
+
+                    <ImageView
+                        android:id="@+id/icShare"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="18dp"
+                        android:src="@drawable/ic_share"
+                        android:visibility="visible" />
+                </RelativeLayout>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <!--         layout 2-->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white">
+
+            <RelativeLayout
+                android:id="@+id/relLayout4"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_horizontal">
+
+                <ImageView
+                    android:id="@+id/imageAvatar2"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/ic_profile"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    android:id="@+id/textUsername2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/imageAvatar2"
+                    android:text="Lotus Check" />
+
+                <ImageView
+                    android:id="@+id/ivEllipses2"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/ic_ellipses" />
+
+            </RelativeLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardPostText2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="7pt"
+                android:layout_below="@+id/relLayout4"
+                app:cardElevation="3dp"
+                app:cardUseCompatPadding="true"
+                android:layout_centerHorizontal="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Hello world"
+                        android:id="@+id/textStatusDetail2"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:background="@color/white"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/textStatusDetail"
+                        android:textColor="@color/colorPrimary"
+                        android:id="@+id/textHashtagFeed2"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"/>
+                </LinearLayout>
+
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <LinearLayout
+                android:id="@+id/relLayout5"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@+id/cardPostText2"
+                android:background="@android:color/white">
+
+                <RelativeLayout
+                    android:id="@+id/likeLayout2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp">
+
+                    <ImageView
+                        android:id="@+id/icLikeTrue2"
+                        android:layout_width="25dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_like_true"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/icLikeFalse2"
+                        android:layout_width="25dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_like_false" />
+
+                    <TextView
+                        android:id="@+id/textIctLikes2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="30dp"
+                        android:text="0" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/likeLayout"
+                    android:gravity="left"
+                    android:paddingLeft="20dp">
+
+                    <ImageView
+                        android:id="@+id/icComment2"
+                        android:layout_width="25dp"
+                        android:layout_height="50dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_comment" />
+
+                    <TextView
+                        android:id="@+id/textIcCommentPost2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_toRightOf="@+id/icComment2"
+                        android:gravity="center"
+                        android:paddingLeft="5dp"
+                        android:text="0" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="end"
+                    android:paddingRight="20dp">
+
+                    <ImageView
+                        android:id="@+id/icShare2"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="18dp"
+                        android:src="@drawable/ic_share"
+                        android:visibility="visible" />
+                </RelativeLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

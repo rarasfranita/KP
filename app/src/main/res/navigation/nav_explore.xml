@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/exploreFragment"
-        android:name="com.example.lotus.ui.explore.ExploreFragment"
+        android:name="com.example.lotus.ui.explore.general.ExploreFragment"
         android:label="ExploreFragment"
         tools:layout="@layout/fragment_explore"/>
 </navigation>

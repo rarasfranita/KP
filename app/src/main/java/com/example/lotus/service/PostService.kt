@@ -12,7 +12,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 
 class PostService {
-    private val token = "5f02b3361718f5360aeff6d2"
+    private val token = "5f058e0cf5cb8c4c1659c12d"
 
     suspend fun getPostsHome(): ArrayList<Post>{
         var dataFeed = ArrayList<Post>()

@@ -6,44 +6,41 @@
     android:id="@+id/fragmentExplore"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.explore.general.GeneralActivity">
+    tools:context=".ui.explore.hashtag.HashtagActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
+    <LinearLayout
+        android:id="@+id/LinLayout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
         tools:ignore="MissingConstraints">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/tbExplore"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@android:color/white"
-            app:elevation="10dp"
-            app:navigationIcon="@drawable/ic_arrow_back_black"
-            app:title="Explore"
-            app:titleTextColor="#6B6B6B" />
-    </com.google.android.material.appbar.AppBarLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/ic_arrow_back_black" />
 
+        <TextView
+            android:id="@+id/hashtagDiHashtag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="#inihashtag"
+            android:textSize="14sp"
+            android:fontFamily="@font/lato"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:textColor="#6B6B6B"/>
 
-    <EditText
-        android:id="@+id/edSearchbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="@drawable/search_bar_drawable"
-        android:drawableStart="@drawable/ic_baseline_search_24"
-        android:drawableLeft="@drawable/ic_baseline_search_24"
-        android:fontFamily="@font/lato"
-        android:hint="Search profile, hastag"
-        android:textSize="12sp"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">></EditText>
+    </LinearLayout>
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabs"
+        android:id="@+id/tabsHashtag"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/edSearchbar"
+        app:layout_constraintTop_toBottomOf="@+id/LinLayout1"
         app:tabBackground="@color/white"
         app:tabIconTint="#F79543"
         app:tabIndicatorColor="#F79543"
@@ -64,11 +61,11 @@
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/view_pager"
+        android:id="@+id/view_pagerHashtag"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tabs" />
+        app:layout_constraintTop_toBottomOf="@+id/tabsHashtag" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
