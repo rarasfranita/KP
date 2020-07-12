@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/createPost"
     android:orientation="vertical"
-    tools:context=".ui.CreatePost">
+    tools:context=".ui.CreatePostActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/ablCreatePost"
@@ -47,7 +47,8 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:id="@+id/llAddCaption">
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"

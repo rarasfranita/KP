@@ -8,25 +8,26 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.text.InputFilter
 import android.text.InputFilter.LengthFilter
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lotus.R
 import com.example.lotus.models.MediaData
 import com.example.lotus.models.MediaPost
 import com.example.lotus.ui.createpost.AddHashtag
+import com.example.lotus.ui.createpost.CallbackListener
 import com.example.lotus.ui.home.HomeActivity
 import com.github.dhaval2404.imagepicker.ImagePicker
 import kotlinx.android.synthetic.main.activity_create_post.*
 
 
-class CreatePost : AppCompatActivity() {
+class CreatePostActivity : AppCompatActivity(), CallbackListener {
     val TAG = "CreatePost Activity"
     val REQUEST_VIDEO_CAPTURE = 1
     lateinit var alertDialog: AlertDialog
@@ -190,17 +191,40 @@ class CreatePost : AppCompatActivity() {
         alertDialog.dismiss()
     }
 
+    private fun showDialog() {
+        val dialogFragment = AddHashtag(this)
+        val bundle = Bundle()
+        bundle.putStringArrayList("Tag", tags)
+        dialogFragment.arguments = bundle
+        dialogFragment.show(supportFragmentManager, "signature")
+    }
+
+    override fun onDataReceived(data: Array<String>) {
+        val tag1 = findViewById<TextView>(R.id.textHashtag)
+        val tag2 = findViewById<TextView>(R.id.textHashtagRepost)
+        tagsString = ""
+        tags = arrayListOf()
+
+        for (tag in data){
+            if (tag != ""){
+                tagsString += "#$tag "
+                tags.add(tag)
+            }
+        }
+
+        Log.d("TAFSASFSA", tags.toString())
+
+        tag1.text = tagsString
+        tag2.text = tagsString
+    }
+
     fun editHashtag(){
         addTagButton.setOnClickListener{
-            val addHashtag = AddHashtag()
-            val manager = getSupportFragmentManager()
+            showDialog()
+        }
 
-            createPost.visibility = View.GONE
-
-            manager?.beginTransaction()
-                ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                ?.replace(R.id.createPost, addHashtag)
-                ?.commit()
+        addTagButtonRepost.setOnClickListener{
+            showDialog()
         }
     }
 

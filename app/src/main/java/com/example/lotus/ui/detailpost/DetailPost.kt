@@ -26,7 +26,7 @@ import com.asura.library.posters.RemoteVideo
 import com.asura.library.views.PosterSlider
 import com.example.lotus.R
 import com.example.lotus.models.*
-import com.example.lotus.ui.CreatePost
+import com.example.lotus.ui.CreatePostActivity
 import kotlinx.android.synthetic.main.layout_detail_post.view.*
 import matrixsystems.nestedexpandablerecyclerview.RowAdapter
 import java.text.SimpleDateFormat
@@ -111,7 +111,7 @@ class DetailPost : Fragment() {
     fun listenRepostIcon(view: View){
         val repostIcon = view.findViewById<ImageView>(R.id.icSharePost)
         repostIcon.setOnClickListener{
-            val intent = Intent(this.activity, CreatePost::class.java)
+            val intent = Intent(this.activity, CreatePostActivity::class.java)
 
             intent.putExtra("Extra", "DetailPost")
             intent.putExtra("Media", postData?.media)
