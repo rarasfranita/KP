@@ -4,11 +4,13 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.InputFilter
 import android.text.InputFilter.LengthFilter
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -136,7 +138,7 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
         }
     }
 
-    fun uploadPhoto(view: View) {
+    fun selectPhoto(view: View) {
         ImagePicker.with(this)
             .cropSquare()
             .compress(1024)
@@ -159,6 +161,8 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
         dismissDialog(view)
          Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
             .putExtra(MediaStore.EXTRA_DURATION_LIMIT, 60)
+//             .setType("video/*")
+//             .putExtra(MediaStore.EXTRA_SIZE_LIMIT, 1024)
             .also { takeVideoIntent ->
             takeVideoIntent.resolveActivity(packageManager)?.also {
                 startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE)
@@ -186,9 +190,12 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
                 rvPreviewPostMedia.visibility = View.VISIBLE
             }
 
-            val videoUri: Uri? = intent?.data
+            val data = intent?.data
+
+            val videoUri: Uri? = Uri.parse(getPath(data))
             var mediaPostData: MediaPost = MediaPost(videoUri!!, getString(R.string.video) )
             mediaPostDatas.add(mediaPostData)
+
         }else if (resultCode == Activity.RESULT_OK) {
             // Show Preview Media
             if (rvPreviewPostMedia.visibility == View.GONE){
@@ -203,6 +210,18 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
         } else {
             Toast.makeText(this, getString(R.string.task_cancelled), Toast.LENGTH_SHORT).show()
         }
+    }
+
+    fun getPath(uri: Uri?): String? {
+        val projection =
+            arrayOf(MediaStore.Video.Media.DATA)
+        val cursor: Cursor? = contentResolver.query(uri!!, projection, null, null, null)
+        return if (cursor != null) {
+            val column_index: Int = cursor
+                .getColumnIndexOrThrow(MediaStore.Video.Media.DATA)
+            cursor.moveToFirst()
+            cursor.getString(column_index)
+        } else null
     }
 
     fun dismissDialog(view: View) {
@@ -297,7 +316,14 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
 
                     for (media in mediaPostDatas){
                         val auxFile = File(media.mediaPath.path)
-                        uploadPost.addMultipartFile("media",  auxFile)
+                        Log.d("AUXFILE", auxFile.toString())
+                        try {
+                            uploadPost.addMultipartFile("media",  auxFile)
+                            Log.d("COBA", uploadPost.toString())
+                        }catch (e: Exception){
+                            Log.d("Eroor yaa", e.toString())
+                            Log.d("Gatau deh ", "pusing")
+                        }
                     }
 
                     if (tagStringSend != ""){
@@ -321,12 +347,15 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
                                         val intent = Intent(this@CreatePostActivity, HomeActivity::class.java)
                                         startActivity(intent)
                                     }else {
+                                        Log.d("ERROR!!!", res.code.toString())
                                         Toast.makeText(applicationContext, "Error ${res.code}", Toast.LENGTH_SHORT)
                                     }
                                 }
 
                                 override fun onError(anError: ANError) {
                                     progressDialog.dismiss()
+                                    Log.d("ERROR code", anError.errorCode.toString())
+                                    Log.d("ERROR code", anError.errorDetail.toString())
                                     Toast.makeText(
                                         applicationContext,
                                         "Error ${anError.errorDetail}",

@@ -135,7 +135,7 @@
                 android:backgroundTint="@color/white"
                 android:textColor="@color/colorPrimaryDark"
                 android:paddingBottom="10dp"
-                android:onClick="uploadPhoto"
+                android:onClick="selectPhoto"
                 app:strokeColor="@color/colorAccent"
                 app:strokeWidth="1dp"
                 style="?android:attr/borderlessButtonStyle"/>
