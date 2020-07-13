@@ -2,9 +2,11 @@ package com.example.lotus.ui.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -21,6 +23,7 @@ import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
 import com.example.lotus.ui.CreatePost
 import com.example.lotus.ui.detailpost.DetailPost
+import com.example.lotus.ui.profile.ProfileActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
@@ -35,7 +38,6 @@ class HomeActivity : AppCompatActivity() {
     private var manager: FragmentManager? = null
     private val token = "5f02b3361718f5360aeff6d2"
     var dataFeed = ArrayList<Post>()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +58,7 @@ class HomeActivity : AppCompatActivity() {
         getFeedsData()
     }
 
-    fun getFeedsData(){
+    fun getFeedsData() {
         AndroidNetworking.get(EnvService.ENV_API + "/feeds/testaccount1/-1")
             .addHeaders("Authorization", "Bearer " + token)
             .setTag(this)
@@ -76,7 +78,7 @@ class HomeActivity : AppCompatActivity() {
 
                             loadFeed(dataFeed, findViewById(R.id.rcHomeFeed))
 
-                        }else {
+                        } else {
 //                            TODO: Create error page and show what the error
 //                            Toast.makeText(coroutineContext(), "Error ${respon.code}", Toast.LENGTH_SHORT)
                         }
@@ -89,7 +91,7 @@ class HomeActivity : AppCompatActivity() {
                 })
     }
 
-    fun loadFeed(data: ArrayList<Post>, homeFeed: RecyclerView){
+    fun loadFeed(data: ArrayList<Post>, homeFeed: RecyclerView) {
         homeFeed.setHasFixedSize(true)
         homeFeed.layoutManager = LinearLayoutManager(this)
         val adapter = PostFeedAdapter(data, this)
@@ -103,7 +105,7 @@ class HomeActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun navigationMenuLogic(){
+    private fun navigationMenuLogic() {
         val llBottomSheet =
             findViewById<View>(R.id.bottom_sheet) as LinearLayout
 
@@ -128,7 +130,7 @@ class HomeActivity : AppCompatActivity() {
         val btmNav =
             findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
-        val btmNav2  =
+        val btmNav2 =
             findViewById<BottomNavigationView>(R.id.bottom_navigation_2)
 
         btmNav2.menu.findItem(R.id.navigation_calendar).setCheckable(false)
@@ -176,7 +178,7 @@ class HomeActivity : AppCompatActivity() {
         btmNav.getMenu().findItem(R.id.navigation_home).setCheckable(active);
         btmNav.getMenu().findItem(R.id.navigation_tipitaka).setCheckable(active);
         btmNav.getMenu().findItem(R.id.navigation_meditation).setCheckable(active);
-      }
+    }
 
     fun detailPost(item: Post) {
         val bundle = Bundle()
@@ -199,5 +201,6 @@ class HomeActivity : AppCompatActivity() {
         manager?.beginTransaction()
             ?.replace(R.id.fragmentHome, HomeFragment())?.commit()
     }
+
 
 }

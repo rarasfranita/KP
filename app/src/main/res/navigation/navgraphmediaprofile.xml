@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/navgraphmediaprofile">
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navgraphmediaprofile"
+    app:startDestination="@id/mediaProfile3">
+    <fragment
+        android:id="@+id/mediaProfile3"
+        android:name="com.example.lotus.ui.profile.MediaProfile"
+        android:label="media_profile_fragment"
+        tools:layout="@layout/media_profile_fragment" />
 </navigation>

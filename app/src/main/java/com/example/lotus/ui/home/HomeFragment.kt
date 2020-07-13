@@ -1,5 +1,7 @@
 package com.example.lotus.ui.home
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.view.LayoutInflater
@@ -9,6 +11,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.lotus.R
+import com.example.lotus.ui.profile.ProfileActivity
 
 
 class HomeFragment : Fragment() {
@@ -41,19 +44,12 @@ class HomeFragment : Fragment() {
         toolbar.setNavigationOnClickListener {
         }
 
-        toolbar.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.explore -> {
-                    true
-                }
-                R.id.direct_message -> {
-                    true
-                }
-                R.id.profile -> {
-                    true
-                }
-                else -> false
+        toolbar.setOnMenuItemClickListener {
+            when (it.itemId){
+                R.id.profile ->
+                    toolbar.context.startActivity(Intent(context,ProfileActivity::class.java))
             }
+            true
+        }
         }
     }
-}
