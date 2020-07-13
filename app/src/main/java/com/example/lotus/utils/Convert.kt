@@ -1,8 +1,11 @@
 package com.example.lotus.utils
 
 import android.widget.TextView
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.log10
+import kotlin.math.pow
 
 fun setTimePost(v: TextView, time: String?){
     val current = Calendar.getInstance();
@@ -36,4 +39,16 @@ fun setTimePost(v: TextView, time: String?){
 
         v.text = formatted
     }
+}
+
+fun getFileSize(size: Long): String {
+    if (size <= 0)
+        return "0"
+
+    val units = arrayOf("B", "KB", "MB", "GB", "TB")
+    val digitGroups = (log10(size.toDouble()) / log10(1024.0)).toInt()
+
+    return DecimalFormat("#,##0.#").format(
+        size / 1024.0.pow(digitGroups.toDouble())
+    ) + " " + units[digitGroups]
 }
