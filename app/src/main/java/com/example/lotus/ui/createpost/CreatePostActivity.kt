@@ -2,13 +2,13 @@ package com.example.lotus.ui
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.InputFilter
 import android.text.InputFilter.LengthFilter
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -251,48 +251,45 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
         val postButton = findViewById<ImageView>(R.id.icPosting)
         val caption = findViewById<TextView>(R.id.textCaption)
         postButton.setOnClickListener{
+            val progressDialog = ProgressDialog(this)
+            progressDialog.setMessage("Loading...")
+            progressDialog.show()
             if (mediaPostDatas.size <= 0 && caption.text.length < 1){
                 Toast.makeText(this, R.string.alertNoDataPost, Toast.LENGTH_SHORT).show()
             }else{
                 if (repost){
-                    Log.d("INI DATA REPOST", "$mediaRepostDatas, ${caption.text}, $tags, $postId")
-
-                    val uploadPost =  AndroidNetworking.upload(EnvService.ENV_API + "/posts/{username}")
-
-                    for (media in mediaPostDatas){
-                        val auxFile = File(media.mediaPath.path)
-                        uploadPost.addMultipartFile("media",  auxFile)
+                    val uploadRepost = AndroidNetworking.post(EnvService.ENV_API + "/posts/{username}")
+                    if (tagStringSend != ""){
+                        uploadRepost.addBodyParameter("tag", tagStringSend)
                     }
-
-                    uploadPost
+                    uploadRepost
                         .addPathParameter("username", username)
-                        .addMultipartParameter("text", caption.text.toString())
+                        .addBodyParameter("text", caption.text.toString())
                         .addHeaders("Authorization", "Bearer " + token)
                         .setTag(this)
                         .setPriority(Priority.HIGH)
-                        .addMultipartParameter("tag", tagStringSend )
                         .build()
                         .getAsObject(
                             Respon::class.java,
                             object : ParsedRequestListener<Respon> {
                                 override fun onResponse(res: Respon) {
+                                    progressDialog.dismiss()
                                     val gson = Gson()
-                                    Log.d("Respon abis upload", res.code.toString())
                                     if (res.code.toString() == "200") {
-                                        // TODO Success
+                                        val intent = Intent(this@CreatePostActivity, HomeActivity::class.java)
+                                        startActivity(intent)
                                     }else {
-                                        //                            TODO: Create error page and show what the error
                                         Toast.makeText(applicationContext, "Error ${res.code}", Toast.LENGTH_SHORT)
                                     }
                                 }
 
                                 override fun onError(anError: ANError) {
-                                    Log.d("Errornya code kah?", anError.errorCode.toString())
-                                    Log.d("Errornya detail kah?", anError.errorDetail.toString())
-                                    Log.d("Errornya body kah?", anError.errorBody.toString())
-                                    Log.d("Errornya disini kah?", anError.toString())
-
-                                    // Next go to error page (Popup error)
+                                    progressDialog.dismiss()
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "Error ${anError.errorDetail}",
+                                        Toast.LENGTH_SHORT
+                                    )
                                 }
                             })
                 }else{
@@ -303,34 +300,38 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
                         uploadPost.addMultipartFile("media",  auxFile)
                     }
 
+                    if (tagStringSend != ""){
+                        uploadPost.addMultipartParameter("tag", tagStringSend )
+                    }
+
                     uploadPost
                         .addPathParameter("username", username)
                         .addMultipartParameter("text", caption.text.toString())
                         .addHeaders("Authorization", "Bearer " + token)
                         .setTag(this)
                         .setPriority(Priority.HIGH)
-                        .addMultipartParameter("tag", tagStringSend )
                         .build()
                         .getAsObject(
                             Respon::class.java,
                             object : ParsedRequestListener<Respon> {
                                 override fun onResponse(res: Respon) {
+                                    progressDialog.dismiss()
                                     val gson = Gson()
                                     if (res.code.toString() == "200") {
-
+                                        val intent = Intent(this@CreatePostActivity, HomeActivity::class.java)
+                                        startActivity(intent)
                                     }else {
                                         Toast.makeText(applicationContext, "Error ${res.code}", Toast.LENGTH_SHORT)
                                     }
                                 }
 
                                 override fun onError(anError: ANError) {
-                                    Toast.makeText(applicationContext, "Error ${anError.errorDetail}", Toast.LENGTH_SHORT)
-//                                    Log.d("Errornya code kah?", anError.errorCode.toString())
-//                                    Log.d("Errornya detail kah?", anError.errorDetail.toString())
-//                                    Log.d("Errornya body kah?", anError.errorBody.toString())
-//                                    Log.d("Errornya disini kah?", anError.toString())
-
-                                    // Next go to error page (Popup error)
+                                    progressDialog.dismiss()
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "Error ${anError.errorDetail}",
+                                        Toast.LENGTH_SHORT
+                                    )
                                 }
                             })
                 }
