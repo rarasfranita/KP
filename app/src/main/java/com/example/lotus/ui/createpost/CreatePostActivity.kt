@@ -7,9 +7,11 @@ import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.text.InputFilter
 import android.text.InputFilter.LengthFilter
+import android.text.format.DateUtils
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
@@ -19,6 +21,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.abedelazizshe.lightcompressorlibrary.CompressionListener
+import com.abedelazizshe.lightcompressorlibrary.VideoCompressor
+import com.abedelazizshe.lightcompressorlibrary.VideoQuality
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
@@ -35,6 +40,10 @@ import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_create_post.*
 import java.io.File
+import java.io.IOException
+import java.text.DecimalFormat
+import kotlin.math.log10
+import kotlin.math.pow
 
 
 class CreatePostActivity : AppCompatActivity(), CallbackListener {
@@ -61,6 +70,7 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
 
         // Hide hashtag because data is NULL
         textHashtag.visibility = View.GONE
+        llProgres.visibility = View.GONE
 
         toolBarListener()
         initRecyclerView()
@@ -191,10 +201,69 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
             }
 
             val data = intent?.data
+            val path = getPath(data)!!
+            val file = File(path)
 
-            val videoUri: Uri? = Uri.parse(getPath(data))
-            var mediaPostData: MediaPost = MediaPost(videoUri!!, getString(R.string.video) )
-            mediaPostDatas.add(mediaPostData)
+            if (file.length() > 104666320) {
+                Toast.makeText(this, "Video size is too big!!!", Toast.LENGTH_SHORT).show()
+            } else {
+                val downloadsPath =
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                val desFile = File(downloadsPath, "${System.currentTimeMillis()}_${file.name}")
+                if (desFile.exists()) {
+                    desFile.delete()
+                    try {
+                        desFile.createNewFile()
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+
+                }
+
+                var time = 0L
+
+                VideoCompressor.start(
+                    path,
+                    desFile.path,
+                    object : CompressionListener {
+                        override fun onProgress(percent: Float) {
+                            textProgress.text = "${percent.toLong()}%"
+                        }
+
+                        override fun onStart() {
+                            llProgres.visibility = View.VISIBLE
+                            time = System.currentTimeMillis()
+                            Log.d("Original size:", " ${getFileSize(file.length())}")
+                        }
+
+                        override fun onSuccess() {
+                            llProgres.visibility = View.GONE
+
+                            initRecyclerView()
+                            val newSizeValue = desFile.length()
+
+                            Log.d("Size after compression: ", "${getFileSize(newSizeValue)}")
+
+                            time = System.currentTimeMillis() - time
+                            Log.d("Duration: ", "${DateUtils.formatElapsedTime(time / 1000)}")
+
+                            var uri = Uri.parse(desFile.toString())
+
+                            var mediaPostData: MediaPost = MediaPost(uri, getString(R.string.video) )
+                            mediaPostDatas.add(mediaPostData)
+                        }
+
+                        override fun onFailure() {
+                            Log.d("Failure", "This video cannot be compressed!")
+                        }
+
+                        override fun onCancelled() {
+                            Log.wtf("TAG", "compression has been cancelled")
+                            // make UI changes, cleanup, etc
+                        }
+                    }, VideoQuality.MEDIUM, isMinBitRateEnabled = false
+                )
+            }
 
         }else if (resultCode == Activity.RESULT_OK) {
             // Show Preview Media
@@ -234,6 +303,18 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
         bundle.putStringArrayList("Tag", tags)
         dialogFragment.arguments = bundle
         dialogFragment.show(supportFragmentManager, "signature")
+    }
+
+    fun getFileSize(size: Long): String {
+        if (size <= 0)
+            return "0"
+
+        val units = arrayOf("B", "KB", "MB", "GB", "TB")
+        val digitGroups = (log10(size.toDouble()) / log10(1024.0)).toInt()
+
+        return DecimalFormat("#,##0.#").format(
+            size / 1024.0.pow(digitGroups.toDouble())
+        ) + " " + units[digitGroups]
     }
 
     override fun onDataReceived(data: String) {
@@ -316,14 +397,7 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
 
                     for (media in mediaPostDatas){
                         val auxFile = File(media.mediaPath.path)
-                        Log.d("AUXFILE", auxFile.toString())
-                        try {
-                            uploadPost.addMultipartFile("media",  auxFile)
-                            Log.d("COBA", uploadPost.toString())
-                        }catch (e: Exception){
-                            Log.d("Eroor yaa", e.toString())
-                            Log.d("Gatau deh ", "pusing")
-                        }
+                        uploadPost.addMultipartFile("media",  auxFile)
                     }
 
                     if (tagStringSend != ""){

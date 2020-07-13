@@ -27,11 +27,9 @@ import com.asura.library.views.PosterSlider
 import com.example.lotus.R
 import com.example.lotus.models.*
 import com.example.lotus.ui.CreatePostActivity
+import com.example.lotus.utils.setTimePost
 import kotlinx.android.synthetic.main.layout_detail_post.view.*
 import matrixsystems.nestedexpandablerecyclerview.RowAdapter
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class DetailPost : Fragment() {
@@ -184,39 +182,6 @@ class DetailPost : Fragment() {
                 crossfade(300)
                 transformations(CircleCropTransformation())
             }
-        }
-    }
-
-    private  fun setTimePost(v: TextView, time: String?){
-        val current = Calendar.getInstance();
-        var timePost = Calendar.getInstance()
-        val sdf: SimpleDateFormat = SimpleDateFormat(getString(R.string.date_format_full))
-        val str2 = time?.removeRange(19, 23)
-        timePost.setTime(sdf.parse(str2))
-        val diff: Long = current.getTime().time - timePost.getTime().time
-
-        val seconds = diff / 1000
-        val minutes = seconds / 60
-        val hours = minutes / 60
-        val days = hours / 24
-
-        if (seconds < 60 ){
-            v.text = getString(R.string.now)
-        }else if(seconds < 61){
-            v.text = "$minutes minute ago"
-        }else if(minutes < 60){
-            v.text = "$minutes minutes ago"
-        }else if(minutes < 61){
-            v.text = "$hours hour ago"
-        }else if(hours < 24){
-            v.text = "$hours hours ago"
-        }else if(hours < 49){
-            v.text = getString(R.string.yesterday)
-        }else {
-            var format1 = SimpleDateFormat(getString(R.string.date_format))
-            val formatted = format1.format(timePost.getTime());
-
-            v.text = formatted
         }
     }
 

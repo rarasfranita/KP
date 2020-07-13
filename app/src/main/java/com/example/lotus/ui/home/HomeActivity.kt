@@ -57,7 +57,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     fun getFeedsData(){
-        AndroidNetworking.get(EnvService.ENV_API + "/feeds/{username}/-1")
+        AndroidNetworking.get(EnvService.ENV_API + "/feeds/{username}/0")
             .addPathParameter("username", username)
             .addHeaders("Authorization", "Bearer " + token)
             .setTag(this)
