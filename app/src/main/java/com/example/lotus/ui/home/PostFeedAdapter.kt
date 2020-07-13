@@ -23,10 +23,8 @@ import com.asura.library.views.PosterSlider
 import com.example.lotus.R
 import com.example.lotus.models.MediaData
 import com.example.lotus.models.Post
+import com.example.lotus.utils.setTimePost
 import kotlinx.android.synthetic.main.layout_mainfeed_listitem.view.*
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class PostFeedAdapter(private val listPost: ArrayList<Post>, val context: Context) : RecyclerView.Adapter<PostFeedAdapter.Holder>() {
@@ -52,10 +50,17 @@ class PostFeedAdapter(private val listPost: ArrayList<Post>, val context: Contex
             }
         }
 
+        holder.comment.setOnClickListener {
+            if (mContext is HomeActivity) {
+                (mContext as HomeActivity).detailPost(listPost[position])
+            }
+        }
+
     }
 
     class Holder(val view: View) : RecyclerView.ViewHolder(view) {
         val viewALlComment = view.findViewById<TextView>(R.id.viewAllComment)
+        val comment = view.findViewById<RelativeLayout>(R.id.rlCommentFeed)
         var mContext: Context? = null
         private var posterSlider: PosterSlider? = null
         private var postData: Post? = null
@@ -232,39 +237,6 @@ class PostFeedAdapter(private val listPost: ArrayList<Post>, val context: Contex
             textLikeCount.text = likeCount.toString()
         }
 
-        private  fun setTimePost(v: TextView, time: String?){
-            val current = Calendar.getInstance();
-            var timePost = Calendar.getInstance()
-            val sdf: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX")
-            val timeRemove = time?.removeRange(19, 23)
-
-            timePost.setTime(sdf.parse(timeRemove))
-            val diff: Long = current.getTime().time - timePost.getTime().time
-
-            val seconds = diff / 1000
-            val minutes = seconds / 60
-            val hours = minutes / 60
-            val days = hours / 24
-
-            if (seconds < 60 ){
-                v.text = "Now"
-            }else if(seconds < 61){
-                v.text = "$minutes minute ago"
-            }else if(minutes < 60){
-                v.text = "$minutes minutes ago"
-            }else if(minutes < 61){
-                v.text = "$hours hour ago"
-            }else if(hours < 24){
-                v.text = "$hours hours ago"
-            }else if(hours < 49){
-                v.text = "Yesterday"
-            }else {
-                var format1 = "dd MMMM yyyy"
-                val formatted = format1.format(timePost.getTime());
-
-                v.text = formatted
-            }
-        }
 
         fun listenCommentIcon(view: View){
             val commentIcon = view.findViewById<ImageView>(R.id.icCommentFeed)

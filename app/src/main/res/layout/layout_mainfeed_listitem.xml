@@ -157,7 +157,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:layout_toRightOf="@+id/likeLayoutFeed"
-                android:paddingLeft="20dp">
+                android:paddingLeft="20dp"
+                android:id="@+id/rlCommentFeed">
                 <ImageView
                     android:id="@+id/icCommentFeed"
                     android:layout_width="25dp"
