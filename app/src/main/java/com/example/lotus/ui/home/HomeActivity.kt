@@ -21,7 +21,6 @@ import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
 import com.example.lotus.ui.CreatePost
 import com.example.lotus.ui.detailpost.DetailPost
-import com.example.lotus.ui.explore.general.model.Data
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
@@ -192,19 +191,7 @@ class HomeActivity : AppCompatActivity() {
             ?.commit()
     }
 
-    fun detailPostFromExplore(item: Data) {
-        val bundle = Bundle()
-        bundle.putParcelable("data", item)
-        val dataPost = DetailPost()
-        dataPost.arguments = bundle
-        appBarLayout?.setVisibility(View.INVISIBLE)
-        bottom_sheet?.setVisibility(View.INVISIBLE)
-        fab_post?.setVisibility(View.INVISIBLE)
-        manager?.beginTransaction()
-            ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            ?.replace(R.id.fragmentHome, dataPost)
-            ?.commit()
-    }
+
 
     fun backToHome(view: View) {
         appBarLayout?.setVisibility(View.VISIBLE)

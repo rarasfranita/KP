@@ -6,7 +6,7 @@ import android.os.Parcelable
 data class Data(
     val counts: Int,
     val hashtag: String?,
-    val posts: List<Post>
+    val posts: ArrayList<Post>
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),

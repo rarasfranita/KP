@@ -41,10 +41,6 @@ class HomeFragmentDM : Fragment() {
                     view?.findNavController()?.navigate(R.id.action_homeFragmentDM_to_newMessageFragment)
 
             }
-            when (it.itemId){
-                R.id.explore ->
-                    toolbar.context.startActivity(Intent(context, GeneralActivity::class.java))
-            }
             true
         }
     }

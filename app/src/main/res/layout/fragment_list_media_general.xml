@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.explore.general.ListMediaGeneral">
+    tools:context=".ui.explore.general.fragment.ListMediaGeneral">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvExploreMedia"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvExploreMedia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
 
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</RelativeLayout>

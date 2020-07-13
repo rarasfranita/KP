@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/fragment_explore_hashtag"
-    tools:context=".ui.explore.hashtag.ListMediaHashtag">
+    android:id="@+id/fragment_list_media_hashtag"
+    tools:context=".ui.explore.hashtag.fragment.ListMediaHashtag">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvExploreHashtag"
+        android:id="@+id/rvHashtagMedia"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" />

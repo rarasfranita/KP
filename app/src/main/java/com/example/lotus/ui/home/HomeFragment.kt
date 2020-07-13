@@ -39,23 +39,23 @@ class HomeFragment : Fragment() {
         return v
     }
 
-    private fun listenAppToolbar(v: View){
+    private fun listenAppToolbar(v: View) {
         val toolbar: Toolbar = v.findViewById(R.id.appToolbar) as Toolbar
         toolbar.setTitleTextAppearance(context, R.style.My_TextAppearance_Toolbar)
 
         toolbar.setNavigationOnClickListener {
         }
 
-        toolbar.setOnMenuItemClickListener(){
-            when (it.itemId){
+        toolbar.setOnMenuItemClickListener() {
+            when (it.itemId) {
                 R.id.direct_message ->
                     toolbar.context.startActivity(Intent(context, MainActivityDM::class.java))
             }
-            when (it.itemId){
+            when (it.itemId) {
                 R.id.explore ->
                     toolbar.context.startActivity(Intent(context, GeneralActivity::class.java))
             }
-            when (it.itemId){
+            when (it.itemId) {
                 R.id.profile ->
                     toolbar.context.startActivity(Intent(context, HashtagActivity::class.java))
             }

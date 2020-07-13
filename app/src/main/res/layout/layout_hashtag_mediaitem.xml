@@ -8,6 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:background="@android:color/white">
 
         <RelativeLayout
@@ -16,7 +17,7 @@
             android:layout_height="50dp">
 
             <ImageView
-                android:id="@+id/profile_photo"
+                android:id="@+id/imageProfile"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_centerVertical="true"
@@ -31,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/profile_photo"
+                android:layout_toRightOf="@+id/imageProfile"
                 android:text="Lotus Check"
                 android:textColor="@android:color/black" />
 
@@ -65,6 +66,44 @@
             android:layout_below="@id/relLay1"
             android:paddingLeft="10dp"
             android:paddingRight="10dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardPostText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="7pt"
+                app:cardElevation="3dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textStatusDetail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:text="Hello world" />
+
+                    <TextView
+                        android:id="@+id/textHashtagFeed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/textStatusDetail"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:textColor="@color/colorPrimary" />
+                </LinearLayout>
+
+
+            </com.google.android.material.card.MaterialCardView>
 
             <com.example.lotus.utils.DynamicSquareLayout
                 android:id="@+id/mediaWrap"
@@ -202,18 +241,18 @@
             android:id="@+id/viewAllComment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
             android:layout_below="@+id/relLay3"
-            android:text="View all comments"/>
+            android:layout_marginLeft="20dp"
+            android:text="View all comments" />
 
         <TextView
             android:id="@+id/textTimeFeed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/viewAllComment"
             android:layout_marginLeft="20dp"
             android:layout_marginBottom="10dp"
             android:text="3 Days ago"
-            android:layout_below="@id/viewAllComment"
             android:textColor="@android:color/darker_gray"
             android:textSize="10dp" />
 

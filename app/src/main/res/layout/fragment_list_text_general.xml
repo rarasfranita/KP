@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.explore.general.ListTextGeneral">
+    tools:context=".ui.explore.general.fragment.ListTextGeneral">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvExploreText"

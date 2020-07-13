@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -12,12 +12,15 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tagarText1"
+            android:id="@+id/tagar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:fontFamily="@font/lato"
             android:text="#ini hastag"
-            android:textColor="@android:color/black" />
+            android:textColor="@color/colorPrimaryDark" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -336,6 +339,18 @@
                 </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/moreText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_gravity="right"
+            android:fontFamily="@font/lato"
+            android:text="More >>"
+            android:textSize="12sp"
+            android:textColor="@color/colorPrimaryDark"/>
+
     </LinearLayout>
 
 </LinearLayout>

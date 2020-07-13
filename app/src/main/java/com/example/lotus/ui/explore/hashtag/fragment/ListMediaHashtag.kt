@@ -1,4 +1,4 @@
-package com.example.lotus.ui.explore.hashtag
+package com.example.lotus.ui.explore.hashtag.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

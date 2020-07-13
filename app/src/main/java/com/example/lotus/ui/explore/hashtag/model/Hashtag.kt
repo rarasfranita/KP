@@ -1,6 +1,6 @@
 package com.example.lotus.ui.explore.hashtag.model
 
-data class Respons(
+data class Hashtag(
     val code: Int,
-    val `data`: Data
+    val `data`: List<Data>
 )

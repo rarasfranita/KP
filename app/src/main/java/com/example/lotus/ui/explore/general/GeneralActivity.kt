@@ -4,30 +4,36 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.ParsedRequestListener
+import com.baoyz.widget.PullRefreshLayout
 import com.example.lotus.R
 import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
-import com.example.lotus.ui.detailpost.DetailPost
+import com.example.lotus.ui.explore.detailpost.DetailPostHashtag
+import com.example.lotus.ui.explore.general.fragment.ListMediaGeneral
+import com.example.lotus.ui.explore.general.fragment.ListTextGeneral
 import com.example.lotus.ui.explore.general.model.Data
-import com.example.lotus.ui.explore.hashtag.ListMediaHashtag
+import com.example.lotus.ui.explore.hashtag.fragment.ListMediaHashtag
+import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.bottom_sheet.*
-import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.activity_explore_general.*
+import kotlinx.android.synthetic.main.activity_hashtag.*
+
 
 class GeneralActivity : AppCompatActivity() {
+
     private var manager: FragmentManager? = null
     private val TAG = "ExploreActivity"
     private val token = "5f09a143ff07b60aaafd008d"
-    var dataFeed = ArrayList<Data>()
+    var dataExplore = ArrayList<Data>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,16 +41,48 @@ class GeneralActivity : AppCompatActivity() {
             this.supportActionBar!!.hide()
         } catch (e: NullPointerException) {
         }
-        setContentView(R.layout.activity_explore)
+        setContentView(R.layout.activity_explore_general)
 
-        AndroidNetworking.initialize(getApplicationContext());
+        listenAppToolbar()
+        manager = supportFragmentManager
+        val srlMediaGeneral: PullRefreshLayout = findViewById(R.id.srlMediaGeneral)
+
+        srlMediaGeneral.setOnRefreshListener {
+            dataExplore.clear()
+            getExploreMedia()
+            getExploreText()
+
+        }
+        val tabLayout: TabLayout = findViewById(R.id.tabs)
+        val viewPager: ViewPager = findViewById(R.id.view_pager)
+        val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
+
+        viewPagerAdapter.addFragment(ListMediaGeneral(), "Media")
+        viewPagerAdapter.addFragment(ListTextGeneral(), "Text")
+
+        viewPager.adapter = viewPagerAdapter
+        tabLayout.setupWithViewPager(viewPager)
+
+        AndroidNetworking.initialize(applicationContext);
+        dataExplore.clear()
         getExploreMedia()
         getExploreText()
+
     }
 
+    private fun listenAppToolbar() {
+        val toolbar: Toolbar = findViewById(R.id.tbExplore) as Toolbar
+
+        toolbar.setNavigationOnClickListener {
+
+        }
+
+    }
 
     private fun getExploreMedia() {
-        AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore?username=testaccount&index=0&type=media")
+        dataExplore.clear()
+        srlMediaGeneral.setRefreshing(true)
+        AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore?username=testaccount1&index=0&type=media")
             .addHeaders("Authorization", "Bearer " + token)
             .setTag(this)
             .setPriority(Priority.LOW)
@@ -53,20 +91,25 @@ class GeneralActivity : AppCompatActivity() {
                 Respons::class.java,
                 object : ParsedRequestListener<Respons> {
                     override fun onResponse(respon: Respons) {
+                        dataExplore.clear()
+                        srlMediaGeneral.setRefreshing(false)
                         val gson = Gson()
                         if (respon.code.toString() == "200") {
+                            dataExplore.clear()
                             for (res in respon.data) {
                                 val strRes = gson.toJson(res)
                                 val dataJson = gson.fromJson(strRes, Data::class.java)
-                                dataFeed.add(dataJson)
+                                dataExplore.add(dataJson)
                             }
-                            loadExploreMedia(dataFeed, findViewById(R.id.rvExploreMedia))
+                            loadExploreMedia(dataExplore, findViewById(R.id.rvExploreMedia))
 
                         } else {
                         }
                     }
 
                     override fun onError(anError: ANError) {
+                        dataExplore.clear()
+                        srlMediaGeneral.setRefreshing(false)
                         Log.d("asuu nya media explore : ", anError.toString())
                         // Next go to error page (Popup error)
                     }
@@ -74,6 +117,7 @@ class GeneralActivity : AppCompatActivity() {
     }
 
     private fun getExploreText() {
+        dataExplore.clear()
         AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore?username=testaccount&index=0&type=text")
             .addHeaders("Authorization", "Bearer " + token)
             .setTag(this)
@@ -83,35 +127,28 @@ class GeneralActivity : AppCompatActivity() {
                 Respons::class.java,
                 object : ParsedRequestListener<Respons> {
                     override fun onResponse(respon: Respons) {
+                        dataExplore.clear()
                         val gson = Gson()
                         if (respon.code.toString() == "200") {
+                            dataExplore.clear()
                             for (res in respon.data) {
                                 val strRes = gson.toJson(res)
                                 val dataJson = gson.fromJson(strRes, Data::class.java)
-                                dataFeed.add(dataJson)
+                                dataExplore.add(dataJson)
                             }
-                            loadExploreText(dataFeed, findViewById(R.id.rvExploreText))
+                            loadExploreText(dataExplore, findViewById(R.id.rvExploreText))
 
                         } else {
+                            dataExplore.clear()
                         }
                     }
 
                     override fun onError(anError: ANError) {
+                        dataExplore.clear()
                         Log.d("asuu nya text explore :", anError.toString())
                         // Next go to error page (Popup error)
                     }
                 })
-    }
-
-
-    fun loadExploreText(data: ArrayList<Data>, explore: RecyclerView) {
-        explore.setHasFixedSize(true)
-        explore.layoutManager = LinearLayoutManager(this)
-        val adapter =
-            GeneralTextAdapter(data, this)
-        adapter.notifyDataSetChanged()
-
-        explore.adapter = adapter
     }
 
     fun loadExploreMedia(data: ArrayList<Data>, explore: RecyclerView) {
@@ -123,29 +160,68 @@ class GeneralActivity : AppCompatActivity() {
 
         explore.adapter = adapter
     }
+    fun loadExploreText(data: ArrayList<Data>, explore: RecyclerView) {
+        explore.setHasFixedSize(true)
+        explore.layoutManager = LinearLayoutManager(this)
+        val adapter =
+            GeneralTextAdapter(data, this)
+        adapter.notifyDataSetChanged()
+
+        explore.adapter = adapter
+    }
 
     //tambahan, coba intent ke detail post
-    fun detailExplore(item: Data) {
+    fun detailPostFromExplore(item: Data) {
         val bundle = Bundle()
         bundle.putParcelable("data", item)
-        val dataPost = DetailPost()
+        val dataPostt = DetailPostHashtag()
+        dataPostt.arguments = bundle
+        manager?.beginTransaction()
+            ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            ?.replace(R.id.fragmentExplore, dataPostt)
+            ?.commit()
+    }
+    fun more(data: Data) {
+//        LinLayout1.visibility = View.GONE
+//        tabsHashtag.visibility = View.GONE
+        val bundle = Bundle()
+        bundle.putParcelable("data", data)
+        val dataPost = DetailPostHashtag()
         dataPost.arguments = bundle
-        appBarLayout?.setVisibility(View.INVISIBLE)
-        bottom_sheet?.setVisibility(View.INVISIBLE)
-        fab_post?.setVisibility(View.INVISIBLE)
         manager?.beginTransaction()
             ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            ?.replace(R.id.fragmentHome, dataPost)
+            ?.replace(R.id.fragmentHashtag, dataPost)
             ?.commit()
     }
-    //tambahan, coba intent ke hashtag
-    fun more(item : Data) {
-        val bundle = Bundle()
-        bundle.putParcelable("data", item)
-        val dataPost = ListMediaHashtag()
-        manager?.beginTransaction()
-            ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            ?.replace(R.id.hashtagFragment, dataPost)
-            ?.commit()
+
+    internal class ViewPagerAdapter(fragmentManager: FragmentManager) :
+        FragmentPagerAdapter(fragmentManager) {
+        private val fragments: ArrayList<Fragment>
+        private val titles: ArrayList<String>
+
+        init {
+            fragments = ArrayList<Fragment>()
+            titles = ArrayList<String>()
+        }
+
+        override fun getItem(position: Int): Fragment {
+            return fragments[position]
+        }
+
+        override fun getCount(): Int {
+            return fragments.size
+        }
+
+        fun addFragment(fragment: Fragment, title: String) {
+            fragments.add(fragment)
+            titles.add(title)
+
+        }
+
+        override fun getPageTitle(i: Int): CharSequence? {
+            return titles[i]
+
+        }
     }
+
 }
