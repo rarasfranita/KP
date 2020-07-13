@@ -17,25 +17,38 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.androidnetworking.AndroidNetworking
+import com.androidnetworking.common.Priority
+import com.androidnetworking.error.ANError
+import com.androidnetworking.interfaces.ParsedRequestListener
 import com.example.lotus.R
 import com.example.lotus.models.MediaData
 import com.example.lotus.models.MediaPost
+import com.example.lotus.models.Respon
+import com.example.lotus.service.EnvService
 import com.example.lotus.ui.createpost.AddHashtag
 import com.example.lotus.ui.createpost.CallbackListener
 import com.example.lotus.ui.home.HomeActivity
 import com.github.dhaval2404.imagepicker.ImagePicker
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_create_post.*
+import java.io.File
 
 
 class CreatePostActivity : AppCompatActivity(), CallbackListener {
     val TAG = "CreatePost Activity"
     val REQUEST_VIDEO_CAPTURE = 1
     lateinit var alertDialog: AlertDialog
+    private val username = "testaccount1"
+    private val token = "5f02b3ac10032c371426b525"
 
     private val mediaPostDatas: ArrayList<MediaPost> = ArrayList()
     private var mediaRepostDatas: ArrayList<MediaData> = ArrayList()
     private var tags: ArrayList<String> = ArrayList()
-    private var tagsString: String = ""
+    private var tagsStringShow: String = ""
+    private var tagStringSend: String = ""
+    private var repost: Boolean = false
+    private var postId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +63,7 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
         toolBarListener()
         initRecyclerView()
         setRepostContent(mediaRepostDatas)
-        sendPost()
+        posting()
         editHashtag()
     }
 
@@ -59,15 +72,17 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
 
         val extra = intent.getStringExtra("Extra")
         val text = intent.getStringExtra("Text")
-        val postId = intent.getStringExtra("PostId")
         val username = intent.getStringExtra("Username")
         val media = intent.getParcelableArrayListExtra<MediaData>("Media")
         val hashtag = intent.getStringArrayListExtra("Tags")
+        postId = intent.getStringExtra("PostId").toString()
+
         if (hashtag != null) {
             tags = hashtag
         }
 
         if (extra != null){
+            repost = true
             textCaption.setFilters(arrayOf<InputFilter>(LengthFilter(700 - text!!.length)))
             createPostBottom.visibility = View.GONE
 
@@ -79,17 +94,20 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
                 rvPreviewRepostMedia.visibility = View.GONE
             }
             if (tags?.size!! > 0 ){
-                for (tag in tags){
-                    tagsString += "#$tag "
+                for ((i, tag) in tags.withIndex()){
+                    tagsStringShow += "#$tag "
+                    if (i < tags.size - 1){
+                        tagStringSend +="$tag,"
+                    }else
+                        tagStringSend += tag
                 }
-                textHashtagRepost.text = tagsString
+                textHashtagRepost.text = tagsStringShow
             }else{
                 textHashtagRepost.visibility = View.GONE
             }
         } else {
             repostBottom.visibility = View.GONE
         }
-
     }
 
     fun setRepostContent(data: ArrayList<MediaData>) {
@@ -199,23 +217,24 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
         dialogFragment.show(supportFragmentManager, "signature")
     }
 
-    override fun onDataReceived(data: Array<String>) {
+    override fun onDataReceived(data: String) {
         val tag1 = findViewById<TextView>(R.id.textHashtag)
         val tag2 = findViewById<TextView>(R.id.textHashtagRepost)
-        tagsString = ""
+        val arrTags = data.split(",").toTypedArray()
+
+        tagStringSend = data
         tags = arrayListOf()
 
-        for (tag in data){
+        for (tag in arrTags){
             if (tag != ""){
-                tagsString += "#$tag "
+                tagsStringShow += "#$tag "
                 tags.add(tag)
             }
         }
 
-        Log.d("TAFSASFSA", tags.toString())
-
-        tag1.text = tagsString
-        tag2.text = tagsString
+        tag1.visibility = View.VISIBLE
+        tag1.text = tagsStringShow
+        tag2.text = tagsStringShow
     }
 
     fun editHashtag(){
@@ -228,12 +247,93 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
         }
     }
 
-    fun sendPost() {
+    fun posting() {
         val postButton = findViewById<ImageView>(R.id.icPosting)
         val caption = findViewById<TextView>(R.id.textCaption)
         postButton.setOnClickListener{
             if (mediaPostDatas.size <= 0 && caption.text.length < 1){
                 Toast.makeText(this, R.string.alertNoDataPost, Toast.LENGTH_SHORT).show()
+            }else{
+                if (repost){
+                    Log.d("INI DATA REPOST", "$mediaRepostDatas, ${caption.text}, $tags, $postId")
+
+                    val uploadPost =  AndroidNetworking.upload(EnvService.ENV_API + "/posts/{username}")
+
+                    for (media in mediaPostDatas){
+                        val auxFile = File(media.mediaPath.path)
+                        uploadPost.addMultipartFile("media",  auxFile)
+                    }
+
+                    uploadPost
+                        .addPathParameter("username", username)
+                        .addMultipartParameter("text", caption.text.toString())
+                        .addHeaders("Authorization", "Bearer " + token)
+                        .setTag(this)
+                        .setPriority(Priority.HIGH)
+                        .addMultipartParameter("tag", tagStringSend )
+                        .build()
+                        .getAsObject(
+                            Respon::class.java,
+                            object : ParsedRequestListener<Respon> {
+                                override fun onResponse(res: Respon) {
+                                    val gson = Gson()
+                                    Log.d("Respon abis upload", res.code.toString())
+                                    if (res.code.toString() == "200") {
+                                        // TODO Success
+                                    }else {
+                                        //                            TODO: Create error page and show what the error
+                                        Toast.makeText(applicationContext, "Error ${res.code}", Toast.LENGTH_SHORT)
+                                    }
+                                }
+
+                                override fun onError(anError: ANError) {
+                                    Log.d("Errornya code kah?", anError.errorCode.toString())
+                                    Log.d("Errornya detail kah?", anError.errorDetail.toString())
+                                    Log.d("Errornya body kah?", anError.errorBody.toString())
+                                    Log.d("Errornya disini kah?", anError.toString())
+
+                                    // Next go to error page (Popup error)
+                                }
+                            })
+                }else{
+                    val uploadPost =  AndroidNetworking.upload(EnvService.ENV_API + "/posts/{username}")
+
+                    for (media in mediaPostDatas){
+                        val auxFile = File(media.mediaPath.path)
+                        uploadPost.addMultipartFile("media",  auxFile)
+                    }
+
+                    uploadPost
+                        .addPathParameter("username", username)
+                        .addMultipartParameter("text", caption.text.toString())
+                        .addHeaders("Authorization", "Bearer " + token)
+                        .setTag(this)
+                        .setPriority(Priority.HIGH)
+                        .addMultipartParameter("tag", tagStringSend )
+                        .build()
+                        .getAsObject(
+                            Respon::class.java,
+                            object : ParsedRequestListener<Respon> {
+                                override fun onResponse(res: Respon) {
+                                    val gson = Gson()
+                                    if (res.code.toString() == "200") {
+
+                                    }else {
+                                        Toast.makeText(applicationContext, "Error ${res.code}", Toast.LENGTH_SHORT)
+                                    }
+                                }
+
+                                override fun onError(anError: ANError) {
+                                    Toast.makeText(applicationContext, "Error ${anError.errorDetail}", Toast.LENGTH_SHORT)
+//                                    Log.d("Errornya code kah?", anError.errorCode.toString())
+//                                    Log.d("Errornya detail kah?", anError.errorDetail.toString())
+//                                    Log.d("Errornya body kah?", anError.errorBody.toString())
+//                                    Log.d("Errornya disini kah?", anError.toString())
+
+                                    // Next go to error page (Popup error)
+                                }
+                            })
+                }
             }
         }
     }

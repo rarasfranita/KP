@@ -66,9 +66,7 @@
             android:gravity="top|left"
             android:hint="@string/hint_add_tag"
             android:maxLength="700"
-            android:textColor="@color/black76"
-            android:digits=",ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
-            android:inputType="textFilter"/>
+            android:textColor="@color/black76"/>
     </LinearLayout>
 
 </LinearLayout>

@@ -38,8 +38,8 @@ class AddHashtag (private val callbackListener: CallbackListener) : DialogFragme
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         icSaveTag.setOnClickListener {
-            val arrTags = textAddHashtag.text.toString().split(",").toTypedArray()
-            callbackListener.onDataReceived(arrTags)
+            val sentence = textAddHashtag.text.toString().replace("\\s".toRegex(), "")
+            callbackListener.onDataReceived(sentence)
             dismiss()
         }
 

@@ -35,6 +35,7 @@ class HomeActivity : AppCompatActivity() {
     private var manager: FragmentManager? = null
     private val token = "5f02b3361718f5360aeff6d2"
     var dataFeed = ArrayList<Post>()
+    val username = "testaccount1"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +57,8 @@ class HomeActivity : AppCompatActivity() {
     }
 
     fun getFeedsData(){
-        AndroidNetworking.get(EnvService.ENV_API + "/feeds/testaccount3/-1")
+        AndroidNetworking.get(EnvService.ENV_API + "/feeds/{username}/-1")
+            .addPathParameter("username", username)
             .addHeaders("Authorization", "Bearer " + token)
             .setTag(this)
             .setPriority(Priority.LOW)
