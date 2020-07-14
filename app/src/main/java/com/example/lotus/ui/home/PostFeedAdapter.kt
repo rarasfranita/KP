@@ -1,6 +1,7 @@
 package com.example.lotus.ui.home
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.text.SpannableString
 import android.text.Spanned
@@ -23,6 +24,7 @@ import com.asura.library.views.PosterSlider
 import com.example.lotus.R
 import com.example.lotus.models.MediaData
 import com.example.lotus.models.Post
+import com.example.lotus.ui.CreatePostActivity
 import com.example.lotus.utils.setTimePost
 import kotlinx.android.synthetic.main.layout_mainfeed_listitem.view.*
 
@@ -56,11 +58,27 @@ class PostFeedAdapter(private val listPost: ArrayList<Post>, val context: Contex
             }
         }
 
+        holder.repost.setOnClickListener {
+            val intent = Intent(mContext, CreatePostActivity::class.java)
+
+            intent.putExtra("Extra", "DetailPost")
+            intent.putExtra("Media", listPost[position].media)
+            intent.putExtra("Text", listPost[position].text)
+            intent.putExtra("postID", listPost[position].postId)
+            intent.putExtra("Username", listPost[position].username)
+            intent.putExtra("Tags", listPost[position].tag)
+
+            if (mContext is HomeActivity) {
+                (mContext as HomeActivity).startActivity(intent)
+            }
+        }
+
     }
 
     class Holder(val view: View) : RecyclerView.ViewHolder(view) {
         val viewALlComment = view.findViewById<TextView>(R.id.viewAllComment)
         val comment = view.findViewById<RelativeLayout>(R.id.rlCommentFeed)
+        val repost = view.findViewById<ImageView>(R.id.icSharePost)
         var mContext: Context? = null
         private var posterSlider: PosterSlider? = null
         private var postData: Post? = null
