@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/tagar"
             android:layout_width="wrap_content"
@@ -44,9 +45,10 @@
                     <ImageView
                         android:id="@+id/imageMediaExplore1"
                         android:layout_width="match_parent"
-                        android:layout_height="137dp"
+                        android:layout_height="match_parent"
                         android:background="@color/colorAccent"
                         android:scaleType="centerCrop" />
+
                 </com.google.android.material.card.MaterialCardView>
             </com.example.lotus.utils.DynamicSquareLayout>
 
@@ -69,6 +71,7 @@
                         android:layout_height="match_parent"
                         android:background="@color/colorAccent"
                         android:scaleType="centerCrop" />
+
                 </com.google.android.material.card.MaterialCardView>
             </com.example.lotus.utils.DynamicSquareLayout>
 
@@ -91,6 +94,7 @@
                         android:layout_height="match_parent"
                         android:background="@color/colorAccent"
                         android:scaleType="centerCrop" />
+
                 </com.google.android.material.card.MaterialCardView>
             </com.example.lotus.utils.DynamicSquareLayout>
         </LinearLayout>
@@ -109,3 +113,20 @@
     </LinearLayout>
 
 </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,4 +1,4 @@
-package com.example.lotus.ui.explore.general
+package com.example.lotus.ui.explore.general.adapter
 
 import android.content.Context
 import android.text.SpannableString
@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import coil.transform.CircleCropTransformation
 import com.example.lotus.R
+import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.explore.general.model.Data
 
 class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val context: Context) :

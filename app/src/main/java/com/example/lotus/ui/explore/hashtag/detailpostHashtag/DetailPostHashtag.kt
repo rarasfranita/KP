@@ -25,7 +25,7 @@ import com.asura.library.posters.RemoteVideo
 import com.asura.library.views.PosterSlider
 import com.example.lotus.R
 import com.example.lotus.models.*
-import com.example.lotus.ui.explore.hashtag.model.Data
+import com.example.lotus.ui.explore.general.model.Data
 import kotlinx.android.synthetic.main.layout_detail_post.view.*
 import matrixsystems.nestedexpandablerecyclerview.RowAdapter
 import java.text.SimpleDateFormat
@@ -63,9 +63,9 @@ class DetailPostHashtag : Fragment() {
             postData = bundle.getParcelable<Data>("data")
         }
 
-        likeStatus = postData?.like
-        likeCount = postData?.liked!!
-        commentCount = postData?.commentsCount!!
+        likeStatus = postData!!.posts[0].like
+        likeCount = postData!!.posts[0].likesCount!!
+        commentCount = postData!!.posts[0].commentsCount!!
 
         setView(v)
         initRecyclerView(v)
@@ -113,18 +113,18 @@ class DetailPostHashtag : Fragment() {
         val comment: TextView = view.findViewById<View>(R.id.textIcCommentPost) as TextView
         val time: TextView = view.findViewById<View>(R.id.textTimePost) as TextView
 
-        username.text = postData?.name
-        caption.text = postData?.text
+        username.text = postData!!.posts[0].name
+        caption.text = postData!!.posts[0].text
 
 
         if (commentCount > 0) {
             comment.text = commentCount.toString()
         }
 
-        setMediaPost(view, postData?.media, postData?.text)
-        setProfilePicture(ava, postData?.profilePicture)
-        setTimePost(time, postData?.postDate)
-        setLike(view, postData?.like, likeCount)
+        setMediaPost(view, postData!!.posts[0].media, postData!!.posts[0].text)
+        setProfilePicture(ava, postData!!.posts[0].profilePicture)
+        setTimePost(time, postData!!.posts[0].postDate)
+        setLike(view, postData!!.posts[0].like, likeCount)
 
     }
 
@@ -140,7 +140,7 @@ class DetailPostHashtag : Fragment() {
             postText.visibility = View.GONE
             posterSlider?.visibility = View.VISIBLE
             val tagCaption = view.findViewById<TextView>(R.id.textHashtag)
-            setHashTag(tagCaption, postData?.tag)
+            setHashTag(tagCaption, postData!!.posts[0].tag)
             for (media in medias) {
                 if (media.type == getString(R.string.image)) {
                     posters.add(RemoteImage(media.link))
@@ -152,7 +152,7 @@ class DetailPostHashtag : Fragment() {
             posterSlider!!.setPosters(posters)
         } else {
             val tagCaption = view.findViewById<TextView>(R.id.textHashtagPost)
-            setHashTag(tagCaption, postData?.tag)
+            setHashTag(tagCaption, postData!!.posts[0].tag)
 
             postText.visibility = View.VISIBLE
             postMedia.visibility = View.GONE

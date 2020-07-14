@@ -1,4 +1,4 @@
-package com.example.lotus.ui.explore.hashtag
+package com.example.lotus.ui.explore.hashtag.adapter
 
 
 import android.content.Context
@@ -24,6 +24,7 @@ import com.asura.library.posters.RemoteVideo
 import com.asura.library.views.PosterSlider
 import com.example.lotus.R
 import com.example.lotus.models.MediaData
+import com.example.lotus.ui.explore.hashtag.HashtagActivity
 import com.example.lotus.ui.explore.hashtag.model.Data
 import kotlinx.android.synthetic.main.layout_hashtag_mediaitem.view.*
 import java.text.SimpleDateFormat
@@ -237,11 +238,6 @@ class HashtagMediaAdapter(private val listHashtagMedia: ArrayList<Data>, val con
             }
         }
 
-        //        fun setProfilePicture(profpic: ImageView, url: String) {
-//            profpic.load(url) {
-//                transformations(CircleCropTransformation())
-//            }
-//        }
         private fun setProfilePicture(v: ImageView, image: String?) {
             if (image != null) {
                 v.load(image) {

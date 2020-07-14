@@ -19,17 +19,14 @@ import com.baoyz.widget.PullRefreshLayout
 import com.example.lotus.R
 import com.example.lotus.service.EnvService
 import com.example.lotus.ui.explore.detailpost.DetailPostHashtag
+import com.example.lotus.ui.explore.hashtag.adapter.HashtagMediaAdapter
 import com.example.lotus.ui.explore.hashtag.fragment.ListMediaHashtag
 import com.example.lotus.ui.explore.hashtag.fragment.ListTextHashtag
 import com.example.lotus.ui.explore.hashtag.model.Data
 import com.example.lotus.ui.explore.hashtag.model.Hashtag
-import com.example.lotus.ui.home.HomeFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_hashtag.*
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.bottom_sheet.*
-import kotlinx.android.synthetic.main.fragment_home.*
 
 class HashtagActivity : AppCompatActivity() {
     private var manager: FragmentManager? = null
@@ -113,7 +110,11 @@ class HashtagActivity : AppCompatActivity() {
     }
 
     fun loadExploreHashtag(data: ArrayList<Data>, hashtag: RecyclerView) {
-        val adapter = HashtagMediaAdapter(data, this)
+        val adapter =
+            HashtagMediaAdapter(
+                data,
+                this
+            )
         adapter.notifyDataSetChanged()
         hashtag.adapter = adapter
         hashtag.setHasFixedSize(true)

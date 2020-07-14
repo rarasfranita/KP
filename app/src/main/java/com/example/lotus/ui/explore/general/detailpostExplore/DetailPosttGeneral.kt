@@ -1,4 +1,4 @@
-package com.example.lotus.ui.explore.detailpost
+package com.example.lotus.ui.explore.general.detailpostExplore
 
 import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
@@ -26,14 +26,14 @@ import com.asura.library.views.PosterSlider
 import com.example.lotus.R
 import com.example.lotus.models.*
 import com.example.lotus.ui.explore.general.model.Data
-import kotlinx.android.synthetic.main.layout_detail_post.view.*
+import kotlinx.android.synthetic.main.layout_detail_post_notfollow.view.*
 import matrixsystems.nestedexpandablerecyclerview.RowAdapter
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class DetailPostt : Fragment() {
+class DetailPosttGeneral : Fragment() {
     private val TAG = "[DetailPostt] [Fragment]"
 
     lateinit var rowAdapter: RowAdapter
@@ -56,7 +56,7 @@ class DetailPostt : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreate(savedInstanceState)
-        val v = inflater.inflate(R.layout.fragment_detail_post, container, false)
+        val v = inflater.inflate(R.layout.fragment_detail_post_notfollow, container, false)
 
         val bundle = this.arguments
         if (bundle != null) {
@@ -77,8 +77,8 @@ class DetailPostt : Fragment() {
     }
 
     fun listenCommentIcon(view: View) {
-        val commentIcon = view.findViewById<ImageView>(R.id.icCommentPost)
-        val inputComment = view.findViewById<EditText>(R.id.inputComment)
+        val commentIcon = view.findViewById<ImageView>(R.id.icCommentGeneral)
+        val inputComment = view.findViewById<EditText>(R.id.inputCommentGeneral)
 
         commentIcon.setOnClickListener(View.OnClickListener {
             inputComment.requestFocus()
@@ -90,7 +90,7 @@ class DetailPostt : Fragment() {
     }
 
     fun listentLikeIcon(view: View) {
-        val likeIcon = view.findViewById<RelativeLayout>(R.id.likeLayoutPost)
+        val likeIcon = view.findViewById<RelativeLayout>(R.id.likeLayoutGeneral)
         likeIcon.setOnClickListener {
             if (likeStatus == true) {
                 likeStatus = false
@@ -107,11 +107,11 @@ class DetailPostt : Fragment() {
     }
 
     fun setView(view: View) {
-        val username: TextView = view.findViewById<View>(R.id.textUsernamePost) as TextView
-        val caption: TextView = view.findViewById<View>(R.id.textCaption) as TextView
-        val ava: ImageView = view.findViewById<View>(R.id.imageAvatarPost) as ImageView
-        val comment: TextView = view.findViewById<View>(R.id.textIcCommentPost) as TextView
-        val time: TextView = view.findViewById<View>(R.id.textTimePost) as TextView
+        val username: TextView = view.findViewById<View>(R.id.textUsernameGeneral) as TextView
+        val caption: TextView = view.findViewById<View>(R.id.textCaptionGeneral) as TextView
+        val ava: ImageView = view.findViewById<View>(R.id.imageAvatarGeneral) as ImageView
+        val comment: TextView = view.findViewById<View>(R.id.textIcCommentGeneral) as TextView
+        val time: TextView = view.findViewById<View>(R.id.textTimeGeneral) as TextView
 
         username.text = postData?.posts!![0].name
         caption.text = postData?.posts!![0].text
@@ -129,17 +129,17 @@ class DetailPostt : Fragment() {
     }
 
     private fun setMediaPost(view: View, medias: ArrayList<MediaData>?, text: String?) {
-        val postText = view.findViewById<CardView>(R.id.cardPostText)
-        val postMedia = view.findViewById<RelativeLayout>(R.id.mediaWrap)
-        val caption = view.findViewById<RelativeLayout>(R.id.relLayout3)
+        val postText = view.findViewById<CardView>(R.id.cardTextGeneral)
+        val postMedia = view.findViewById<RelativeLayout>(R.id.mediaWrapGeneral)
+        val caption = view.findViewById<RelativeLayout>(R.id.relLayout3General)
 
-        posterSlider = view.findViewById(R.id.mediaPost)
+        posterSlider = view.findViewById(R.id.mediaGeneral)
         val posters: MutableList<Poster> = ArrayList()
 
         if (medias?.size!! > 0) {
             postText.visibility = View.GONE
             posterSlider?.visibility = View.VISIBLE
-            val tagCaption = view.findViewById<TextView>(R.id.textHashtag)
+            val tagCaption = view.findViewById<TextView>(R.id.textHashtagGeneral)
             setHashTag(tagCaption, postData?.posts!![0].tag)
             for (media in medias) {
                 if (media.type == getString(R.string.image)) {
@@ -151,13 +151,14 @@ class DetailPostt : Fragment() {
             }
             posterSlider!!.setPosters(posters)
         } else {
-            val tagCaption = view.findViewById<TextView>(R.id.textHashtagPost)
+            val tagCaption = view.findViewById<TextView>(R.id.textHashtagGeneral)
             setHashTag(tagCaption, postData?.posts!![0].tag)
 
             postText.visibility = View.VISIBLE
             postMedia.visibility = View.GONE
             caption.visibility = View.GONE
-            val postTextView = view.findViewById<TextView>(R.id.textStatusDetail)
+            posterSlider?.visibility = View.GONE
+            val postTextView = view.findViewById<TextView>(R.id.textStatusDetailGeneral)
             postTextView.text = text
         }
     }
@@ -206,9 +207,9 @@ class DetailPostt : Fragment() {
     }
 
     fun setLike(view: View, likeStatus: Boolean?, likeCount: Int) {
-        val iconLikeTrue = view.findViewById<ImageView>(R.id.icLikeTrue)
-        val iconLikeFalse = view.findViewById<ImageView>(R.id.icLikeFalse)
-        val textLikeCount = view.findViewById<TextView>(R.id.textIctLikesPost)
+        val iconLikeTrue = view.findViewById<ImageView>(R.id.icLikeTrueGeneral)
+        val iconLikeFalse = view.findViewById<ImageView>(R.id.icLikeFalseGeneral)
+        val textLikeCount = view.findViewById<TextView>(R.id.textIctLikesGeneral)
 
         if (likeStatus == true) {
             iconLikeTrue.visibility = View.VISIBLE
@@ -234,7 +235,7 @@ class DetailPostt : Fragment() {
     }
 
     private fun initRecyclerView(v: View) {
-        recyclerView = v.findViewById(R.id.recycler_view)
+        recyclerView = v.findViewById(R.id.recycler_viewGeneral)
         rows = mutableListOf()
         val context: Context = this.requireContext()
         rowAdapter = RowAdapter(context, rows)
@@ -251,8 +252,8 @@ class DetailPostt : Fragment() {
     }
 
     fun sendComment(v: View) {
-        val btnSend = v.findViewById<View>(R.id.imageSendComment)
-        val s = v.inputComment.text
+        val btnSend = v.findViewById<View>(R.id.imageSendCommentGeneral)
+        val s = v.inputCommentGeneral.text
         btnSend.setOnClickListener {
             Log.d("Comment: ", s.toString())
         }

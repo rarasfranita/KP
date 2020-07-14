@@ -18,23 +18,22 @@ import com.example.lotus.R
 import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
 import com.example.lotus.ui.explore.detailpost.DetailPostHashtag
+import com.example.lotus.ui.explore.general.adapter.GeneralMediaAdapter
+import com.example.lotus.ui.explore.general.adapter.GeneralTextAdapter
+import com.example.lotus.ui.explore.general.detailpostExplore.DetailPosttGeneral
 import com.example.lotus.ui.explore.general.fragment.ListMediaGeneral
 import com.example.lotus.ui.explore.general.fragment.ListTextGeneral
 import com.example.lotus.ui.explore.general.model.Data
-import com.example.lotus.ui.explore.hashtag.fragment.ListMediaHashtag
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_explore_general.*
-import kotlinx.android.synthetic.main.activity_hashtag.*
 
 
 class GeneralActivity : AppCompatActivity() {
 
     private var manager: FragmentManager? = null
-    private val TAG = "ExploreActivity"
     private val token = "5f09a143ff07b60aaafd008d"
     var dataExplore = ArrayList<Data>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         try {
@@ -83,7 +82,7 @@ class GeneralActivity : AppCompatActivity() {
         dataExplore.clear()
         srlMediaGeneral.setRefreshing(true)
         AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore?username=testaccount1&index=0&type=media")
-            .addHeaders("Authorization", "Bearer " + token)
+            .addHeaders("Authorization", "Bearer $token")
             .setTag(this)
             .setPriority(Priority.LOW)
             .build()
@@ -118,8 +117,8 @@ class GeneralActivity : AppCompatActivity() {
 
     private fun getExploreText() {
         dataExplore.clear()
-        AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore?username=testaccount&index=0&type=text")
-            .addHeaders("Authorization", "Bearer " + token)
+        AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore?username=testaccount1&index=0&type=text")
+            .addHeaders("Authorization", "Bearer $token")
             .setTag(this)
             .setPriority(Priority.LOW)
             .build()
@@ -155,42 +154,63 @@ class GeneralActivity : AppCompatActivity() {
         explore.setHasFixedSize(true)
         explore.layoutManager = LinearLayoutManager(this)
         val adapter =
-            GeneralMediaAdapter(data, this)
+            GeneralMediaAdapter(
+                data,
+                this
+            )
         adapter.notifyDataSetChanged()
 
         explore.adapter = adapter
     }
+
     fun loadExploreText(data: ArrayList<Data>, explore: RecyclerView) {
         explore.setHasFixedSize(true)
         explore.layoutManager = LinearLayoutManager(this)
         val adapter =
-            GeneralTextAdapter(data, this)
+            GeneralTextAdapter(
+                data,
+                this
+            )
         adapter.notifyDataSetChanged()
 
         explore.adapter = adapter
     }
 
-    //tambahan, coba intent ke detail post
+    //move to detail post
     fun detailPostFromExplore(item: Data) {
+        appBarLayout?.visibility = View.GONE
+        tabs.visibility = View.GONE
+        edSearchbar.visibility = View.GONE
         val bundle = Bundle()
         bundle.putParcelable("data", item)
-        val dataPostt = DetailPostHashtag()
+        val dataPostt = DetailPosttGeneral()
         dataPostt.arguments = bundle
         manager?.beginTransaction()
             ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             ?.replace(R.id.fragmentExplore, dataPostt)
             ?.commit()
     }
+
+    fun backToHome(view: View) {
+        appBarLayout?.visibility = View.VISIBLE
+        tabs.visibility = View.VISIBLE
+        edSearchbar.visibility = View.VISIBLE
+        manager?.beginTransaction()
+            ?.replace(R.id.fragmentExplore, ListMediaGeneral())?.commit()
+    }
+
+    //move to hashtagActivity
     fun more(data: Data) {
-//        LinLayout1.visibility = View.GONE
-//        tabsHashtag.visibility = View.GONE
+        appBarLayout?.visibility = View.GONE
+        tabs.visibility = View.GONE
+        edSearchbar.visibility = View.GONE
         val bundle = Bundle()
         bundle.putParcelable("data", data)
         val dataPost = DetailPostHashtag()
         dataPost.arguments = bundle
         manager?.beginTransaction()
             ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            ?.replace(R.id.fragmentHashtag, dataPost)
+            ?.replace(R.id.fragmentExplore, dataPost)
             ?.commit()
     }
 
