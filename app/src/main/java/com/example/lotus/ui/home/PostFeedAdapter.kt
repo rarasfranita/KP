@@ -111,6 +111,7 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
                 username.text = post?.username
                 likeCount = post?.likesCount!!
                 likeStatus = post?.liked
+                commentCount = post?.commentsCount!!
 
                 if (commentCount > 0){
                     comment.text = commentCount.toString()
@@ -210,7 +211,7 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
         }
 
         fun setHashTag(view: TextView, tags: ArrayList<String>?){
-            if (tags?.size!! > 0 ) {
+            if (tags?.size!! > 0) {
                 var hashTag: String = ""
                 var anyMore = false
 
@@ -273,13 +274,11 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
                     likeStatus = 0
                     likeCount--
                     setLike(view, likeStatus, likeCount)
-//                Add logic to hit end point like
                 }else {
                     likePost(postData?.postId.toString(), postData?.belongsTo.toString())
                     likeStatus = 1
                     likeCount++
                     setLike(view, likeStatus, likeCount)
-//                Add logic to hit endpont dislike
                 }
             }
         }

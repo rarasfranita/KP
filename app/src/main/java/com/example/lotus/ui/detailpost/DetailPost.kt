@@ -133,7 +133,12 @@ class DetailPost : Fragment() {
         val time: TextView = view.findViewById<View>(R.id.textTimePost) as TextView
 
         username.text = postData?.username
-        caption.text = postData?.text
+
+        if (postData?.text?.length!! < 1){
+            caption.visibility = View.GONE
+        }else {
+            caption.text = postData?.text
+        }
 
         if (commentCount > 0){
             comment.text = commentCount.toString()
@@ -206,7 +211,7 @@ class DetailPost : Fragment() {
     }
 
     fun setHashTag(view: TextView, tags: ArrayList<String>?){
-        if (tags != null) {
+        if (tags?.size!! > 0) {
             var hashTag: String = ""
             for (tag in tags){
                 hashTag += "#$tag "
