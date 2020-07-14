@@ -19,7 +19,7 @@ import com.example.lotus.R
 import com.example.lotus.models.Post
 import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
-import com.example.lotus.ui.CreatePost
+import com.example.lotus.ui.CreatePostActivity
 import com.example.lotus.ui.detailpost.DetailPost
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -35,6 +35,7 @@ class HomeActivity : AppCompatActivity() {
     private var manager: FragmentManager? = null
     private val token = "5f0697c5f165da1a2cc6d3f0"
     var dataFeed = ArrayList<Post>()
+    val username = "testaccount1"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +57,8 @@ class HomeActivity : AppCompatActivity() {
     }
 
     fun getFeedsData(){
-        AndroidNetworking.get(EnvService.ENV_API + "/feeds/testaccount1/-1")
+        AndroidNetworking.get(EnvService.ENV_API + "/feeds/{username}/0")
+            .addPathParameter("username", username)
             .addHeaders("Authorization", "Bearer " + token)
             .setTag(this)
             .setPriority(Priority.LOW)
@@ -89,16 +91,16 @@ class HomeActivity : AppCompatActivity() {
     }
 
     fun loadFeed(data: ArrayList<Post>, homeFeed: RecyclerView){
-        homeFeed.setHasFixedSize(true)
-        homeFeed.layoutManager = LinearLayoutManager(this)
         val adapter = PostFeedAdapter(data, this)
         adapter.notifyDataSetChanged()
 
         homeFeed.adapter = adapter
+        homeFeed.setHasFixedSize(true)
+        homeFeed.layoutManager = LinearLayoutManager(this)
     }
 
     private fun fabPostOnClick() {
-        val intent = Intent(this, CreatePost::class.java)
+        val intent = Intent(this, CreatePostActivity::class.java)
         startActivity(intent)
     }
 

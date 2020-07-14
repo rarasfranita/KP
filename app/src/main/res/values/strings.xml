@@ -52,6 +52,11 @@
     <string name="hint_caption">Tell the story about goodness...</string>
     <string name="image">image</string>
     <string name="video">video</string>
+    <string name="repost">Repost</string>
+    <string name="choose">Choose</string>
+    <string name="task_cancelled">Task Cancelled</string>
+    <string name="add_hashtag">Add Hashtag</string>
+    <string name="hint_add_tag">Hashtag separated by comma. \neg: Hashtag1, Hashtag2</string>
 
     <!-- Text Home-->
 

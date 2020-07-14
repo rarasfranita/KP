@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/createPost"
     android:orientation="vertical"
-    tools:context=".ui.CreatePost">
+    tools:context=".ui.CreatePostActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/ablCreatePost"
@@ -29,40 +30,60 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/create_post"
-                    android:textSize="20dp"/>
+                    android:textSize="20dp"
+                    android:id="@+id/postingTitle"/>
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_post"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="10dp"
-                    android:onClick="sendPost"></ImageView>
+                    android:id="@+id/icPosting"/>
             </RelativeLayout>
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:id="@+id/llAddCaption">
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginLeft="5dp"
-            android:src="@drawable/ic_profile"></ImageView>
+            android:src="@drawable/ic_profile"/>
 
-        <EditText
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/eTextCaption"
-            android:layout_marginLeft="10dp"
-            android:gravity="top|left"
-            android:background="@null"
-            android:maxLength="400"
-            android:hint="@string/hint_caption" />
+            android:layout_height="wrap_content">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textCaption"
+                android:layout_marginLeft="10dp"
+                android:gravity="top|left"
+                android:background="@null"
+                android:textColor="@color/black76"
+                android:maxLength="700"
+                android:hint="@string/hint_caption" />
+        </androidx.core.widget.NestedScrollView>
+
     </LinearLayout>
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textCaptionRepost"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"/>
+    </androidx.core.widget.NestedScrollView>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -74,8 +95,47 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
+            android:id="@+id/llProgres"
             android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="24pt"
+                android:text="0%"
+                android:gravity="center"
+                android:id="@+id/textProgress"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Compressing Image"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:orientation="vertical"
+            android:id="@+id/createPostBottom">
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add_tag"
+                android:id="@+id/addTagButton"
+                android:paddingBottom="10dp"
+                />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent">
+                <TextView android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollHorizontally="true"
+                    android:id="@+id/textHashtag"
+                    android:paddingBottom="10dp"/>
+
+            </HorizontalScrollView>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="wrap_content"
@@ -83,7 +143,6 @@
                 android:orientation="horizontal"
                 android:id="@+id/rvPreviewPostMedia"
                 app:layout_constraintBottom_toTopOf="@+id/btmBotton">
-
             </androidx.recyclerview.widget.RecyclerView>
 
             <Button
@@ -95,7 +154,7 @@
                 android:backgroundTint="@color/white"
                 android:textColor="@color/colorPrimaryDark"
                 android:paddingBottom="10dp"
-                android:onClick="uploadPhoto"
+                android:onClick="selectPhoto"
                 app:strokeColor="@color/colorAccent"
                 app:strokeWidth="1dp"
                 style="?android:attr/borderlessButtonStyle"/>
@@ -112,6 +171,42 @@
                 app:strokeColor="@color/colorAccent"
                 app:strokeWidth="1dp"
                 style="?android:attr/borderlessButtonStyle"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:orientation="vertical"
+            android:id="@+id/repostBottom">
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add_tag"
+                android:id="@+id/addTagButtonRepost"
+                android:paddingBottom="10dp"
+                />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent">
+
+                <TextView android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollHorizontally="true"
+                    android:id="@+id/textHashtagRepost"
+                    android:paddingBottom="10dp"/>
+
+            </HorizontalScrollView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:orientation="horizontal"
+                android:id="@+id/rvPreviewRepostMedia">
+            </androidx.recyclerview.widget.RecyclerView>
+
         </LinearLayout>
     </FrameLayout>
 
