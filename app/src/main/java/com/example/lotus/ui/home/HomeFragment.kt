@@ -1,7 +1,6 @@
 package com.example.lotus.ui.home
 
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -17,10 +16,6 @@ class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
     private val TAG = "HomeFragment"
-
-    private val mPhotos: ArrayList<ContactsContract.CommonDataKinds.Photo>? = null
-    private val mPaginatedPhotos: ArrayList<ContactsContract.CommonDataKinds.Photo>? = null
-    private var resultsCount = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -3,8 +3,8 @@ package com.example.lotus.models;
 import android.os.Parcel
 import android.os.Parcelable
 
-public class Post(
-    val id: Number,
+class Post(
+    val id: Int?,
     val username: String?,
     val profilePicture: String?,
     val name: String?,
@@ -13,12 +13,13 @@ public class Post(
     val views: String?,
     val date: String?,
     val text: String?,
-    val like: Boolean?,
+    val liked: Int?,
+    val postId: String?,
     val tag: ArrayList<String>?,
     val media: ArrayList<MediaData>?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        TODO("id"),
+        parcel.readInt(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -27,13 +28,15 @@ public class Post(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readValue(Boolean::class.java.classLoader) as? Boolean,
-        TODO("tag"),
-        TODO("media")
+        parcel.readInt(),
+        parcel.readString(),
+        parcel.createStringArrayList(),
+        parcel.createTypedArrayList(MediaData)
     ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(id as Int)
         parcel.writeString(username)
         parcel.writeString(profilePicture)
         parcel.writeString(name)
@@ -42,7 +45,8 @@ public class Post(
         parcel.writeString(views)
         parcel.writeString(date)
         parcel.writeString(text)
-        parcel.writeValue(like)
+//        parcel.writeInt(liked as Int)
+        parcel.writeString(postId)
     }
 
     override fun describeContents(): Int {
