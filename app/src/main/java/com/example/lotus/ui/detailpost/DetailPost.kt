@@ -20,16 +20,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import coil.transform.CircleCropTransformation
+import com.androidnetworking.AndroidNetworking.get
+import com.androidnetworking.common.Priority
+import com.androidnetworking.error.ANError
+import com.androidnetworking.interfaces.ParsedRequestListener
 import com.asura.library.posters.Poster
 import com.asura.library.posters.RemoteImage
 import com.asura.library.posters.RemoteVideo
 import com.asura.library.views.PosterSlider
 import com.example.lotus.R
 import com.example.lotus.models.*
+import com.example.lotus.service.EnvService
 import com.example.lotus.ui.CreatePostActivity
+import com.example.lotus.utils.dateToFormatTime
 import com.example.lotus.utils.dislikePost
 import com.example.lotus.utils.likePost
-import com.example.lotus.utils.setTimePost
+import com.example.lotus.utils.token
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.layout_detail_post.view.*
 import matrixsystems.nestedexpandablerecyclerview.RowAdapter
 
@@ -99,13 +106,11 @@ class DetailPost : Fragment() {
                 likeStatus = 0
                 likeCount--
                 setLike(view, likeStatus, likeCount)
-//                Add logic to hit end point like
             }else {
                 likePost(postData?.postId.toString(), postData?.belongsTo.toString())
                 likeStatus = 1
                 likeCount++
                 setLike(view, likeStatus, likeCount)
-//                Add logic to hit endpont dislike
             }
         }
     }
@@ -146,7 +151,7 @@ class DetailPost : Fragment() {
 
         setMediaPost(view, postData?.media, postData?.text)
         setProfilePicture(ava, postData?.profilePicture)
-        setTimePost(time, postData?.date)
+        dateToFormatTime(time, postData?.date)
         setLike(view, postData?.liked, likeCount)
     }
 
@@ -226,7 +231,7 @@ class DetailPost : Fragment() {
         recyclerView = v.findViewById(R.id.recycler_view)
         rows = mutableListOf()
         val context: Context = this.requireContext()
-        rowAdapter = RowAdapter(context, rows)
+        rowAdapter = RowAdapter(context, rows, this)
 
         recyclerView.layoutManager = LinearLayoutManager(
             context,
@@ -236,7 +241,7 @@ class DetailPost : Fragment() {
 
         recyclerView.adapter = rowAdapter
 
-        populateData()
+        populateCommentData()
     }
 
     fun sendComment(v: View){
@@ -247,17 +252,54 @@ class DetailPost : Fragment() {
         }
     }
 
-    fun populateData(){ //For sample comment section
-        var child1 : MutableList<ChildComment> = mutableListOf()
-        child1.add(ChildComment("Hello", "aduh", "hhhhh", "1 second ago", "100"))
-        child1.add(ChildComment("gatu", "aduh", "hhhhh", "1 second ago", "23"))
-        child1.add(ChildComment("kenapa", "aduh", "hhhhh", "1 second ago", "4000"))
-        child1.add(ChildComment("pusing", "aduh", "hhhhh", "1 second ago", "1"))
+    fun populateCommentData(){
+        get(EnvService.ENV_API + "/posts/{postID}/comments/all")
+            .addHeaders("Authorization", "Bearer " + token)
+            .addPathParameter("postID", postData?.postId)
+            .setPriority(Priority.MEDIUM)
+            .build()
+            .getAsObject(
+                Respon::class.java,
+                object : ParsedRequestListener<Respon> {
+                    override fun onResponse(respon: Respon) {
+                        val gson = Gson()
+                        if (respon.code.toString() == "200") {
+                            Log.d("Get Comment", "Success")
+                            val strRes = gson.toJson(respon.data)
+                            val data = gson.fromJson(strRes, PostWithComment::class.java)
+                            val comments = data.comments
 
+                            for (comment in comments){
+                                var child1 : MutableList<ChildComment> = mutableListOf()
+                                for (reply in comment.replies!!){
 
-        rows.add(CommentRowModel(CommentRowModel.PARENT, Comment("Hello world", "aduhduh", "helo", "1 second", "10k", child1)))
-        rows.add(CommentRowModel(CommentRowModel.PARENT, Comment("Ih aplikasinya bagus banget suka deh", "rhmdnrhuda", "helo", "1 second", "1", child1)))
+                                    child1.add(ChildComment(reply.id, reply.parentId, reply.userId, reply.text, reply.username, reply.profilePicture, reply.createdAt, reply.name))
+                                }
+                                rows.add((CommentRowModel(
+                                    CommentRowModel.PARENT,
+                                    Comment(
+                                        comment.id,
+                                        comment.parentId,
+                                        comment.userId,
+                                        comment.text,
+                                        comment.username,
+                                        comment.profilePicture,
+                                        comment.createdAt,
+                                        comment.name,
+                                        child1
+                                    ))))
+                                rowAdapter.notifyDataSetChanged()
+                            }
 
-        rowAdapter.notifyDataSetChanged()
+                        }else {
+                            Log.e("ERROR!!!", "Get Comment Data ${respon.code}")
+                        }
+                    }
+
+                    override fun onError(anError: ANError) {
+                        Log.e("ERROR!!!", "Like Post ${anError.errorCode}")
+
+                    }
+                })
     }
 }

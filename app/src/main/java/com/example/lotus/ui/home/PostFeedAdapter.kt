@@ -33,7 +33,7 @@ import com.example.lotus.models.Post
 import com.example.lotus.ui.CreatePostActivity
 import com.example.lotus.utils.dislikePost
 import com.example.lotus.utils.likePost
-import com.example.lotus.utils.setTimePost
+import com.example.lotus.utils.dateToFormatTime
 import kotlinx.android.synthetic.main.layout_mainfeed_listitem.view.*
 import kotlinx.android.synthetic.main.progress_loading.view.*
 
@@ -121,7 +121,7 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
 
                 setMediaPost(view, post?.media, post?.text)
                 setProfilePicture(ava, post?.profilePicture.toString())
-                setTimePost(time, post?.date)
+                dateToFormatTime(time, post?.date)
                 setLike(view, post?.liked, likeCount)
             }
         }

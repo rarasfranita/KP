@@ -11,10 +11,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lotus.R
 import com.example.lotus.models.CommentRowModel
+import com.example.lotus.ui.detailpost.DetailPost
+import com.example.lotus.utils.dateToFormatTime
 import kotlinx.android.synthetic.main.comment_parent.view.*
 
-class RowAdapter (val context: Context, var commentRowModels: MutableList<CommentRowModel>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class RowAdapter (val context: Context, var commentRowModels: MutableList<CommentRowModel>, detailPost: DetailPost) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var actionLock = false
+    private var mDetailPost = detailPost
 
     class CommentParentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         internal var textComment: TextView
@@ -61,13 +64,13 @@ class RowAdapter (val context: Context, var commentRowModels: MutableList<Commen
 
     override fun onBindViewHolder(p0: RecyclerView.ViewHolder, p1: Int) {
         val row = commentRowModels[p1]
-
         when(row.type){
             CommentRowModel.PARENT -> {
-                (p0 as CommentParentViewHolder).textComment.setText(Html.fromHtml("<b>" + row.parent.username +"</b> " + row.parent.comment))
-                p0.like.setText(row.parent.like)
-                p0.time.setText(row.parent.time)
-                if(row.parent.childComment == null || row.parent.childComment!!.size == 0) {
+                (p0 as CommentParentViewHolder).textComment.setText(Html.fromHtml("<b>" + row.parent.username +"</b> " + row.parent.text))
+                p0.like.visibility = View.GONE
+                dateToFormatTime(p0.time, row.parent.createdAt)
+//                p0.like.setText(row.parent.name)
+                if(row.parent.replies == null || row.parent.replies!!.size == 0) {
                     p0.itemView.textShowReplayComment.visibility = View.GONE
                 }
                 else {
@@ -94,11 +97,16 @@ class RowAdapter (val context: Context, var commentRowModels: MutableList<Commen
                         }
                     }
                 }
+
+                p0.itemView.replyCommentParent.setOnClickListener {
+                    mDetailPost.listenCommentIcon(mDetailPost.requireView())
+                }
             }
             CommentRowModel.CHILD -> {
-                (p0 as CommentChildViewHolder).textComment.setText(Html.fromHtml("<b>" + row.child.username +"</b> " + row.child.comment))
-                p0.like.setText(row.child.like)
-                p0.time.setText(row.child.time)
+                (p0 as CommentChildViewHolder).textComment.setText(Html.fromHtml("<b>" + row.child.username +"</b> " + row.child.text))
+//                p0.like.setText(row.child.name)
+                p0.like.visibility = View.GONE
+                dateToFormatTime(p0.time, row.child.createdAt)
             }
         }
     }
@@ -110,7 +118,7 @@ class RowAdapter (val context: Context, var commentRowModels: MutableList<Commen
 
         when (row.type) {
             CommentRowModel.PARENT -> {
-                for (state in row.parent.childComment!!) {
+                for (state in row.parent.replies!!) {
                     commentRowModels.add(++nextPosition, CommentRowModel(CommentRowModel.CHILD, state))
                 }
                 notifyDataSetChanged()
