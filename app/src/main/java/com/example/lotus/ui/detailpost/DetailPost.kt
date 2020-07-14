@@ -50,9 +50,7 @@ class DetailPost : Fragment() {
     lateinit var recyclerView : RecyclerView
     private var posterSlider: PosterSlider? = null
     private var commentID: String? = null
-
     var postData: Post? = null
-
     var likeStatus: Int? = 0
     var likeCount: Int = 0
     var commentCount: Int = 0
@@ -94,7 +92,7 @@ class DetailPost : Fragment() {
             val s = v.inputComment.text
             closeEditTextComment()
 
-            if (commentID == null || commentID == ""){
+            if (commentID == null){
                 AndroidNetworking.post(EnvService.ENV_API + "/posts/{postID}/comments")
                     .addHeaders("Authorization", "Bearer " + token)
                     .addPathParameter("postID", postData?.postId)
@@ -136,6 +134,7 @@ class DetailPost : Fragment() {
                                 if (respon.code.toString() == "200") {
                                     Log.d("Add Comment: ", "Success")
                                     v.inputComment.setText("")
+                                    commentID = null
                                     populateCommentData()
                                 }else {
                                     Log.e("ERROR!!!", "Add Comment Data ${respon.code}")
@@ -164,9 +163,9 @@ class DetailPost : Fragment() {
 
     fun closeEditTextComment(){
         val inputManager =
-            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(
-            activity?.getCurrentFocus()?.getWindowToken(),
+            requireActivity().getCurrentFocus()?.getWindowToken(),
             InputMethodManager.HIDE_NOT_ALWAYS
         )
     }
@@ -343,6 +342,7 @@ class DetailPost : Fragment() {
                             val strRes = gson.toJson(respon.data)
                             val data = gson.fromJson(strRes, PostWithComment::class.java)
                             val comments = data.comments
+
                             rows.clear()
                             commentCount = data.commentsCount!!
                             textIcCommentPost.text = commentCount.toString()
@@ -364,7 +364,9 @@ class DetailPost : Fragment() {
                                         comment.createdAt,
                                         comment.name,
                                         child1
-                                    ))))
+                                    )
+                                )))
+
                                 rowAdapter.notifyDataSetChanged()
                             }
 

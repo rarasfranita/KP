@@ -13,6 +13,7 @@ import com.example.lotus.R
 import com.example.lotus.models.CommentRowModel
 import com.example.lotus.ui.detailpost.DetailPost
 import com.example.lotus.utils.dateToFormatTime
+import kotlinx.android.synthetic.main.comment_child.view.*
 import kotlinx.android.synthetic.main.comment_parent.view.*
 
 class RowAdapter (val context: Context, var commentRowModels: MutableList<CommentRowModel>, detailPost: DetailPost) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -38,12 +39,14 @@ class RowAdapter (val context: Context, var commentRowModels: MutableList<Commen
         internal var like: TextView
         internal var time: TextView
         internal var avatar: ImageView
+        internal var reply: TextView
 
         init {
             this.textComment = itemView.findViewById(R.id.textCommentChild) as TextView
             this.like = itemView.findViewById(R.id.textLikeComentChild) as TextView
             this.time = itemView.findViewById(R.id.textTimeCommentChild) as TextView
             this.avatar = itemView.findViewById(R.id.imageAvatarCommentChild) as ImageView
+            this.reply = itemView.findViewById(R.id.replyCommentChild) as TextView
         }
     }
 
@@ -108,6 +111,10 @@ class RowAdapter (val context: Context, var commentRowModels: MutableList<Commen
 //                p0.like.setText(row.child.name)
                 p0.like.visibility = View.GONE
                 dateToFormatTime(p0.time, row.child.createdAt)
+                p0.itemView.replyCommentChild.setOnClickListener {
+                    mDetailPost.setCommentID(row.child.parentId!!)
+                    mDetailPost.openEditTextComment(mDetailPost.requireView())
+                }
             }
         }
     }
