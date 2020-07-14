@@ -27,14 +27,21 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvHomeFeed"
+    <com.baoyz.widget.PullRefreshLayout
+        android:id="@+id/prlFeed"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-        android:paddingBottom="150dp"
-        ></androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="0dp"
+        app:refreshColor="@color/colorPrimary"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvHomeFeed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+            android:paddingBottom="150dp"/>
+    </com.baoyz.widget.PullRefreshLayout>
+
+
 
 
 

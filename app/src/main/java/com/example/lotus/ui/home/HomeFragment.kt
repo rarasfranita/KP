@@ -17,6 +17,7 @@ import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.ParsedRequestListener
+import com.baoyz.widget.PullRefreshLayout
 import com.example.lotus.R
 import com.example.lotus.models.Post
 import com.example.lotus.models.Respons
@@ -46,14 +47,22 @@ class HomeFragment : Fragment() {
         homeViewModel =
             ViewModelProviders.of(this).get(HomeViewModel::class.java)
         val v = inflater.inflate(R.layout.fragment_home, container, false)
+        val reloadFeed: PullRefreshLayout = v.findViewById(R.id.prlFeed)
 
         listenAppToolbar(v)
-        getFeedsData()
+        getFeedsData(reloadFeed)
 //        setRVScrollListener(v) TODO
+
+        reloadFeed.setOnRefreshListener {
+            getFeedsData(reloadFeed)
+        }
+
         return v
     }
 
-    fun getFeedsData(){
+    fun getFeedsData(v: PullRefreshLayout){
+        v.setRefreshing(true)
+
         AndroidNetworking.get(EnvService.ENV_API + "/feeds/{username}/{id}")
             .addPathParameter("username", username)
             .addPathParameter("id", idBucket.toString())
@@ -65,18 +74,22 @@ class HomeFragment : Fragment() {
                 Respons::class.java,
                 object : ParsedRequestListener<Respons> {
                     override fun onResponse(respon: Respons) {
+                        prlFeed.setRefreshing(false)
                         val gson = Gson()
+                        var tempDataFeed = ArrayList<Post>()
                         if (respon.code.toString() == "200") {
                             for ((i, res) in respon.data.withIndex()) {
                                 val strRes = gson.toJson(res)
                                 val dataJson = gson.fromJson(strRes, Post::class.java)
-                                dataFeed.add(dataJson)
+                                tempDataFeed.add(dataJson)
+
+                                /* TODO: For load data scrolling
                                 if (i.equals(respon.data.size-1)){
-                                    Log.d(TAG,"Change id bucket")
                                     idBucket = dataJson.id!!
                                 }
+                                 */
                             }
-
+                            dataFeed = tempDataFeed
                             loadFeed(dataFeed, rvHomeFeed)
 
                         }else {
@@ -85,6 +98,7 @@ class HomeFragment : Fragment() {
                     }
 
                     override fun onError(anError: ANError) {
+                        prlFeed.setRefreshing(false)
                         Toast.makeText(context, "Error ${anError.errorCode}", Toast.LENGTH_SHORT).show()
                         Log.d("Errornya disini kah?", anError.toString())
                     }
