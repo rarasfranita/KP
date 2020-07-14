@@ -1,7 +1,6 @@
 package com.example.lotus.ui.detailpost
 
 import android.content.Context
-import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -20,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import coil.transform.CircleCropTransformation
+import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.AndroidNetworking.get
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
@@ -37,17 +37,19 @@ import com.example.lotus.utils.dislikePost
 import com.example.lotus.utils.likePost
 import com.example.lotus.utils.token
 import com.google.gson.Gson
+import kotlinx.android.synthetic.main.layout_detail_post.*
 import kotlinx.android.synthetic.main.layout_detail_post.view.*
 import matrixsystems.nestedexpandablerecyclerview.RowAdapter
 
 
 class DetailPost : Fragment() {
     private val TAG = "[DetailPost] [Fragment]"
-
+    val userID = "5f0466e2e524346040f53178"
     lateinit var rowAdapter: RowAdapter
     lateinit var rows : MutableList<CommentRowModel>
     lateinit var recyclerView : RecyclerView
     private var posterSlider: PosterSlider? = null
+    private var commentID: String? = null
 
     var postData: Post? = null
 
@@ -85,17 +87,98 @@ class DetailPost : Fragment() {
         return v
     }
 
+
+    fun sendComment(v: View){
+        val btnSend = v.findViewById<View>(R.id.imageSendComment)
+        btnSend.setOnClickListener{
+            val s = v.inputComment.text
+            closeEditTextComment()
+
+            if (commentID == null || commentID == ""){
+                AndroidNetworking.post(EnvService.ENV_API + "/posts/{postID}/comments")
+                    .addHeaders("Authorization", "Bearer " + token)
+                    .addPathParameter("postID", postData?.postId)
+                    .addBodyParameter("userId", userID)
+                    .addBodyParameter("text", s.toString())
+                    .setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsObject(
+                        Respon::class.java,
+                        object : ParsedRequestListener<Respon> {
+                            override fun onResponse(respon: Respon) {
+                                if (respon.code.toString() == "200") {
+                                    Log.d("Add Comment: ", "Success")
+                                    v.inputComment.setText("")
+                                    populateCommentData()
+                                }else {
+                                    Log.e("ERROR!!!", "Add Comment Data ${respon.code}")
+                                }
+                            }
+
+                            override fun onError(anError: ANError) {
+                                Log.e("ERROR!!!", "Add Comment ${anError.errorCode}")
+
+                            }
+                        })
+            }else {
+                AndroidNetworking.post(EnvService.ENV_API + "/posts/{postID}/comments/{commentID}/replies")
+                    .addHeaders("Authorization", "Bearer " + token)
+                    .addPathParameter("postID", postData?.postId)
+                    .addPathParameter("commentID", commentID)
+                    .addBodyParameter("userId", userID)
+                    .addBodyParameter("text", s.toString())
+                    .setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsObject(
+                        Respon::class.java,
+                        object : ParsedRequestListener<Respon> {
+                            override fun onResponse(respon: Respon) {
+                                if (respon.code.toString() == "200") {
+                                    Log.d("Add Comment: ", "Success")
+                                    v.inputComment.setText("")
+                                    populateCommentData()
+                                }else {
+                                    Log.e("ERROR!!!", "Add Comment Data ${respon.code}")
+                                }
+                            }
+
+                            override fun onError(anError: ANError) {
+                                Log.e("ERROR!!!", "Add Comment ${anError.errorCode}")
+
+                            }
+                        })
+            }
+        }
+    }
+
+    fun setCommentID(id: String){
+        this.commentID = id
+    }
+
     fun listenCommentIcon(view: View){
         val commentIcon = view.findViewById<ImageView>(R.id.icCommentPost)
+        commentIcon.setOnClickListener(View.OnClickListener {
+            openEditTextComment(view)
+        })
+    }
+
+    fun closeEditTextComment(){
+        val inputManager =
+            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(
+            activity?.getCurrentFocus()?.getWindowToken(),
+            InputMethodManager.HIDE_NOT_ALWAYS
+        )
+    }
+
+    fun openEditTextComment(view: View){
         val inputComment = view.findViewById<EditText>(R.id.inputComment)
 
-        commentIcon.setOnClickListener(View.OnClickListener {
-            inputComment.requestFocus()
-            inputComment.setFocusableInTouchMode(true)
-            val imm: InputMethodManager =
-                activity?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            imm?.showSoftInput(inputComment, InputMethodManager.SHOW_FORCED)
-        })
+        inputComment.requestFocus()
+        inputComment.setFocusableInTouchMode(true)
+        val imm: InputMethodManager =
+            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm?.showSoftInput(inputComment, InputMethodManager.SHOW_FORCED)
     }
 
     fun listenLikeIcon(view: View){
@@ -244,14 +327,6 @@ class DetailPost : Fragment() {
         populateCommentData()
     }
 
-    fun sendComment(v: View){
-        val btnSend = v.findViewById<View>(R.id.imageSendComment)
-        val s = v.inputComment.text
-        btnSend.setOnClickListener{
-            Log.d("Comment: ", s.toString())
-        }
-    }
-
     fun populateCommentData(){
         get(EnvService.ENV_API + "/posts/{postID}/comments/all")
             .addHeaders("Authorization", "Bearer " + token)
@@ -268,11 +343,13 @@ class DetailPost : Fragment() {
                             val strRes = gson.toJson(respon.data)
                             val data = gson.fromJson(strRes, PostWithComment::class.java)
                             val comments = data.comments
+                            rows.clear()
+                            commentCount = data.commentsCount!!
+                            textIcCommentPost.text = commentCount.toString()
 
                             for (comment in comments){
                                 var child1 : MutableList<ChildComment> = mutableListOf()
                                 for (reply in comment.replies!!){
-
                                     child1.add(ChildComment(reply.id, reply.parentId, reply.userId, reply.text, reply.username, reply.profilePicture, reply.createdAt, reply.name))
                                 }
                                 rows.add((CommentRowModel(

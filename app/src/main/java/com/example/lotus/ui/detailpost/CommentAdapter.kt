@@ -99,7 +99,8 @@ class RowAdapter (val context: Context, var commentRowModels: MutableList<Commen
                 }
 
                 p0.itemView.replyCommentParent.setOnClickListener {
-                    mDetailPost.listenCommentIcon(mDetailPost.requireView())
+                    mDetailPost.setCommentID(row.parent.id!!)
+                    mDetailPost.openEditTextComment(mDetailPost.requireView())
                 }
             }
             CommentRowModel.CHILD -> {
