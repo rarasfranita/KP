@@ -27,6 +27,8 @@ import com.asura.library.views.PosterSlider
 import com.example.lotus.R
 import com.example.lotus.models.*
 import com.example.lotus.ui.CreatePostActivity
+import com.example.lotus.utils.dislikePost
+import com.example.lotus.utils.likePost
 import com.example.lotus.utils.setTimePost
 import kotlinx.android.synthetic.main.layout_detail_post.view.*
 import matrixsystems.nestedexpandablerecyclerview.RowAdapter
@@ -93,11 +95,13 @@ class DetailPost : Fragment() {
         val likeIcon = view.findViewById<RelativeLayout>(R.id.likeLayoutPost)
         likeIcon.setOnClickListener {
             if(likeStatus.toString() == "1"){
+                dislikePost(postData?.postId.toString(), postData?.belongsTo.toString())
                 likeStatus = 0
                 likeCount--
                 setLike(view, likeStatus, likeCount)
 //                Add logic to hit end point like
             }else {
+                likePost(postData?.postId.toString(), postData?.belongsTo.toString())
                 likeStatus = 1
                 likeCount++
                 setLike(view, likeStatus, likeCount)
