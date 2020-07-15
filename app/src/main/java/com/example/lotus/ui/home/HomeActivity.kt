@@ -47,37 +47,10 @@ class HomeActivity : AppCompatActivity() {
         AndroidNetworking.initialize(getApplicationContext());
     }
 
-
-
     private fun fabPostOnClick() {
         val intent = Intent(this, CreatePostActivity::class.java)
         startActivity(intent)
     }
-
-//    override fun onTouchEvent(touchEvent:MotionEvent):Boolean {
-//        Log.d(TAG, touchEvent.toString())
-//        when (touchEvent.getAction()) {
-//            MotionEvent.ACTION_DOWN -> {
-//                x1 = touchEvent.getX()
-//                y1 = touchEvent.getY()
-//            }
-//            MotionEvent.ACTION_UP -> {
-//                x2 = touchEvent.getX()
-//                y2 = touchEvent.getY()
-//                if (x1 > x2)
-//                {
-//                    val i = Intent(this, NotificationActivity::class.java)
-//                    startActivity(i)
-//                }
-//                else if (x1 < x2)
-//                {
-//                    val i = Intent(this, LoginActivity::class.java)
-//                    startActivity(i)
-//                }
-//            }
-//        }
-//        return false
-//    }
 
     private fun navigationMenuLogic(){
         val llBottomSheet =
