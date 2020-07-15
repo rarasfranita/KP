@@ -5,11 +5,9 @@
     android:layout_height="match_parent"
     tools:context=".ui.profile.TextFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-  <include layout="@layout/emptypostprofile"
-      ></include>
-    <include layout="@layout/layout_textprofile"></include>
-
-
-
+    <include layout="@layout/emptypostprofile"></include>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/list_text"/>
 </FrameLayout>

@@ -50,11 +50,24 @@
     <string name="tuesday">Tuesday</string>
     <string name="wednesday">Wednesday</string>
     <string name="title_activity_profile_child">ProfileChildActivity</string>
+    <string name="editprofile">Edit Profile</string>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
     -->
     <string name="hello_world">Hello Square World!</string>
+    <string name="name">Name</string>
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="number">Phone Number</string>
+    <string name="birth">Date of Birth</string>
+    <string name="gender">Gender</string>
+    <string name="security">Security</string>
+    <string name="biografi">bio</string>
+    <string name="ChangePassword">Change Password</string>
+    <string name="newPassword">New Password</string>
+    <string name="confirmpassword">Confirm Password</string>
+    <string name="title_activity_edit_profile">EditProfileActivity</string>
 
     <!-- Text Home-->
 
