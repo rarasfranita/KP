@@ -68,6 +68,13 @@
     <string name="newPassword">New Password</string>
     <string name="confirmpassword">Confirm Password</string>
     <string name="title_activity_edit_profile">EditProfileActivity</string>
+    <string name="repost">Repost</string>
+    <string name="choose">Choose</string>
+    <string name="task_cancelled">Task Cancelled</string>
+    <string name="add_hashtag">Add Hashtag</string>
+    <string name="hint_add_tag">Hashtag separated by comma (ex: Hashtag1, Hashtag2)</string>
+    <string name="load_more_reply">Load more reply</string>
+    <string name="lorem_ipsum">Lorem Ipsum Dolor Sit Amet</string>
 
     <!-- Text Home-->
 
