@@ -15,6 +15,7 @@ class Post(
     val text: String?,
     val liked: Int?,
     val postId: String?,
+    val belongsTo: String?,
     val tag: ArrayList<String>?,
     val media: ArrayList<MediaData>?
 ) : Parcelable {
@@ -29,6 +30,7 @@ class Post(
         parcel.readString(),
         parcel.readString(),
         parcel.readInt(),
+        parcel.readString(),
         parcel.readString(),
         parcel.createStringArrayList(),
         parcel.createTypedArrayList(MediaData)
@@ -47,6 +49,7 @@ class Post(
         parcel.writeString(text)
 //        parcel.writeInt(liked as Int)
         parcel.writeString(postId)
+        parcel.writeString(belongsTo)
     }
 
     override fun describeContents(): Int {
