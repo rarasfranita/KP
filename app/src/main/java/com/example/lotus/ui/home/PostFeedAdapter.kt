@@ -1,7 +1,14 @@
 package com.example.lotus.ui.home
 
 import android.content.Context
+import android.content.Intent
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.net.Uri
+import android.os.Build
+import android.os.Handler
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
@@ -23,43 +30,62 @@ import com.asura.library.views.PosterSlider
 import com.example.lotus.R
 import com.example.lotus.models.MediaData
 import com.example.lotus.models.Post
-import com.example.lotus.utils.setTimePost
+import com.example.lotus.ui.CreatePostActivity
+import com.example.lotus.utils.dislikePost
+import com.example.lotus.utils.likePost
+import com.example.lotus.utils.dateToFormatTime
 import kotlinx.android.synthetic.main.layout_mainfeed_listitem.view.*
+import kotlinx.android.synthetic.main.progress_loading.view.*
 
 
-class PostFeedAdapter(private val listPost: ArrayList<Post>, val context: Context) : RecyclerView.Adapter<PostFeedAdapter.Holder>() {
+class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var mContext: Context? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         this.mContext = context;
 
-        return Holder(
-            LayoutInflater.from(
-                parent.context
-            ).inflate(R.layout.layout_mainfeed_listitem, parent, false)
-        )
+        return if (viewType == Constant.VIEW_TYPE_ITEM) {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_mainfeed_listitem, parent, false)
+            ItemViewHolder(view)
+        } else {
+            val view = LayoutInflater.from(mContext).inflate(R.layout.progress_loading, parent, false)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                view.progressbar.indeterminateDrawable.colorFilter = BlendModeColorFilter(Color.WHITE, BlendMode.SRC_ATOP)
+            } else {
+                view.progressbar.indeterminateDrawable.setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY)
+            }
+            LoadingViewHolder(view)
+        }
     }
 
     override fun getItemCount(): Int = listPost?.size
 
-    override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.bindFeed(listPost[position], context)
-        holder.viewALlComment.setOnClickListener {
-            if (mContext is HomeActivity) {
-                (mContext as HomeActivity).detailPost(listPost[position])
-            }
-        }
-
-        holder.comment.setOnClickListener {
-            if (mContext is HomeActivity) {
-                (mContext as HomeActivity).detailPost(listPost[position])
-            }
-        }
-
+    fun addData(dataViews: ArrayList<Post>) {
+        this.listPost.addAll(dataViews)
+        notifyDataSetChanged()
     }
 
-    class Holder(val view: View) : RecyclerView.ViewHolder(view) {
-        val viewALlComment = view.findViewById<TextView>(R.id.viewAllComment)
+    fun getItemAtPosition(position: Int): Post? {
+        return listPost[position]
+    }
+
+    fun addLoadingView() {
+        Handler().post {
+            var post: Post = listPost[0]
+            listPost.add(post)
+            notifyItemInserted(listPost.size - 1)
+        }
+    }
+
+    fun removeLoadingView() {
+        //Remove loading item
+        if (listPost.size != 0) {
+            listPost.removeAt(listPost.size - 1)
+            notifyItemRemoved(listPost.size)
+        }
+    }
+
+    class ItemViewHolder(val view: View) : RecyclerView.ViewHolder(view){
         val comment = view.findViewById<RelativeLayout>(R.id.rlCommentFeed)
         var mContext: Context? = null
         private var posterSlider: PosterSlider? = null
@@ -75,7 +101,6 @@ class PostFeedAdapter(private val listPost: ArrayList<Post>, val context: Contex
                 mContext = context
 
                 listenLikeIcon(view)
-                listenCommentIcon(view)
 
                 val username :TextView = view.findViewById<View>(R.id.textUsernameFeed) as TextView
                 val caption : TextView = view.findViewById<View>(R.id.textCaptionFeed) as TextView
@@ -84,7 +109,9 @@ class PostFeedAdapter(private val listPost: ArrayList<Post>, val context: Contex
                 val time: TextView = view.findViewById<View>(R.id.textTimeFeed) as TextView
 
                 username.text = post?.username
-//                caption.text = post?.text
+                likeCount = post?.likesCount!!
+                likeStatus = post?.liked
+                commentCount = post?.commentsCount!!
 
                 if (commentCount > 0){
                     comment.text = commentCount.toString()
@@ -94,7 +121,7 @@ class PostFeedAdapter(private val listPost: ArrayList<Post>, val context: Contex
 
                 setMediaPost(view, post?.media, post?.text)
                 setProfilePicture(ava, post?.profilePicture.toString())
-                setTimePost(time, post?.date)
+                dateToFormatTime(time, post?.date)
                 setLike(view, post?.liked, likeCount)
             }
         }
@@ -174,6 +201,9 @@ class PostFeedAdapter(private val listPost: ArrayList<Post>, val context: Contex
                 captionView.text = spannableString
                 tagView.visibility = View.GONE
             }else{
+                if (text?.length!! < 1){
+                    captionView.visibility = View.GONE
+                }
                 val tagCaption = view.findViewById<TextView>(R.id.textHashtag2)
                 setHashTag(tagCaption, postData?.tag)
                 captionView.text = text
@@ -181,8 +211,7 @@ class PostFeedAdapter(private val listPost: ArrayList<Post>, val context: Contex
         }
 
         fun setHashTag(view: TextView, tags: ArrayList<String>?){
-
-            if (tags?.size!! > 0 ) {
+            if (tags?.size!! > 0) {
                 var hashTag: String = ""
                 var anyMore = false
 
@@ -237,36 +266,61 @@ class PostFeedAdapter(private val listPost: ArrayList<Post>, val context: Contex
             textLikeCount.text = likeCount.toString()
         }
 
-
-        fun listenCommentIcon(view: View){
-            val commentIcon = view.findViewById<ImageView>(R.id.icCommentFeed)
-//            val inputComment = view.findViewById<EditText>(R.id.inputComment)
-//
-//            commentIcon.setOnClickListener(View.OnClickListener {
-//                inputComment.requestFocus()
-//                inputComment.setFocusableInTouchMode(true)
-//                val imm: InputMethodManager =
-//                    activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//                imm?.showSoftInput(inputComment, InputMethodManager.SHOW_FORCED)
-//            })
-        }
-
         fun listenLikeIcon(view: View){
             val likeIcon = view.findViewById<RelativeLayout>(R.id.likeLayoutFeed)
             likeIcon.setOnClickListener {
                 if(likeStatus.toString() == "1"){
+                    dislikePost(postData?.postId.toString(), postData?.belongsTo.toString())
                     likeStatus = 0
                     likeCount--
                     setLike(view, likeStatus, likeCount)
-//                Add logic to hit end point like
                 }else {
+                    likePost(postData?.postId.toString(), postData?.belongsTo.toString())
                     likeStatus = 1
                     likeCount++
                     setLike(view, likeStatus, likeCount)
-//                Add logic to hit endpont dislike
                 }
             }
         }
     }
 
+    class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder.itemViewType == Constant.VIEW_TYPE_ITEM) {
+
+            val item = ItemViewHolder(holder.itemView)
+            item.bindFeed(listPost[position], context)
+
+
+            holder.itemView.viewAllComment.setOnClickListener {
+                if (mContext is HomeActivity) {
+                    (mContext as HomeActivity).detailPost(listPost[position])
+                }
+            }
+
+            holder.itemView.rlCommentFeed.setOnClickListener {
+                if (mContext is HomeActivity) {
+                    (mContext as HomeActivity).detailPost(listPost[position])
+                }
+            }
+
+            holder.itemView.icSharePost.setOnClickListener {
+                val intent = Intent(mContext, CreatePostActivity::class.java)
+
+                intent.putExtra("Extra", "DetailPost")
+                intent.putExtra("Media", listPost[position].media)
+                intent.putExtra("Text", listPost[position].text)
+                intent.putExtra("postID", listPost[position].postId)
+                intent.putExtra("Username", listPost[position].username)
+                intent.putExtra("Tags", listPost[position].tag)
+
+                if (mContext is HomeActivity) {
+                    (mContext as HomeActivity).startActivity(intent)
+                }
+            }
+
+
+        }
+    }
 }

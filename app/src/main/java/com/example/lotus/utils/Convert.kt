@@ -7,7 +7,7 @@ import java.util.*
 import kotlin.math.log10
 import kotlin.math.pow
 
-fun setTimePost(v: TextView, time: String?){
+fun dateToFormatTime(v: TextView, time: String?){
     val current = Calendar.getInstance();
     var timePost = Calendar.getInstance()
     val sdf: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX")
