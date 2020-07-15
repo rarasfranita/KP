@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="5dp"
             android:paddingRight="20dp"
-            android:text="ini komentar pedas netijen"
+            android:text="@string/lorem_ipsum"
             android:id="@+id/textCommentParent" />
     </LinearLayout>
 
@@ -67,7 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textShowReplayComment"
-            android:text="Load more reply"
+            android:text="@string/load_more_reply"
             android:paddingTop="5dp"
             android:textSize="12dp"/>
     </RelativeLayout>

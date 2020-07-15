@@ -56,7 +56,9 @@
     <string name="choose">Choose</string>
     <string name="task_cancelled">Task Cancelled</string>
     <string name="add_hashtag">Add Hashtag</string>
-    <string name="hint_add_tag">Hashtag separated by comma. \neg: Hashtag1, Hashtag2</string>
+    <string name="hint_add_tag">Hashtag separated by comma (ex: Hashtag1, Hashtag2)</string>
+    <string name="load_more_reply">Load more reply</string>
+    <string name="lorem_ipsum">Lorem Ipsum Dolor Sit Amet</string>
 
     <!-- Text Home-->
 

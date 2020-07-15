@@ -48,7 +48,7 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
     val TAG = "CreatePost Activity"
     val REQUEST_VIDEO_CAPTURE = 1
     lateinit var alertDialog: AlertDialog
-    private val username = "testaccount1"
+    private val username = "testaccount4"
     private val token = "5f02b3ac10032c371426b525"
 
     private val mediaPostDatas: ArrayList<MediaPost> = ArrayList()

@@ -1,8 +1,12 @@
 package com.example.lotus.models
 
 class ChildComment (
-    val comment: String,
-    val username: String,
-    val avatar: String,
-    val time: String,
-    val like: String){}
+    val id: String?,
+    val parentId: String?,
+    val userId: String?,
+    val text: String?,
+    val username: String?,
+    val profilePicture: String?,
+    val createdAt: String?,
+    val name: String?
+)
