@@ -22,9 +22,9 @@ import com.androidnetworking.interfaces.ParsedRequestListener
 import com.baoyz.widget.PullRefreshLayout
 import com.example.lotus.R
 import com.example.lotus.models.Post
-import com.example.lotus.ui.notification.NotificationActivity
 import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
+import com.example.lotus.ui.notification.NotificationActivity
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_home.*
 

@@ -2,8 +2,6 @@ package com.example.lotus.ui.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
@@ -12,9 +10,6 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.findNavController
 import com.androidnetworking.AndroidNetworking
 import com.example.lotus.R
-import com.example.lotus.ui.login.LoginActivity
-import com.example.lotus.ui.notification.NotificationActivity
-import com.r0adkll.slidr.Slidr
 import com.example.lotus.models.Post
 import com.example.lotus.ui.CreatePostActivity
 import com.example.lotus.ui.detailpost.DetailPost
@@ -59,30 +54,30 @@ class HomeActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    override fun onTouchEvent(touchEvent:MotionEvent):Boolean {
-        Log.d(TAG, touchEvent.toString())
-        when (touchEvent.getAction()) {
-            MotionEvent.ACTION_DOWN -> {
-                x1 = touchEvent.getX()
-                y1 = touchEvent.getY()
-            }
-            MotionEvent.ACTION_UP -> {
-                x2 = touchEvent.getX()
-                y2 = touchEvent.getY()
-                if (x1 > x2)
-                {
-                    val i = Intent(this, NotificationActivity::class.java)
-                    startActivity(i)
-                }
-                else if (x1 < x2)
-                {
-                    val i = Intent(this, LoginActivity::class.java)
-                    startActivity(i)
-                }
-            }
-        }
-        return false
-    }
+//    override fun onTouchEvent(touchEvent:MotionEvent):Boolean {
+//        Log.d(TAG, touchEvent.toString())
+//        when (touchEvent.getAction()) {
+//            MotionEvent.ACTION_DOWN -> {
+//                x1 = touchEvent.getX()
+//                y1 = touchEvent.getY()
+//            }
+//            MotionEvent.ACTION_UP -> {
+//                x2 = touchEvent.getX()
+//                y2 = touchEvent.getY()
+//                if (x1 > x2)
+//                {
+//                    val i = Intent(this, NotificationActivity::class.java)
+//                    startActivity(i)
+//                }
+//                else if (x1 < x2)
+//                {
+//                    val i = Intent(this, LoginActivity::class.java)
+//                    startActivity(i)
+//                }
+//            }
+//        }
+//        return false
+//    }
 
     private fun navigationMenuLogic(){
         val llBottomSheet =
