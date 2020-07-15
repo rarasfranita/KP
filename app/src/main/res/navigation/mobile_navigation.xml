@@ -30,4 +30,9 @@
         android:id="@+id/navigation_calendar"
         android:name="com.example.lotus.ui.home.HomeFragment"
         tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/detail_post"
+        android:name="com.example.lotus.ui.detailpost.DetailPost"
+        tools:layout="@layout/fragment_detail_post"/>
 </navigation>

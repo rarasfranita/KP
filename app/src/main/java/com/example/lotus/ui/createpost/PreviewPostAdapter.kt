@@ -42,15 +42,12 @@ class PreviewPostAdapter(private val listMedia: ArrayList<MediaPost>) :
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        public val fabDeleteMediaItem = itemView.findViewById<View>(R.id.fabDeleteMedia)
+        val fabDeleteMediaItem = itemView.findViewById<View>(R.id.fabDeleteMedia)
 
         fun bindFeed(post: MediaPost){
             itemView.apply {
-                var image: ImageView
-                var video: VideoView
-
-                image = itemView.findViewById(R.id.imagePreviewPost)
-                video = itemView.findViewById(R.id.videoPreviewPost)
+                val image: ImageView = itemView.findViewById(R.id.imagePreviewPost)
+                val video: VideoView = itemView.findViewById(R.id.videoPreviewPost)
 
                 if (post.type =="image"){
                     video.setVisibility(View.INVISIBLE)
