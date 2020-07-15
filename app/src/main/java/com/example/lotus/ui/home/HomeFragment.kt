@@ -60,7 +60,7 @@ class HomeFragment : Fragment() {
             }
             true
         }
-        getFeedsData(reloadFeed)
+        getFeedsData(null)
 //        setRVScrollListener(v) TODO
 
         reloadFeed.setOnRefreshListener {
@@ -70,8 +70,10 @@ class HomeFragment : Fragment() {
         return v
     }
 
-    fun getFeedsData(v: PullRefreshLayout){
-        v.setRefreshing(true)
+    fun getFeedsData(v: PullRefreshLayout?){
+        if (v !=  null){
+            v.setRefreshing(true)
+        }
 
         AndroidNetworking.get(EnvService.ENV_API + "/feeds/{username}/{id}")
             .addPathParameter("username", username)
