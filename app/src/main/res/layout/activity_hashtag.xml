@@ -20,7 +20,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
-            android:src="@drawable/ic_arrow_back_black" />
+            android:onClick="backToExplore"
+            android:clickable="true"
+            android:src="@drawable/ic_arrow_back_black"
+            android:focusable="true" />
 
         <TextView
             android:id="@+id/hashtagDiHashtag"
@@ -28,12 +31,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="#inihashtag"
-            android:textSize="14sp"
+            android:textSize="18sp"
             android:fontFamily="@font/lato"
             android:textStyle="bold"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="20dp"
             android:textColor="#6B6B6B"/>
-
     </LinearLayout>
 
     <com.google.android.material.tabs.TabLayout

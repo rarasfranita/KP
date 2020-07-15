@@ -2,26 +2,33 @@ package com.example.lotus.ui.explore.general.adapter
 
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
-import android.util.Log
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.lotus.R
-import com.example.lotus.ui.explore.general.GeneralActivity
+import com.example.lotus.ui.detailpost.DetailPost
 import com.example.lotus.ui.explore.general.model.Data
 import com.example.lotus.ui.explore.general.model.Post
+import com.example.lotus.ui.explore.hashtag.HashtagActivity
 import com.example.lotus.utils.DynamicSquareLayout
 import com.squareup.picasso.Picasso
 
 
-class GeneralMediaAdapter(private val listExploreMedia: MutableList<Data>, val context: Context) :
-    RecyclerView.Adapter<GeneralMediaAdapter.Holder>() {
+class GeneralMediaAdapter(
+    private val listExploreMedia: MutableList<Data>, var context: Context)
+    : RecyclerView.Adapter<GeneralMediaAdapter.Holder>() {
+
+    var data: Post? = null
     private var mContext: Context? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         this.mContext = context
         return Holder(
@@ -29,41 +36,16 @@ class GeneralMediaAdapter(private val listExploreMedia: MutableList<Data>, val c
                 parent.context
             ).inflate(R.layout.layout_explore_mediaitem, parent, false)
         )
-
     }
 
 
     override fun getItemCount(): Int = listExploreMedia.size
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.bindFeed(listExploreMedia[position], context)
-        //tambahan
-        holder.dynamicSquare1.setOnClickListener {
-            if (mContext is GeneralActivity) {
-                (mContext as GeneralActivity).detailPostFromExplore(listExploreMedia[position])
-            }
-        }
-        holder.dynamicSquare2.setOnClickListener {
-            if (mContext is GeneralActivity) {
-                (mContext as GeneralActivity).detailPostFromExplore(listExploreMedia[position])
-            }
-        }
-        holder.dynamicSquare3.setOnClickListener {
-            if (mContext is GeneralActivity) {
-                (mContext as GeneralActivity).detailPostFromExplore(listExploreMedia[position])
-            }
-        }
-        holder.more.setOnClickListener {
-            if (mContext is GeneralActivity) {
-                (mContext as GeneralActivity).more(listExploreMedia[position])
-            }
-        }
-    }
+        holder.bindFeed(listExploreMedia[position], context) }
 
     class Holder(val view: View) : RecyclerView.ViewHolder(view) {
         var mContext: Context? = null
-        val more: TextView = view.findViewById(R.id.moreMedia)
-        var dynamicSquare1 = view.findViewById(R.id.dynamicSquare1) as DynamicSquareLayout
         var dynamicSquare2 = view.findViewById(R.id.dynamicSquare2) as DynamicSquareLayout
         var dynamicSquare3 = view.findViewById(R.id.dynamicSquare3) as DynamicSquareLayout
         var imageView1: ImageView? = null
@@ -75,8 +57,59 @@ class GeneralMediaAdapter(private val listExploreMedia: MutableList<Data>, val c
                 val hashtag: TextView = view.findViewById(R.id.tagar)
                 data.hashtag?.let { tagar(hashtag, it) }
                 mContext = context
+                data.posts?.let { setMediaPost(view, it) }
+                listenSendhashtag(view, data)
+                listenSendId(view, data)
+            }
+        }
 
-                setMediaPost(view, data.posts)
+        fun listenSendhashtag(view: View, data: Data) {
+            val more: TextView = view.findViewById(R.id.moreMedia)
+            more.setOnClickListener {
+                val more = Intent(mContext, HashtagActivity::class.java)
+                val ani = data.hashtag
+                val bundle = Bundle()
+                bundle.putString("hashtag", ani)
+                val dataPost = DetailPost()
+                dataPost.arguments = bundle
+                more.putExtras(bundle)
+                mContext!!.startActivity(more)
+            }
+        }
+
+        fun listenSendId(view: View, data: Data) {
+            val dynamicSquare1: DynamicSquareLayout = view.findViewById(R.id.dynamicSquare1)
+            val dynamicSquare2: DynamicSquareLayout = view.findViewById(R.id.dynamicSquare2)
+            val dynamicSquare3: DynamicSquareLayout = view.findViewById(R.id.dynamicSquare3)
+            dynamicSquare1.setOnClickListener {
+                val ani = data.posts?.get(0)?.id
+                val bundle = Bundle()
+                bundle.putString("id", ani)
+                val dataPost = DetailPost()
+                dataPost.arguments = bundle
+
+                Toast.makeText(mContext, "idnya! $ani",
+                    Toast.LENGTH_SHORT).show();
+            }
+            dynamicSquare2.setOnClickListener {
+                val ani = data.posts?.get(1)?.id
+                val bundle = Bundle()
+                bundle.putString("id", ani)
+                val dataPost = DetailPost()
+                dataPost.arguments = bundle
+
+                Toast.makeText(mContext, "idnya! $ani",
+                    Toast.LENGTH_SHORT).show();
+            }
+            dynamicSquare3.setOnClickListener {
+                val ani = data.posts?.get(2)?.id
+                val bundle = Bundle()
+                bundle.putString("id", ani)
+                val dataPost = DetailPost()
+                dataPost.arguments = bundle
+
+                Toast.makeText(mContext, "idnya! $ani",
+                    Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -85,59 +118,107 @@ class GeneralMediaAdapter(private val listExploreMedia: MutableList<Data>, val c
             imageView2 = view.findViewById(R.id.imageMediaExplore2) as ImageView
             imageView3 = view.findViewById(R.id.imageMediaExplore3) as ImageView
 
+            try {
 
-
-            for ((i, post) in post.withIndex()) {
-                when (i) {
-                    0 -> {
-                        if (post.media[0].type == "image") {
-                            Picasso.get().load(post.media[0].link)
-                                .into(imageView1)
-                            Log.d("ini link gambar post 1", post.media[0].link)
-                            Log.d("ini text 1", post.text.toString())
-                            Log.d("ini nama 1", post.name.toString())
-
-                        } else if (post.media[0].type == "video") {
-                            val videoURI = Uri.parse(post.media[0].link)
-                            Log.d("link video ", videoURI.toString())
-                            mContext?.let { Glide.with(it).load(videoURI).into(imageView1!!) }
+                when (post.size) {
+                    3 -> {
+                        for ((i, post) in post.withIndex()) {
+                            when (i) {
+                                0 -> {
+                                    if (post.media!![0].type == "image") {
+                                        Picasso.get().load(post.media[0].link)
+                                            .into(imageView1)
+                                    } else if (post.media[0].type == "video") {
+                                        val videoURI = Uri.parse(post.media[0].link)
+                                        mContext?.let {
+                                            Glide.with(it).load(videoURI).into(imageView1!!)
+                                        }
+                                    }
+                                }
+                                1 -> {
+                                    if (post.media!![0].type == "image") {
+                                        Picasso.get().load(post.media[0].link)
+                                            .into(imageView2)
+                                    } else if (post.media[0].type == "video") {
+                                        val videoURI = Uri.parse(post.media[0].link)
+                                        mContext?.let {
+                                            Glide.with(it).load(videoURI).into(imageView2!!)
+                                        }
+                                    }
+                                }
+                                2 -> {
+                                    if (post.media!![0].type == "image") {
+                                        Picasso.get().load(post.media[0].link)
+                                            .into(imageView3)
+                                    } else if (post.media[0].type == "video") {
+                                        val videoURI = Uri.parse(post.media[0].link)
+                                        mContext?.let {
+                                            Glide.with(it).load(videoURI).into(imageView3!!)
+                                        }
+                                    }
+                                }
+                            }
                         }
-                    }
-                    1 -> {
-                        if (post.media[0].type == "image") {
-                            Picasso.get().load(post.media[0].link)
-                                .into(imageView2)
-                            Log.d("ini link gambar post 2", post.media[0].link)
-                            Log.d("ini text 2", post.text.toString())
-                            Log.d("ini nama 2", post.name.toString())
 
-                        } else if (post.media[0].type == "video") {
-                            val videoURI = Uri.parse(post.media[0].link)
-                            Log.d("link video ", videoURI.toString())
-                            mContext?.let { Glide.with(it).load(videoURI).into(imageView2!!) }
-                        }
                     }
                     2 -> {
-                        if (post.media[0].type == "image") {
-                            Picasso.get().load(post.media[0].link)
-                                .into(imageView3)
-                            Log.d("ini link gambar post 3", post.media[0].link)
-                            Log.d("ini text 3", post.text.toString())
-                            Log.d("ini nama 3", post.name.toString())
-
-                        } else if (post.media[0].type == "video") {
-                            val videoURI = Uri.parse(post.media[0].link)
-                            Log.d("link video ", videoURI.toString())
-                            mContext?.let { Glide.with(it).load(videoURI).into(imageView3!!) }
+                        dynamicSquare3.visibility = View.INVISIBLE
+                        for ((i, post) in post.withIndex()) {
+                            when (i) {
+                                0 -> {
+                                    if (post.media!![0].type == "image") {
+                                        Picasso.get().load(post.media[0].link)
+                                            .into(imageView1)
+                                    } else if (post.media[0].type == "video") {
+                                        val videoURI = Uri.parse(post.media[0].link)
+                                        mContext?.let {
+                                            Glide.with(it).load(videoURI).into(imageView1!!)
+                                        }
+                                    }
+                                }
+                                1 -> {
+                                    if (post.media!![0].type == "image") {
+                                        Picasso.get().load(post.media[0].link)
+                                            .into(imageView2)
+                                    } else if (post.media[0].type == "video") {
+                                        val videoURI = Uri.parse(post.media[0].link)
+                                        mContext?.let {
+                                            Glide.with(it).load(videoURI).into(imageView2!!)
+                                        }
+                                    }
+                                }
+                            }
                         }
+
+                    }
+                    1 -> {
+                        dynamicSquare2.visibility = View.INVISIBLE
+                        dynamicSquare3.visibility = View.INVISIBLE
+                        for ((i, post) in post.withIndex()) {
+                            when (i) {
+                                0 -> {
+                                    if (post.media!![0].type == "image") {
+                                        Picasso.get().load(post.media[0].link)
+                                            .into(imageView1)
+                                    } else if (post.media[0].type == "video") {
+                                        val videoURI = Uri.parse(post.media[0].link)
+                                        mContext?.let {
+                                            Glide.with(it).load(videoURI).into(imageView1!!)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
                     }
                 }
+            } catch (ex: IndexOutOfBoundsException) {
             }
         }
 
 
-        fun tagar(view: TextView, tags: String) {
-            var tagar: String = ""
+        private fun tagar(view: TextView, tags: String) {
+            var tagar = ""
             tagar += "#$tags"
             view.text = tagar
         }

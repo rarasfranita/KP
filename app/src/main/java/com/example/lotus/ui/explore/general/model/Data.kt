@@ -6,17 +6,17 @@ import android.os.Parcelable
 data class Data(
     val counts: Int,
     val hashtag: String?,
-    val posts: ArrayList<Post>
+    val posts: ArrayList<Post>?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readString(),
-        TODO("posts")
-    ) {
-    }
+        parcel.createTypedArrayList(Post) as ArrayList<Post>
+    )
 
-    override fun writeToParcel(p0: Parcel?, p1: Int) {
-        TODO("Not yet implemented")
+    override fun writeToParcel(parcel: Parcel?, flags: Int) {
+        parcel?.writeInt(counts as Int)
+        parcel?.writeString(hashtag)
     }
 
     override fun describeContents(): Int {

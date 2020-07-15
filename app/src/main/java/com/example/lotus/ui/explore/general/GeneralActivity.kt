@@ -1,11 +1,15 @@
 package com.example.lotus.ui.explore.general
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.*
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
@@ -24,13 +28,13 @@ import com.example.lotus.ui.explore.general.detailpostExplore.DetailPosttGeneral
 import com.example.lotus.ui.explore.general.fragment.ListMediaGeneral
 import com.example.lotus.ui.explore.general.fragment.ListTextGeneral
 import com.example.lotus.ui.explore.general.model.Data
+import com.example.lotus.ui.home.HomeActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_explore_general.*
 
 
 class GeneralActivity : AppCompatActivity() {
-
     private var manager: FragmentManager? = null
     private val token = "5f09a143ff07b60aaafd008d"
     var dataExplore = ArrayList<Data>()
@@ -62,7 +66,7 @@ class GeneralActivity : AppCompatActivity() {
         viewPager.adapter = viewPagerAdapter
         tabLayout.setupWithViewPager(viewPager)
 
-        AndroidNetworking.initialize(applicationContext);
+        AndroidNetworking.initialize(applicationContext)
         dataExplore.clear()
         getExploreMedia()
         getExploreText()
@@ -70,10 +74,11 @@ class GeneralActivity : AppCompatActivity() {
     }
 
     private fun listenAppToolbar() {
-        val toolbar: Toolbar = findViewById(R.id.tbExplore) as Toolbar
+        val toolbar: Toolbar = findViewById<Toolbar>(R.id.tbExplore)
 
         toolbar.setNavigationOnClickListener {
-
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
         }
 
     }
@@ -154,10 +159,7 @@ class GeneralActivity : AppCompatActivity() {
         explore.setHasFixedSize(true)
         explore.layoutManager = LinearLayoutManager(this)
         val adapter =
-            GeneralMediaAdapter(
-                data,
-                this
-            )
+            GeneralMediaAdapter(data, this)
         adapter.notifyDataSetChanged()
 
         explore.adapter = adapter
@@ -178,16 +180,16 @@ class GeneralActivity : AppCompatActivity() {
 
     //move to detail post
     fun detailPostFromExplore(item: Data) {
-        appBarLayout?.visibility = View.GONE
-        tabs.visibility = View.GONE
-        edSearchbar.visibility = View.GONE
+        appBarLayout?.visibility = View.INVISIBLE
+        tabs.visibility = View.INVISIBLE
+        edSearchbar.visibility = View.INVISIBLE
         val bundle = Bundle()
-        bundle.putParcelable("data", item)
-        val dataPostt = DetailPosttGeneral()
-        dataPostt.arguments = bundle
+        bundle.putParcelable("data", item.posts!![0])
+        val dataPost = DetailPosttGeneral()
+        dataPost.arguments = bundle
         manager?.beginTransaction()
             ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            ?.replace(R.id.fragmentExplore, dataPostt)
+            ?.replace(R.id.fragmentExplore, dataPost)
             ?.commit()
     }
 

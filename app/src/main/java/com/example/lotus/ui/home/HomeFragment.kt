@@ -12,8 +12,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.lotus.R
 import com.example.lotus.ui.dm.MainActivityDM
 import com.example.lotus.ui.explore.general.GeneralActivity
-import com.example.lotus.ui.explore.hashtag.HashtagActivity
-import kotlin.collections.ArrayList
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
@@ -30,9 +28,7 @@ class HomeFragment : Fragment() {
         homeViewModel =
             ViewModelProviders.of(this).get(HomeViewModel::class.java)
         val v = inflater.inflate(R.layout.fragment_home, container, false)
-
         listenAppToolbar(v)
-
         return v
     }
 
@@ -43,7 +39,7 @@ class HomeFragment : Fragment() {
         toolbar.setLogo(R.drawable.ic_notification)
 
         toolbar.setNavigationOnClickListener {
-            rcHomeFeed.smoothScrollToPosition(0);
+            rcHomeFeed.smoothScrollToPosition(0)
         }
 
         val logoView: View? = getToolbarLogoIcon(toolbar)
@@ -52,7 +48,7 @@ class HomeFragment : Fragment() {
 
         }
 
-        toolbar.setOnMenuItemClickListener() {
+        toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.direct_message ->
                     toolbar.context.startActivity(Intent(context, MainActivityDM::class.java))
@@ -60,10 +56,6 @@ class HomeFragment : Fragment() {
             when (it.itemId) {
                 R.id.explore ->
                     toolbar.context.startActivity(Intent(context, GeneralActivity::class.java))
-            }
-            when (it.itemId) {
-                R.id.profile ->
-                    toolbar.context.startActivity(Intent(context, HashtagActivity::class.java))
             }
             true
         }

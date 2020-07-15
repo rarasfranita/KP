@@ -1,6 +1,8 @@
 package com.example.lotus.ui.explore.general.adapter
 
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
@@ -9,14 +11,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.cardview.widget.CardView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import coil.transform.CircleCropTransformation
 import com.example.lotus.R
+import com.example.lotus.ui.detailpost.DetailPost
 import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.explore.general.model.Data
+import com.example.lotus.ui.explore.general.model.Post
+import com.example.lotus.ui.explore.hashtag.HashtagActivity
+import com.example.lotus.utils.DynamicSquareLayout
 
 class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val context: Context) :
     RecyclerView.Adapter<GeneralTextAdapter.Holder>() {
@@ -39,53 +46,316 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
     }
 
     class Holder(val view: View) : RecyclerView.ViewHolder(view) {
+        val more: TextView = view.findViewById(R.id.moreTextGeneralText)
         var mContext: Context? = null
         private var postData: Data? = null
 
         private var likeCount: Int = 0
 
         fun bindFeed(data: Data, context: Context) {
-            itemView.apply {
-                postData = data
-                mContext = context
-                val hashtag: TextView = view.findViewById(R.id.tagar)
-                data.hashtag?.let { tagar(hashtag, it) }
-                val commentCount1: TextView = view.findViewById(R.id.textIcCommentPost) as TextView
-                val username1: TextView = view.findViewById<View>(R.id.textUsername1) as TextView
-                val ava1: ImageView = view.findViewById<View>(R.id.imageAvatar1) as ImageView
-                val comment1: TextView = view.findViewById<View>(R.id.textIcCommentPost) as TextView
+            try {
+                itemView.apply {
+                    postData = data
+                    mContext = context
+                    val hashtag: TextView = view.findViewById(R.id.tagarGeneralText)
+                    data.hashtag?.let { tagar(hashtag, it) }
+                    val commentCount1: TextView =
+                        view.findViewById(R.id.textIcCommentGeneralText) as TextView
+                    val username1: TextView =
+                        view.findViewById<View>(R.id.textUsername1GeneralText) as TextView
+                    val ava1: ImageView =
+                        view.findViewById<View>(R.id.imageAvatar1GeneralText) as ImageView
+                    val comment1: TextView =
+                        view.findViewById<View>(R.id.textIcCommentGeneralText) as TextView
 
-                val commentCount2: TextView = view.findViewById(R.id.textIcCommentPost2) as TextView
-                val username2: TextView = view.findViewById<View>(R.id.textUsername2) as TextView
-                val ava2: ImageView = view.findViewById<View>(R.id.imageAvatar2) as ImageView
-                val comment2: TextView =
-                    view.findViewById<View>(R.id.textIcCommentPost2) as TextView
+                    val commentCount2: TextView =
+                        view.findViewById(R.id.textIcComment2GeneralText) as TextView
+                    val username2: TextView =
+                        view.findViewById<View>(R.id.textUsername2GeneralText) as TextView
+                    val ava2: ImageView =
+                        view.findViewById<View>(R.id.imageAvatar2GeneralText) as ImageView
+                    val comment2: TextView =
+                        view.findViewById<View>(R.id.textIcComment2GeneralText) as TextView
 
-                commentCount1.text = data.posts[0].commentsCount.toString()
-                username1.text = data.posts[0].name
-                comment1.text = data.posts[0].commentsCount.toString()
+                    commentCount1.text = data.posts!![0].commentsCount.toString()
+                    username1.text = data.posts[0].name
+                    comment1.text = data.posts[0].commentsCount.toString()
 
-                commentCount2.text = data.posts[1].commentsCount.toString()
-                username2.text = data.posts[1].name
-                comment2.text = data.posts[1].commentsCount.toString()
+                    commentCount2.text = data.posts[1].commentsCount.toString()
+                    username2.text = data.posts[1].name
+                    comment2.text = data.posts[1].commentsCount.toString()
 
-                data.posts[0].text?.let { setMediaPost1(view, it) }
-                setProfilePicture1(ava1, data.posts[0].profilePicture.toString())
-                setLike1(view, data.posts[0].like, likeCount)
+                    setProfilePicture1(ava1, data.posts[0].profilePicture.toString())
+                    setLike1(view, data.posts[0].liked, likeCount)
 
-                data.posts[1].text?.let { setMediaPost2(view, it) }
-                setProfilePicture2(ava2, data.posts[1].profilePicture.toString())
-                setLike2(view, data.posts[1].like, likeCount)
+                    setProfilePicture2(ava2, data.posts[1].profilePicture.toString())
+                    setLike2(view, data.posts[1].liked, likeCount)
+                    listenSendhashtag(view, data)
+                    listenSendId(view, data)
+                    setMediaPost(view, data.posts, data.posts[0].text)
+                }
+            } catch (ex: IndexOutOfBoundsException) {
+
             }
 
+
+        }
+        fun listenSendhashtag(view: View, data: Data) {
+            val more: TextView = view.findViewById(R.id.moreTextGeneralText)
+            more.setOnClickListener {
+                val more = Intent(mContext, HashtagActivity::class.java)
+                val ani = data.hashtag
+                val bundle = Bundle()
+                bundle.putString("hashtag", ani)
+                val dataPost = DetailPost()
+                dataPost.arguments = bundle
+                more.putExtras(bundle)
+                mContext!!.startActivity(more)
+            }
+        }
+        fun listenSendId(view: View, data: Data) {
+            val RL1 = view.findViewById<RelativeLayout>(R.id.RL1)
+            val RL2 = view.findViewById<RelativeLayout>(R.id.RL2)
+
+            RL1.setOnClickListener {
+                val ani = data.posts?.get(0)?.id
+                val bundle = Bundle()
+                bundle.putString("id", ani)
+                val dataPost = DetailPost()
+                dataPost.arguments = bundle
+
+                Toast.makeText(mContext, "idnya! $ani",
+                    Toast.LENGTH_SHORT).show();
+            }
+            RL2.setOnClickListener {
+                val ani = data.posts?.get(1)?.id
+                val bundle = Bundle()
+                bundle.putString("id", ani)
+                val dataPost = DetailPost()
+                dataPost.arguments = bundle
+
+                Toast.makeText(mContext, "idnya! $ani",
+                    Toast.LENGTH_SHORT).show();
+            }
         }
 
-        private fun setLike1(view: View, likeStatus: Boolean?, likeCount: Int) {
-            val iconLikeTrue = view.findViewById<ImageView>(R.id.icLikeTrue1)
-            val iconLikeFalse = view.findViewById<ImageView>(R.id.icLikeFalse1)
-            val textLikeCount = view.findViewById<TextView>(R.id.textIctLikes1)
 
-            if (likeStatus == true) {
+        private fun setMediaPost(view: View, post: ArrayList<Post>?, text: String?){
+            val tag = view.findViewById<TextView>(R.id.textHashtagGeneralText)
+            val postTextView1 = view.findViewById<TextView>(R.id.textStatusDetailGeneralText)
+            val postTextView2 = view.findViewById<TextView>(R.id.textStatusDetail2GeneralText)
+            val RL2 = view.findViewById<RelativeLayout>(R.id.RL2)
+
+
+            try {
+                if (post != null) {
+                    when (post.size) {
+                        3 -> {
+                            for ((i, post) in post.withIndex()) {
+                                when (i) {
+                                    0 -> {
+                                        if (post.text?.length!! > 249) {
+                                            val cutCaption = post.text.removeRange(249, post.text.length)
+                                            val caption = "$cutCaption... more"
+                                            val spannableString = SpannableString(caption)
+                                            val clickableSpan = object : ClickableSpan() {
+                                                override fun onClick(p0: View) {
+                                                    val ani = post.id
+                                                    val bundle = Bundle()
+                                                    bundle.putString("id", ani)
+                                                    val dataPost = DetailPost()
+                                                    dataPost.arguments = bundle
+                                                    Toast.makeText(
+                                                        mContext, "idnya! $ani",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show();
+                                                }
+                                            }
+                                            postTextView1.movementMethod = LinkMovementMethod.getInstance()
+                                            spannableString.setSpan(
+                                                clickableSpan,
+                                                caption.length - 4,
+                                                caption.length,
+                                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                                            )
+                                            postTextView1.text = spannableString
+                                            tag.visibility = View.GONE
+                                        } else {
+                                            hashTag(
+                                                tag,
+                                                post.tag
+                                            )
+                                            postTextView1.text = post.text
+                                        }
+                                    }
+                                    1 -> {
+                                        if (post.text?.length!! > 249) {
+                                            val cutCaption = post.text.removeRange(249, post.text.length)
+                                            val caption = "$cutCaption... more"
+                                            val spannableString = SpannableString(caption)
+                                            val clickableSpan = object : ClickableSpan() {
+                                                override fun onClick(p0: View) {
+                                                    val ani = post.id
+                                                    val bundle = Bundle()
+                                                    bundle.putString("id", ani)
+                                                    val dataPost = DetailPost()
+                                                    dataPost.arguments = bundle
+                                                    Toast.makeText(
+                                                        mContext, "idnya! $ani",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show();
+                                                }
+                                            }
+                                            postTextView2.movementMethod = LinkMovementMethod.getInstance()
+                                            spannableString.setSpan(
+                                                clickableSpan,
+                                                caption.length - 4,
+                                                caption.length,
+                                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                                            )
+                                            postTextView2.text = spannableString
+                                            tag.visibility = View.GONE
+                                        } else {
+                                            hashTag(
+                                                tag,
+                                                post.tag
+                                            )
+                                            postTextView2.text = post.text
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        2 -> {
+                            for ((i, post) in post.withIndex()) {
+                                when (i) {
+                                    0 -> {
+                                        if (post.text?.length!! > 249) {
+                                            val cutCaption = post.text.removeRange(249, post.text.length)
+                                            val caption = "$cutCaption... more"
+                                            val spannableString = SpannableString(caption)
+                                            val clickableSpan = object : ClickableSpan() {
+                                                override fun onClick(p0: View) {
+                                                    val ani = post.id
+                                                    val bundle = Bundle()
+                                                    bundle.putString("id", ani)
+                                                    val dataPost = DetailPost()
+                                                    dataPost.arguments = bundle
+                                                    Toast.makeText(
+                                                        mContext, "idnya! $ani",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show();
+                                                }
+                                            }
+                                            postTextView1.movementMethod = LinkMovementMethod.getInstance()
+                                            spannableString.setSpan(
+                                                clickableSpan,
+                                                caption.length - 4,
+                                                caption.length,
+                                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                                            )
+                                            postTextView1.text = spannableString
+                                            tag.visibility = View.GONE
+                                        } else {
+                                            hashTag(
+                                                tag,
+                                                post.tag
+                                            )
+                                            postTextView1.text = post.text
+                                        }
+                                    }
+                                    1 -> {
+                                        if (post.text?.length!! > 249) {
+                                            val cutCaption = post.text.removeRange(249, post.text.length)
+                                            val caption = "$cutCaption... more"
+                                            val spannableString = SpannableString(caption)
+                                            val clickableSpan = object : ClickableSpan() {
+                                                override fun onClick(p0: View) {
+                                                    val ani = post.id
+                                                    val bundle = Bundle()
+                                                    bundle.putString("id", ani)
+                                                    val dataPost = DetailPost()
+                                                    dataPost.arguments = bundle
+                                                    Toast.makeText(
+                                                        mContext, "idnya! $ani",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show();
+                                                }
+                                            }
+                                            postTextView2.movementMethod = LinkMovementMethod.getInstance()
+                                            spannableString.setSpan(
+                                                clickableSpan,
+                                                caption.length - 4,
+                                                caption.length,
+                                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                                            )
+                                            postTextView2.text = spannableString
+                                            tag.visibility = View.GONE
+                                        } else {
+                                            hashTag(
+                                                tag,
+                                                post.tag
+                                            )
+                                            postTextView2.text = post.text
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        1 -> {
+                            RL2.visibility=View.GONE
+                            for ((i, post) in post.withIndex()) {
+                                when (i) {
+                                    0 -> {
+                                        if (post.text?.length!! > 249) {
+                                            val cutCaption = post.text.removeRange(249, post.text.length)
+                                            val caption = "$cutCaption... more"
+                                            val spannableString = SpannableString(caption)
+                                            val clickableSpan = object : ClickableSpan() {
+                                                override fun onClick(p0: View) {
+                                                    val ani = post.id
+                                                    val bundle = Bundle()
+                                                    bundle.putString("id", ani)
+                                                    val dataPost = DetailPost()
+                                                    dataPost.arguments = bundle
+                                                    Toast.makeText(
+                                                        mContext, "idnya! $ani",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show();
+                                                }
+                                            }
+                                            postTextView1.movementMethod = LinkMovementMethod.getInstance()
+                                            spannableString.setSpan(
+                                                clickableSpan,
+                                                caption.length - 4,
+                                                caption.length,
+                                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                                            )
+                                            postTextView1.text = spannableString
+                                            tag.visibility = View.GONE
+                                        } else {
+                                            hashTag(
+                                                tag,
+                                                post.tag
+                                            )
+                                            postTextView1.text = post.text
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (ex: IndexOutOfBoundsException) {
+            }
+        }
+
+        private fun setLike1(view: View, likeStatus: Int?, likeCount: Int) {
+            val iconLikeTrue = view.findViewById<ImageView>(R.id.icLikeTrue1GeneralText)
+            val iconLikeFalse = view.findViewById<ImageView>(R.id.icLikeFalse1GeneralText)
+            val textLikeCount = view.findViewById<TextView>(R.id.textIctLikes1GeneralText)
+
+            if (likeStatus.toString() == "1") {
                 iconLikeTrue.visibility = View.VISIBLE
                 iconLikeFalse.visibility = View.GONE
             } else {
@@ -103,47 +373,12 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
 
         }
 
-        private fun setMediaPost1(view: View, text: String) {
-            val postText = view.findViewById<CardView>(R.id.cardPostText)
-            val tag = view.findViewById<TextView>(R.id.textHashtagFeed)
-            val postTextView = view.findViewById<TextView>(R.id.textStatusDetail)
+        private fun setLike2(view: View, likeStatus: Int?, likeCount: Int) {
+            val iconLikeTrue2 = view.findViewById<ImageView>(R.id.icLikeTrue2GeneralText)
+            val iconLikeFalse2 = view.findViewById<ImageView>(R.id.icLikeFalse2GeneralText)
+            val textLikeCount2 = view.findViewById<TextView>(R.id.textIctLikes2GeneralText)
 
-            postText.visibility = View.VISIBLE
-
-            if (text.length > 249) {
-                val cutCaption = text.removeRange(249, text.length)
-                val caption = "$cutCaption... more"
-                val spannableString = SpannableString(caption)
-                val clickableSpan = object : ClickableSpan() {
-                    override fun onClick(view: View) {
-                        if (mContext is GeneralActivity) {
-                            postData?.let { (mContext as GeneralActivity).detailPostFromExplore(it) }
-                        }
-                    }
-                }
-
-                postTextView.movementMethod = LinkMovementMethod.getInstance()
-                spannableString.setSpan(
-                    clickableSpan,
-                    caption.length - 4,
-                    caption.length,
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-                postTextView.text = spannableString
-                tag.visibility = View.GONE
-            } else {
-                hashTag(tag, postData?.posts?.get(0)?.tag)
-                postTextView.text = text
-            }
-
-        }
-
-        private fun setLike2(view: View, likeStatus: Boolean?, likeCount: Int) {
-            val iconLikeTrue2 = view.findViewById<ImageView>(R.id.icLikeTrue2)
-            val iconLikeFalse2 = view.findViewById<ImageView>(R.id.icLikeFalse2)
-            val textLikeCount2 = view.findViewById<TextView>(R.id.textIctLikes2)
-
-            if (likeStatus == true) {
+            if (likeStatus.toString() == "1") {
                 iconLikeTrue2.visibility = View.VISIBLE
                 iconLikeFalse2.visibility = View.GONE
             } else {
@@ -161,40 +396,6 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
 
         }
 
-        private fun setMediaPost2(view: View, text: String) {
-            val postText = view.findViewById<CardView>(R.id.cardPostText2)
-            val tag = view.findViewById<TextView>(R.id.textHashtagFeed2)
-            val postTextView = view.findViewById<TextView>(R.id.textStatusDetail2)
-
-            postText.visibility = View.VISIBLE
-
-            if (text.length > 249) {
-                val cutCaption = text.removeRange(249, text.length)
-                val caption = "$cutCaption... more"
-                val spannableString = SpannableString(caption)
-                val clickableSpan = object : ClickableSpan() {
-                    override fun onClick(view: View) {
-                        if (mContext is GeneralActivity) {
-                            postData?.let { (mContext as GeneralActivity).detailPostFromExplore(it) }
-                        }
-                    }
-                }
-
-                postTextView.movementMethod = LinkMovementMethod.getInstance()
-                spannableString.setSpan(
-                    clickableSpan,
-                    caption.length - 4,
-                    caption.length,
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-                postTextView.text = spannableString
-                tag.visibility = View.GONE
-            } else {
-                hashTag(tag, postData?.posts?.get(0)?.tag)
-                postTextView.text = text
-            }
-
-        }
 
         private fun tagar(view: TextView, tags: String) {
             var tagar = ""

@@ -3,12 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/fragment_list_media_hashtag"
     tools:context=".ui.explore.hashtag.fragment.ListTextHashtag">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvHashtagText"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="INI TAB TEXT" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
 
 </FrameLayout>

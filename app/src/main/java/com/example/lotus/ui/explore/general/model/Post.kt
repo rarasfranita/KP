@@ -5,55 +5,58 @@ import android.os.Parcelable
 import com.example.lotus.models.MediaData
 
 data class Post(
-    val bio: String?,
-    val commentsCount: Int?,
     val id: String?,
-    val likesCount: Int?,
-    val media: ArrayList<MediaData>,
-    val name: String?,
-    val postDate: String?,
-    val postsCount: Int?,
-    val profilePicture: String?,
-    val tag: ArrayList<String>,
-    val text: String?,
-    val like: Boolean?,
     val userId: String?,
+    val profilePicture: String?,
     val username: String?,
-    val views: Int?
+    val bio: String?,
+    val postsCount: Int?,
+    val likesCount: Int?,
+    val liked: Int?,
+    val commentsCount: Int?,
+    val postDate: String?,
+    val media: ArrayList<MediaData>?,
+    val tag: ArrayList<String>?,
+    val views: Int?,
+    val text: String?,
+    val name: String?,
+    val belongsTo: String?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
-        parcel.readInt(),
-        parcel.readString(),
-        parcel.readInt(),
-        TODO("media"),
         parcel.readString(),
         parcel.readString(),
-        parcel.readInt(),
-        parcel.readString(),
-        TODO("tag"),
-        parcel.readString(),
-        parcel.readValue(Boolean::class.java.classLoader) as? Boolean,
         parcel.readString(),
         parcel.readString(),
-        parcel.readInt()
+        parcel.readValue(Int::class.java.classLoader) as? Int,
+        parcel.readValue(Int::class.java.classLoader) as? Int,
+        parcel.readValue(Int::class.java.classLoader) as? Int,
+        parcel.readValue(Int::class.java.classLoader) as? Int,
+        parcel.readString(),
+        parcel.createTypedArrayList(MediaData),
+        parcel.createStringArrayList(),
+        parcel.readValue(Int::class.java.classLoader) as? Int,
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString()
     ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(bio)
-        commentsCount?.let { parcel.writeInt(it) }
         parcel.writeString(id)
-        likesCount?.let { parcel.writeInt(it) }
-        parcel.writeString(name)
-        parcel.writeString(postDate)
-        postsCount?.let { parcel.writeInt(it) }
-        parcel.writeString(profilePicture)
-        parcel.writeString(text)
-        parcel.writeValue(like)
         parcel.writeString(userId)
+        parcel.writeString(profilePicture)
         parcel.writeString(username)
-        views?.let { parcel.writeInt(it) }
+        parcel.writeString(bio)
+        parcel.writeValue(postsCount)
+        parcel.writeValue(likesCount)
+        parcel.writeValue(liked)
+        parcel.writeValue(commentsCount)
+        parcel.writeString(postDate)
+        parcel.writeValue(views)
+        parcel.writeString(text)
+        parcel.writeString(name)
+        parcel.writeString(belongsTo)
     }
 
     override fun describeContents(): Int {

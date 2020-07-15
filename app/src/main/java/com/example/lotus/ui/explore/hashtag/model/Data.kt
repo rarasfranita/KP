@@ -7,7 +7,7 @@ import com.example.lotus.models.MediaData
 data class Data(
     val bio: String?,
     val commentsCount: Int?,
-    val id: String?,
+    var id: String?,
     val liked: Int?,
     val like:Boolean?,
     val likesCount: Int?,

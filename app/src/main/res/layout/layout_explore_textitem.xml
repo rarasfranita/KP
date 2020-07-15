@@ -6,35 +6,37 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tagar"
+            android:id="@+id/tagarGeneralText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:textStyle="bold"
-            android:textSize="14sp"
             android:fontFamily="@font/lato"
             android:text="#ini hastag"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <RelativeLayout
+            android:id="@+id/RL1"
+            android:layout_below="@+id/tagarGeneralText"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@android:color/white">
 
             <RelativeLayout
-                android:id="@+id/relLayout1"
+                android:id="@+id/relLayout1GeneralText"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:gravity="center_horizontal">
 
                 <ImageView
-                    android:id="@+id/imageAvatar1"
+                    android:id="@+id/imageAvatar1GeneralText"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_centerVertical="true"
@@ -44,16 +46,16 @@
                     android:scaleType="centerCrop" />
 
                 <TextView
-                    android:id="@+id/textUsername1"
+                    android:id="@+id/textUsername1GeneralText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@+id/imageAvatar1"
+                    android:layout_toRightOf="@+id/imageAvatar1GeneralText"
                     android:text="Lotus Check" />
 
                 <ImageView
-                    android:id="@+id/ivEllipses1"
+                    android:id="@+id/ivEllipses1GeneralText"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentRight="true"
@@ -64,73 +66,73 @@
             </RelativeLayout>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardPostText"
+                android:id="@+id/cardPostTextGeneralText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/relLayout1GeneralText"
+                android:layout_centerHorizontal="true"
                 app:cardCornerRadius="7pt"
-                android:layout_below="@+id/relLayout1"
                 app:cardElevation="3dp"
-                app:cardUseCompatPadding="true"
-                android:layout_centerHorizontal="true">
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
                     android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp">
+                    android:layout_marginBottom="20dp"
+                    android:orientation="vertical">
+
                     <TextView
+                        android:id="@+id/textStatusDetailGeneralText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Hello world"
-                        android:id="@+id/textStatusDetail"
+                        android:background="@color/white"
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"
-                        android:background="@color/white"/>
+                        android:text="Hello world" />
 
                     <TextView
+                        android:id="@+id/textHashtagGeneralText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/textStatusDetail"
-                        android:textColor="@color/colorPrimary"
-                        android:id="@+id/textHashtagFeed"
+                        android:layout_below="@+id/textStatusDetailGeneralText"
                         android:paddingLeft="20dp"
-                        android:paddingRight="20dp"/>
+                        android:paddingRight="20dp"
+                        android:textColor="@color/colorPrimary" />
                 </LinearLayout>
-
 
 
             </com.google.android.material.card.MaterialCardView>
 
 
             <LinearLayout
-                android:id="@+id/relLayout3"
+                android:id="@+id/relLayout3GeneralText"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_below="@+id/cardPostText"
+                android:layout_below="@+id/cardPostTextGeneralText"
                 android:background="@android:color/white">
 
                 <RelativeLayout
-                    android:id="@+id/likeLayout"
+                    android:id="@+id/likeLayoutGeneralText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="20dp">
 
                     <ImageView
-                        android:id="@+id/icLikeTrue1"
+                        android:id="@+id/icLikeTrue1GeneralText"
                         android:layout_width="25dp"
                         android:layout_height="50dp"
                         android:src="@drawable/ic_like_true"
                         android:visibility="gone" />
 
                     <ImageView
-                        android:id="@+id/icLikeFalse1"
+                        android:id="@+id/icLikeFalse1GeneralText"
                         android:layout_width="25dp"
                         android:layout_height="50dp"
                         android:src="@drawable/ic_like_false" />
 
                     <TextView
-                        android:id="@+id/textIctLikes1"
+                        android:id="@+id/textIctLikes1GeneralText"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
                         android:gravity="center_vertical"
@@ -141,22 +143,22 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/likeLayout"
+                    android:layout_toRightOf="@+id/likeLayoutGeneralText"
                     android:gravity="left"
                     android:paddingLeft="20dp">
 
                     <ImageView
-                        android:id="@+id/icComment"
+                        android:id="@+id/icCommentGeneralText"
                         android:layout_width="25dp"
                         android:layout_height="50dp"
                         android:layout_centerVertical="true"
                         android:src="@drawable/ic_comment" />
 
                     <TextView
-                        android:id="@+id/textIcCommentPost"
+                        android:id="@+id/textIcCommentGeneralText"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
-                        android:layout_toRightOf="@+id/icComment"
+                        android:layout_toRightOf="@+id/icCommentGeneralText"
                         android:gravity="center"
                         android:paddingLeft="5dp"
                         android:text="0" />
@@ -169,7 +171,7 @@
                     android:paddingRight="20dp">
 
                     <ImageView
-                        android:id="@+id/icShare"
+                        android:id="@+id/icShareGeneralText"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_centerVertical="true"
@@ -181,20 +183,21 @@
         </RelativeLayout>
 
         <!--         layout 2-->
-
         <RelativeLayout
+            android:id="@+id/RL2"
+            android:layout_below="@+id/RL1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@android:color/white">
 
             <RelativeLayout
-                android:id="@+id/relLayout4"
+                android:id="@+id/relLayout4GeneralText"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:gravity="center_horizontal">
 
                 <ImageView
-                    android:id="@+id/imageAvatar2"
+                    android:id="@+id/imageAvatar2GeneralText"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_centerVertical="true"
@@ -204,16 +207,16 @@
                     android:scaleType="centerCrop" />
 
                 <TextView
-                    android:id="@+id/textUsername2"
+                    android:id="@+id/textUsername2GeneralText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@+id/imageAvatar2"
+                    android:layout_toRightOf="@+id/imageAvatar2GeneralText"
                     android:text="Lotus Check" />
 
                 <ImageView
-                    android:id="@+id/ivEllipses2"
+                    android:id="@+id/ivEllipses2GeneralText"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentRight="true"
@@ -224,73 +227,73 @@
             </RelativeLayout>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardPostText2"
+                android:id="@+id/cardPostText2GeneralText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/relLayout4GeneralText"
+                android:layout_centerHorizontal="true"
                 app:cardCornerRadius="7pt"
-                android:layout_below="@+id/relLayout4"
                 app:cardElevation="3dp"
-                app:cardUseCompatPadding="true"
-                android:layout_centerHorizontal="true">
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
                     android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp">
+                    android:layout_marginBottom="20dp"
+                    android:orientation="vertical">
+
                     <TextView
+                        android:id="@+id/textStatusDetail2GeneralText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Hello world"
-                        android:id="@+id/textStatusDetail2"
+                        android:background="@color/white"
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"
-                        android:background="@color/white"/>
+                        android:text="Hello world" />
 
                     <TextView
+                        android:id="@+id/textHashtagFeed2GeneralText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/textStatusDetail"
-                        android:textColor="@color/colorPrimary"
-                        android:id="@+id/textHashtagFeed2"
+                        android:layout_below="@+id/textStatusDetailGeneralText"
                         android:paddingLeft="20dp"
-                        android:paddingRight="20dp"/>
+                        android:paddingRight="20dp"
+                        android:textColor="@color/colorPrimary" />
                 </LinearLayout>
-
 
 
             </com.google.android.material.card.MaterialCardView>
 
 
             <LinearLayout
-                android:id="@+id/relLayout5"
+                android:id="@+id/relLayout5GeneralText"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_below="@+id/cardPostText2"
+                android:layout_below="@+id/cardPostText2GeneralText"
                 android:background="@android:color/white">
 
                 <RelativeLayout
-                    android:id="@+id/likeLayout2"
+                    android:id="@+id/likeLayout2GeneralText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="20dp">
 
                     <ImageView
-                        android:id="@+id/icLikeTrue2"
+                        android:id="@+id/icLikeTrue2GeneralText"
                         android:layout_width="25dp"
                         android:layout_height="50dp"
                         android:src="@drawable/ic_like_true"
                         android:visibility="gone" />
 
                     <ImageView
-                        android:id="@+id/icLikeFalse2"
+                        android:id="@+id/icLikeFalse2GeneralText"
                         android:layout_width="25dp"
                         android:layout_height="50dp"
                         android:src="@drawable/ic_like_false" />
 
                     <TextView
-                        android:id="@+id/textIctLikes2"
+                        android:id="@+id/textIctLikes2GeneralText"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
                         android:gravity="center_vertical"
@@ -301,22 +304,22 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/likeLayout"
+                    android:layout_toRightOf="@+id/likeLayoutGeneralText"
                     android:gravity="left"
                     android:paddingLeft="20dp">
 
                     <ImageView
-                        android:id="@+id/icComment2"
+                        android:id="@+id/icComment2GeneralText"
                         android:layout_width="25dp"
                         android:layout_height="50dp"
                         android:layout_centerVertical="true"
                         android:src="@drawable/ic_comment" />
 
                     <TextView
-                        android:id="@+id/textIcCommentPost2"
+                        android:id="@+id/textIcComment2GeneralText"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
-                        android:layout_toRightOf="@+id/icComment2"
+                        android:layout_toRightOf="@+id/icComment2GeneralText"
                         android:gravity="center"
                         android:paddingLeft="5dp"
                         android:text="0" />
@@ -329,7 +332,7 @@
                     android:paddingRight="20dp">
 
                     <ImageView
-                        android:id="@+id/icShare2"
+                        android:id="@+id/icShare2GeneralText"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_centerVertical="true"
@@ -340,17 +343,21 @@
             </LinearLayout>
         </RelativeLayout>
 
+
         <TextView
-            android:id="@+id/moreText"
+            android:id="@+id/moreTextGeneralText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
             android:layout_gravity="right"
+            android:layout_margin="10dp"
             android:fontFamily="@font/lato"
             android:text="More >>"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/RL2"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="12sp"
-            android:textColor="@color/colorPrimaryDark"/>
+            />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>
