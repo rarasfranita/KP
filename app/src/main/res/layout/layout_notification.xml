@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardNotification"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        app:cardCornerRadius="10pt"
+        app:cardElevation="4dp">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/ll1"
+                android:gravity="center">
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/ic_profile"
+                    android:id="@+id/profileUserNotification"/>
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:layout_toRightOf="@id/ll1"
+                android:paddingLeft="20dp"
+                android:paddingRight="10dp"
+                android:id="@+id/ll2">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textUsernameNotification"
+                    android:text="Name"
+                    android:textStyle="bold"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Like your post"
+                    android:id="@+id/textNotification"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:layout_toRightOf="@+id/ll2">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="1 Minute ago"
+                    android:textSize="10sp"
+                    android:textColor="@color/colorAccent"
+                    android:id="@+id/timeNotification"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/ll3"
+                android:gravity="center"
+                android:layout_alignParentRight="true">
+                <com.example.lotus.utils.DynamicSquareLayout
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/mediaWrap"
+                    android:gravity="">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardPostMedia"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:cardCornerRadius="5pt"
+                        app:cardElevation="2dp"
+                        android:layout_centerHorizontal="true">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_post_text_logo"
+                            android:id="@+id/mediaNotification"/>
+
+                    </com.google.android.material.card.MaterialCardView>
+                </com.example.lotus.utils.DynamicSquareLayout>
+
+                <Button
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="Follow"/>
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</RelativeLayout>

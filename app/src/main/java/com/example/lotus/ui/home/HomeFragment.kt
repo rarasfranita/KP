@@ -50,7 +50,7 @@ class HomeFragment : Fragment() {
         homeViewModel =
             ViewModelProviders.of(this).get(HomeViewModel::class.java)
         val v = inflater.inflate(R.layout.fragment_home, container, false)
-        val reloadFeed: PullRefreshLayout = v.findViewById(R.id.prlFeed)
+        val reloadFeed: PullRefreshLayout = v.findViewById(R.id.reloadFeed)
 
         listenAppToolbar(v)
         v!!.setOnTouchListener { v, event ->
@@ -86,7 +86,7 @@ class HomeFragment : Fragment() {
                 Respons::class.java,
                 object : ParsedRequestListener<Respons> {
                     override fun onResponse(respon: Respons) {
-                        prlFeed.setRefreshing(false)
+                        reloadFeed.setRefreshing(false)
                         val gson = Gson()
                         var tempDataFeed = ArrayList<Post>()
                         if (respon.code.toString() == "200") {
@@ -110,7 +110,7 @@ class HomeFragment : Fragment() {
                     }
 
                     override fun onError(anError: ANError) {
-                        prlFeed.setRefreshing(false)
+                        reloadFeed.setRefreshing(false)
                         Toast.makeText(context, "Error ${anError.errorCode}", Toast.LENGTH_SHORT).show()
                         Log.d("Errornya disini kah?", anError.toString())
                     }

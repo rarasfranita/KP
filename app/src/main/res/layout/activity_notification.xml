@@ -8,14 +8,71 @@
     tools:context=".ui.notification.NotificationActivity"
     style="@style/SlidingActivity">
 
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbarNotification"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/notificaton_layout">
-        <TextView
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbarNotification"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Halo"
-            android:gravity="center"></TextView>
-    </LinearLayout>
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/white"
+            app:elevation="10dp"
+            app:navigationIcon="@drawable/ic_arrow_back_black"
+            >
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/notification"
+                    android:textSize="20dp"
+                    android:id="@+id/postingTitle"/>
+            </RelativeLayout>
+        </com.google.android.material.appbar.MaterialToolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.baoyz.widget.PullRefreshLayout
+        android:id="@+id/reloadNotification"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:refreshColor="@color/colorPrimary"
+        app:layout_constraintTop_toBottomOf="@+id/appbarNotification">
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rvNotification">
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </com.baoyz.widget.PullRefreshLayout>
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_marginTop="?attr/actionBarSize"-->
+<!--        android:orientation="vertical"-->
+<!--        android:gravity="center"-->
+<!--        android:id="@+id/nullPage">-->
+
+<!--        <ImageView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:src="@drawable/ic_null_data" >-->
+
+<!--        </ImageView>-->
+
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="You don't have any notification yet"-->
+<!--            android:textColor="@color/colorPrimary"-->
+<!--            android:padding="20dp"-->
+<!--            android:layout_marginTop="-55dp"-->
+<!--            android:gravity="center"-->
+<!--            ></TextView>-->
+<!--    </LinearLayout>-->
 </androidx.constraintlayout.widget.ConstraintLayout>
