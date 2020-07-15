@@ -12,10 +12,10 @@ import com.example.lotus.R
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.media_profile_fragment.*
 
-class AccountProfileActivity : AppCompatActivity() {
+class EditProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_account_profile)
+        setContentView(R.layout.edit_profile_activity)
 
         //viewpager
         val tableLayout: TabLayout = findViewById(R.id.tab_Layout)

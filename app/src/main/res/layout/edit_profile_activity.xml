@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.editprofile.EditProfileFragment">
+    tools:context=".ui.profile.EditProfileActivity">
 
     <include layout="@layout/snippet_edit_profile"></include>
 
