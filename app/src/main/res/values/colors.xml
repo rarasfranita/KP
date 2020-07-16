@@ -15,4 +15,5 @@
     <!--  Coloring library cropping image for upload  -->
     <color name="ucrop_color_toolbar">@color/colorPrimary</color>
     <color name="ucrop_color_widget_active">@color/colorPrimary</color>
+
 </resources>

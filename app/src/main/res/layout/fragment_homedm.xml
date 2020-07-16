@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.dm.MainActivityDM">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tbMessage"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/white"
+            app:menu="@menu/top_app_bar_dm"
+            app:elevation="10dp"
+            app:navigationIcon="@drawable/ic_arrow_back_black"
+            app:title="Message"
+            app:titleTextColor="#6B6B6B" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <EditText
+        android:id="@+id/edSearchbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/search_bar_drawable"
+        android:drawableStart="@drawable/ic_baseline_search_24"
+        android:hint="Search"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_listChat"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="10dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</LinearLayout>

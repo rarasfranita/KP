@@ -4508,13 +4508,13 @@
         <item name="statusBarBackground">#000000</item>
     </style>
     <declare-styleable name="ActionBar">
-        <!-- The type of navigation to use. -->
+        <!-- The type of navigation_dm to use. -->
         <attr name="navigationMode">
             <!-- Normal static title text -->
             <enum name="normal" value="0"/>
-            <!-- The action bar will use a selection list for navigation. -->
+            <!-- The action bar will use a selection list for navigation_dm. -->
             <enum name="listMode" value="1"/>
-            <!-- The action bar will use a series of horizontal tabs for navigation. -->
+            <!-- The action bar will use a series of horizontal tabs for navigation_dm. -->
             <enum name="tabMode" value="2"/>
         </attr>
         <!-- Options affecting how the action bar is displayed. -->
@@ -4547,7 +4547,7 @@
         <attr format="reference|color" name="backgroundStacked"/>
         <!-- Specifies a background drawable for the bottom component of a split action bar. -->
         <attr format="reference|color" name="backgroundSplit"/>
-        <!-- Specifies a layout for custom navigation. Overrides navigationMode. -->
+        <!-- Specifies a layout for custom navigation_dm. Overrides navigationMode. -->
         <attr format="reference" name="customNavigationLayout"/>
         <!-- Specifies a fixed height. -->
         <attr name="height"/>
@@ -4559,7 +4559,7 @@
         <attr format="reference" name="indeterminateProgressStyle"/>
         <!-- Specifies the horizontal padding on either end for an embedded progress bar. -->
         <attr format="dimension" name="progressBarPadding"/>
-        <!-- Up navigation glyph -->
+        <!-- Up navigation_dm glyph -->
         <attr name="homeAsUpIndicator"/>
         <!-- Specifies padding that should be applied to the left and right sides of
              system-provided items in the bar. -->
@@ -4578,7 +4578,7 @@
         <!-- Minimum inset for content views within a bar. Navigation buttons and
              menu views are excepted. Only valid for some themes and configurations. -->
         <attr format="dimension" name="contentInsetRight"/>
-        <!-- Minimum inset for content views within a bar when a navigation button
+        <!-- Minimum inset for content views within a bar when a navigation_dm button
              is present, such as the Up button. Only valid for some themes and configurations. -->
         <attr format="dimension" name="contentInsetStartWithNavigation"/>
         <!-- Minimum inset for content views within a bar when actions from a menu
@@ -5188,7 +5188,7 @@
         <attr format="color" name="colorPrimary"/>
 
         <!-- Dark variant of the primary branding color. By default, this is the color applied to
-             the status bar (via statusBarColor) and navigation bar (via navigationBarColor). -->
+             the status bar (via statusBarColor) and navigation_dm bar (via navigationBarColor). -->
         <attr format="color" name="colorPrimaryDark"/>
 
         <!-- Bright complement to the primary branding color. By default, this is the color applied
@@ -5349,46 +5349,46 @@
     <!-- Background tint for the BottomNavigationView. -->
     <attr name="backgroundTint"/>
     <!-- The menu resource to inflate and populate items from. Attribute type definition is in
-         navigation package. -->
+         navigation_dm package. -->
     <attr name="menu"/>
-    <!-- Whether navigation items display with a label, without a label, or with a label during
+    <!-- Whether navigation_dm items display with a label, without a label, or with a label during
          selected state. Can also be "auto", which uses the item count to determine whether to show
          or hide the label. -->
     <attr name="labelVisibilityMode">
       <!-- Label behaves as "labeled" when there are 3 items or less, or "selected" when there are
            4 items or more. -->
       <enum name="auto" value="-1"/>
-      <!-- Label is shown on the selected navigation item. -->
+      <!-- Label is shown on the selected navigation_dm item. -->
       <enum name="selected" value="0"/>
-      <!-- Label is shown on all navigation items. -->
+      <!-- Label is shown on all navigation_dm items. -->
       <enum name="labeled" value="1"/>
-      <!-- Label is not shown on any navigation items. -->
+      <!-- Label is not shown on any navigation_dm items. -->
       <enum name="unlabeled" value="2"/>
     </attr>
-    <!-- The background for the navigation items. Attribute type definition is in navigation
+    <!-- The background for the navigation_dm items. Attribute type definition is in navigation_dm
          package. -->
     <attr name="itemBackground"/>
     <!-- The ColorStateList to use for a ripple background. This only exists because creating
          ripples in drawable xml based on theme colors is not supported pre-23. This will be ignored
          if itemBackground is set.-->
     <attr format="color" name="itemRippleColor"/>
-    <!-- The size to provide for the navigation item icons. -->
+    <!-- The size to provide for the navigation_dm item icons. -->
     <attr name="itemIconSize"/>
-    <!-- The tint to apply to the navigation item icons. Attribute type definition is in navigation
+    <!-- The tint to apply to the navigation_dm item icons. Attribute type definition is in navigation_dm
          package. -->
     <attr name="itemIconTint"/>
-    <!-- The text appearance to apply to the inactive navigation item labels. Setting
+    <!-- The text appearance to apply to the inactive navigation_dm item labels. Setting
          android:textColor in itemTextAppearanceInactive will take precedence over android:textColor
          in itemTextAppearanceActive. Instead, set itemTextColor with a ColorStateList to make
          the text color stateful. -->
     <attr format="reference" name="itemTextAppearanceInactive"/>
-    <!-- The text appearance to apply to the active navigation item label. You should not set
+    <!-- The text appearance to apply to the active navigation_dm item label. You should not set
          android:textColor in itemTextAppearanceActive. Instead, set itemTextColor to a
          ColorStateList to make the text color stateful. -->
     <attr format="reference" name="itemTextAppearanceActive"/>
-    <!-- The color to apply to the navigation items' text. Setting itemTextColor will take
+    <!-- The color to apply to the navigation_dm items' text. Setting itemTextColor will take
          precedence over android:textColor in itemTextAppearanceInactive or
-         itemTextAppearanceActive. Attribute type definition is in navigation package. -->
+         itemTextAppearanceActive. Attribute type definition is in navigation_dm package. -->
     <attr name="itemTextColor"/>
     <!-- Whether the items translate horizontally when in "selected" label visibility mode. -->
     <attr format="boolean" name="itemHorizontalTranslationEnabled"/>
@@ -6520,17 +6520,17 @@
     <attr format="reference" name="menu"/>
     <attr format="color" name="itemIconTint"/>
     <attr name="itemTextColor"/>
-    <!-- A background drawable to use for navigation items. If this is set, this overrides the
+    <!-- A background drawable to use for navigation_dm items. If this is set, this overrides the
          default background drawable for items and the itemShape* attributes will be ignored -->
     <attr format="reference" name="itemBackground"/>
     <attr format="reference" name="itemTextAppearance"/>
     <!-- Layout resource to inflate as the header -->
     <attr format="reference" name="headerLayout"/>
-    <!-- Horizontal padding (left and right) of navigation items, around the icon & text -->
+    <!-- Horizontal padding (left and right) of navigation_dm items, around the icon & text -->
     <attr format="dimension" name="itemHorizontalPadding"/>
-    <!-- Padding between the icon and the text for navigation items that display an icon  -->
+    <!-- Padding between the icon and the text for navigation_dm items that display an icon  -->
     <attr format="dimension" name="itemIconPadding"/>
-    <!-- The size of the icon navigation items that display an icon  -->
+    <!-- The size of the icon navigation_dm items that display an icon  -->
     <attr format="dimension" name="itemIconSize"/>
     <!-- Makes the TextView of the item text be at most this many lines tall.  -->
     <attr format="integer" min="1" name="itemMaxLines"/>
@@ -7223,14 +7223,14 @@
         <!-- Reference to a theme that should be used to inflate popups
              shown by widgets in the toolbar. -->
         <attr name="popupTheme"/>
-        <!-- Icon drawable to use for the navigation button located at
+        <!-- Icon drawable to use for the navigation_dm button located at
              the start of the toolbar. -->
         <attr format="reference" name="navigationIcon"/>
-        <!-- Text to set as the content description for the navigation button
+        <!-- Text to set as the content description for the navigation_dm button
              located at the start of the toolbar. -->
         <attr format="string" name="navigationContentDescription"/>
         <!-- Drawable to set as the logo that appears at the starting side of
-             the Toolbar, just after the navigation button. -->
+             the Toolbar, just after the navigation_dm button. -->
         <attr name="logo"/>
         <!-- A content description string to describe the appearance of the
              associated logo image. -->
@@ -7253,7 +7253,7 @@
              allowed to take focus.  This value does not impact the behavior of
              directly calling {@link android.view.View#requestFocus}, which will
              always request focus regardless of this view.  It only impacts where
-             focus navigation will try to move focus. -->
+             focus navigation_dm will try to move focus. -->
         <attr name="android:focusable"/>
         <!-- Deprecated. -->
         <attr format="reference" name="theme"/>

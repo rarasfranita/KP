@@ -134,7 +134,7 @@ class HomeActivity : AppCompatActivity() {
         btmNav.getMenu().findItem(R.id.navigation_home).setCheckable(active);
         btmNav.getMenu().findItem(R.id.navigation_tipitaka).setCheckable(active);
         btmNav.getMenu().findItem(R.id.navigation_meditation).setCheckable(active);
-      }
+    }
 
     fun detailPost(item: Post) {
         val bundle = Bundle()
