@@ -31,9 +31,9 @@ import com.example.lotus.R
 import com.example.lotus.models.MediaData
 import com.example.lotus.models.Post
 import com.example.lotus.ui.CreatePostActivity
+import com.example.lotus.utils.dateToFormatTime
 import com.example.lotus.utils.dislikePost
 import com.example.lotus.utils.likePost
-import com.example.lotus.utils.dateToFormatTime
 import kotlinx.android.synthetic.main.layout_mainfeed_listitem.view.*
 import kotlinx.android.synthetic.main.progress_loading.view.*
 
@@ -87,6 +87,7 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
 
     class ItemViewHolder(val view: View) : RecyclerView.ViewHolder(view){
         val comment = view.findViewById<RelativeLayout>(R.id.rlCommentFeed)
+        val menu = view.findViewById<ImageView>(R.id.menuFeed)
         var mContext: Context? = null
         private var posterSlider: PosterSlider? = null
         private var postData: Post? = null
@@ -320,6 +321,11 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
                 }
             }
 
+            holder.itemView.menuFeed.setOnClickListener {
+                if (mContext is HomeActivity){
+                    (mContext as HomeActivity).showDialog(listPost[position].media!!)
+                }
+            }
 
         }
     }
