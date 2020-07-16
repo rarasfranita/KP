@@ -3,6 +3,7 @@ package com.example.lotus.ui.notification
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +11,18 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import coil.transform.CircleCropTransformation
+import com.androidnetworking.AndroidNetworking
+import com.androidnetworking.common.Priority
+import com.androidnetworking.error.ANError
+import com.androidnetworking.interfaces.ParsedRequestListener
 import com.example.lotus.R
 import com.example.lotus.models.Notification
+import com.example.lotus.models.Respon
+import com.example.lotus.service.EnvService
 import com.example.lotus.ui.detailpost.DetailPost
 import com.example.lotus.ui.home.PostFeedAdapter
 import com.example.lotus.utils.dateToFormatTime
+import com.example.lotus.utils.token
 import com.google.android.material.card.MaterialCardView
 
 class NotificationAdapter(private var notificationsDatas: ArrayList<Notification>, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -26,6 +34,7 @@ class NotificationAdapter(private var notificationsDatas: ArrayList<Notification
     override fun getItemCount(): Int = notificationsDatas?.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val username = "testaccount4"
         val item = ItemViewHolder(holder.itemView)
         item.bindNotification(notificationsDatas[position], context)
         item.cardNotification.setOnClickListener {
@@ -40,6 +49,33 @@ class NotificationAdapter(private var notificationsDatas: ArrayList<Notification
                 }
             }
         }
+
+        item.follow.setOnClickListener {
+            if (notificationsDatas[position].isFollowing!!.equals(0)){
+                Log.d("KESINI GASIH", "")
+                AndroidNetworking.get(EnvService.ENV_API + "/users/$username/follow/${notificationsDatas[position].follower?.username}")
+                    .addHeaders("Authorization", "Bearer " + token)
+                    .setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsObject(
+                        Respon::class.java,
+                        object : ParsedRequestListener<Respon> {
+                            @SuppressLint("ResourceAsColor")
+                            override fun onResponse(respon: Respon) {
+                                if (respon.code.toString() == "200") {
+                                    item.setFollowing()
+                                }else {
+                                    Log.e("ERROR!!!", "Following ${respon.code}")
+                                }
+                            }
+
+                            override fun onError(anError: ANError) {
+                                Log.e("ERROR!!!", "While following ${anError.errorCode}")
+
+                            }
+                        })
+            }
+        }
     }
 
     class ItemViewHolder(val view: View) : RecyclerView.ViewHolder(view){
@@ -52,14 +88,11 @@ class NotificationAdapter(private var notificationsDatas: ArrayList<Notification
         val profilePicture: ImageView = view.findViewById(R.id.profileUserNotification)
         val cardNotification: MaterialCardView = view.findViewById(R.id.cardNotification)
 
-        @SuppressLint("ResourceAsColor")
         fun bindNotification(notif: Notification, context: Context){
             if (notif.type == "FOLLOW"){
                 wrapMedia.visibility = View.GONE
                 if (notif.isFollowing == 1){
-                    follow.setText("Following")
-                    follow.setBackgroundColor(R.color.colorAccent)
-                    follow.setTextColor(R.color.colorPrimary)
+                    setFollowing()
                 }
                 textNotification.text = "Start following you."
                 textName.text = notif.follower?.username
@@ -88,6 +121,14 @@ class NotificationAdapter(private var notificationsDatas: ArrayList<Notification
 
             dateToFormatTime(textTime, notif.createdAt)
         }
+
+        @SuppressLint("ResourceAsColor")
+        fun setFollowing(){
+            follow.setText("Following")
+            follow.setBackgroundColor(R.color.black)
+            follow.setTextColor(R.color.colorPrimary)
+        }
+
 
         fun setProfilePicture(url: String){
             profilePicture.load(url){
