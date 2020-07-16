@@ -416,11 +416,11 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
                         val spannableString = SpannableString(tagMore)
                         val clickableSpan = object : ClickableSpan() {
                             override fun onClick(p0: View) {
-                                if (mContext is GeneralActivity) {
-                                    postData?.let {
-                                        (mContext as GeneralActivity).detailPostFromExplore(it)
-                                    }
-                                }
+//                                if (mContext is GeneralActivity) {
+//                                    postData?.let {
+//                                        (mContext as GeneralActivity).detailPostFromExplore(it)
+//                                    }
+//                                }
                             }
                         }
 

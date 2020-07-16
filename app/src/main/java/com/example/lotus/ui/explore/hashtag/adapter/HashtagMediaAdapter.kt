@@ -26,7 +26,7 @@ import com.example.lotus.models.MediaData
 import com.example.lotus.ui.explore.hashtag.HashtagActivity
 import com.example.lotus.ui.explore.hashtag.model.Data
 import com.example.lotus.utils.DynamicSquareLayout
-import com.example.lotus.utils.setTimePost
+import com.example.lotus.utils.dateToFormatTime
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.layout_hashtag_media_item.view.*
 import kotlin.collections.ArrayList
@@ -49,12 +49,12 @@ class HashtagMediaAdapter(private val listHashtagMedia: ArrayList<Data>, val con
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.bindFeed(listHashtagMedia[position], context)
-        holder.viewAllCommentHashtag.setOnClickListener {
-            if (mContext is HashtagActivity) {
-                (mContext as HashtagActivity).detailPost(listHashtagMedia[position])
-
-            }
-        }
+//        holder.viewAllCommentHashtag.setOnClickListener {
+//            if (mContext is HashtagActivity) {
+//                (mContext as HashtagActivity).detailPost(listHashtagMedia[position])
+//
+//            }
+//        }
     }
 
     class Holder(val view: View) : RecyclerView.ViewHolder(view) {
@@ -91,7 +91,7 @@ class HashtagMediaAdapter(private val listHashtagMedia: ArrayList<Data>, val con
 
                 setMediaPost(view, post.media, post.text)
                 setProfilePicture(imageAvatarHashtag, post.profilePicture.toString())
-                setTimePost(time, postData?.postDate)
+                dateToFormatTime(time, postData?.postDate)
                 setLike(view, postData?.like, likeCount)
 
             }
@@ -148,9 +148,9 @@ class HashtagMediaAdapter(private val listHashtagMedia: ArrayList<Data>, val con
                 val spannableString = SpannableString(caption)
                 val clickableSpan = object : ClickableSpan() {
                     override fun onClick(p0: View) {
-                        if (mContext is HashtagActivity) {
-                            postData?.let { (mContext as HashtagActivity).detailPost(it) }
-                        }
+//                        if (mContext is HashtagActivity) {
+//                            postData?.let { (mContext as HashtagActivity).detailPost(it) }
+//                        }
                     }
                 }
 
@@ -183,9 +183,9 @@ class HashtagMediaAdapter(private val listHashtagMedia: ArrayList<Data>, val con
                         val spannableString = SpannableString(tagMore)
                         val clickableSpan = object : ClickableSpan() {
                             override fun onClick(p0: View) {
-                                if (mContext is HashtagActivity) {
-                                    postData?.let { (mContext as HashtagActivity).detailPost(it) }
-                                }
+//                                if (mContext is HashtagActivity) {
+//                                    postData?.let { (mContext as HashtagActivity).detailPost(it) }
+//                                }
                             }
                         }
 

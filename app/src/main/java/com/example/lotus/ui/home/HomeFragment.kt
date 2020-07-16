@@ -1,5 +1,6 @@
 package com.example.lotus.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.text.TextUtils
@@ -22,6 +23,8 @@ import com.example.lotus.R
 import com.example.lotus.models.Post
 import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
+import com.example.lotus.ui.dm.MainActivityDM
+import com.example.lotus.ui.explore.general.GeneralActivity
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -129,20 +132,18 @@ class HomeFragment : Fragment() {
 
         }
 
-        toolbar.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.explore -> {
-                    true
-                }
-                R.id.direct_message -> {
-                    true
-                }
-                R.id.profile -> {
-                    true
-                }
-                else -> false
+        toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.direct_message ->
+                    toolbar.context.startActivity(Intent(context, MainActivityDM::class.java))
             }
+            when (it.itemId) {
+                R.id.explore ->
+                    toolbar.context.startActivity(Intent(context, GeneralActivity::class.java))
+            }
+            true
         }
+
     }
 
     private fun setRVScrollListener(v: View) {
