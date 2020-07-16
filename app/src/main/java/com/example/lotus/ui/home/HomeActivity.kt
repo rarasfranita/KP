@@ -33,6 +33,8 @@ class HomeActivity : AppCompatActivity() {
         }
         setContentView(R.layout.activity_main)
 
+        bottom_sheet.visibility = View.GONE // For temporary
+
         val fabPost = findViewById<View>(R.id.fab_post)
 
         fabPost.setOnClickListener(View.OnClickListener { fabPostOnClick() })
@@ -51,6 +53,7 @@ class HomeActivity : AppCompatActivity() {
     private fun navigationMenuLogic(){
         val llBottomSheet =
             findViewById<View>(R.id.bottom_sheet) as LinearLayout
+        bottom_sheet.visibility = View.GONE
 
         val bottomSheetBehavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(llBottomSheet)
         bottomSheetBehavior.isHideable = false
