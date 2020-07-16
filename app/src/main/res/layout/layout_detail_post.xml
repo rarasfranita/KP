@@ -19,7 +19,7 @@
              android:id="@+id/relLayout1"
              android:layout_width="match_parent"
              android:layout_height="50dp"
-             android:gravity="center_horizontal">
+             android:gravity="left">
 
             <ImageView
                 android:id="@+id/imageAvatarPost"
@@ -39,14 +39,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/imageAvatarPost"
                 android:text="Lotus Check"/>
-            <ImageView
-                android:id="@+id/ivEllipsesPost"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="20dp"
-                android:src="@drawable/ic_ellipses" />
+
 
          </RelativeLayout>
 

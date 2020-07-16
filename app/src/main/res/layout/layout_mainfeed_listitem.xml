@@ -35,7 +35,7 @@
                 android:layout_toRightOf="@+id/imageAvatarFeed"
                 android:text="Lotus Check"/>
             <ImageView
-                android:id="@+id/ivEllipsesPost"
+                android:id="@+id/menuFeed"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
