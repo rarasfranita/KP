@@ -34,11 +34,10 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         bottom_sheet.visibility = View.GONE // For temporary
-
+        // navigationMenuLogic()
         val fabPost = findViewById<View>(R.id.fab_post)
 
         fabPost.setOnClickListener(View.OnClickListener { fabPostOnClick() })
-        navigationMenuLogic()
 
         manager = getSupportFragmentManager()
 
