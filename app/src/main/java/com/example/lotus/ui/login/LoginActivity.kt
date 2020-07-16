@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.util.Patterns.EMAIL_ADDRESS
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
@@ -23,16 +24,16 @@ import com.androidnetworking.interfaces.ParsedRequestListener
 import com.example.lotus.R
 import com.example.lotus.models.DataUser
 import com.example.lotus.models.Respon
-import com.example.lotus.models.User
 import com.example.lotus.service.EnvService
+import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.home.HomeActivity
 import com.google.gson.Gson
 
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var loginViewModel: LoginViewModel
 
+    private lateinit var loginViewModel: LoginViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -101,8 +102,18 @@ class LoginActivity : AppCompatActivity() {
                 false
             }
 
+
             login.setOnClickListener {
-                val type = "username"
+
+                val type =
+                    if (EMAIL_ADDRESS.matcher(username.text.toString()).matches()) {
+                        "email"
+                    } else {
+                        "username"
+                    }
+                Log.d("type", type)
+                Log.d("", EMAIL_ADDRESS.toString())
+                Log.d("", username.toString())
                 loading.visibility = View.VISIBLE
                 AndroidNetworking.post(EnvService.ENV_API + "/users/login")
                     .addBodyParameter("key", username.text.toString())
@@ -114,19 +125,23 @@ class LoginActivity : AppCompatActivity() {
                         override fun onResponse(respon: Respon) {
                             val gson = Gson()
                             if (respon.code.toString() == "200") {
+                                loading.visibility = View.INVISIBLE
                                 val strRes = gson.toJson(respon.data)
                                 val dataJson = gson.fromJson(strRes, DataUser::class.java)
+                                Log.d("Data", respon.data.toString())
                                 Log.d("nama", dataJson?.user?.name.toString())
+                                loginViewModel.login(dataJson.user.name.toString(), password.text.toString())
+
+                                SharedPrefManager.getInstance(applicationContext).saveUser(dataJson.user)
+
                             }
                         }
 
                         override fun onError(error: ANError) {
-                            Log.d("onError: Failed", error.toString()); //untuk log pada onerror
-                            Toast.makeText(
-                                getApplicationContext(),
-                                "gagal login",
-                                Toast.LENGTH_SHORT
-                            ).show();
+                            loading.visibility = View.INVISIBLE
+                            Log.d("onError: Failed", error.toString())
+                            Toast.makeText(applicationContext, "gagal login", Toast.LENGTH_SHORT)
+                                .show()
                         }
                     })
             }
@@ -152,7 +167,19 @@ class LoginActivity : AppCompatActivity() {
     private fun showLoginFailed(@StringRes errorString: Int) {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
+
+    override fun onStart() {
+        super.onStart()
+
+        if (SharedPrefManager.getInstance(this).isLoggedIn) {
+            val intent = Intent(applicationContext, HomeActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+            startActivity(intent)
+        }
+    }
 }
+
 
 /**
  * Extension function to simplify setting an afterTextChanged action to EditText components.
