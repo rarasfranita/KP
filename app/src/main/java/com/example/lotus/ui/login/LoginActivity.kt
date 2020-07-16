@@ -24,6 +24,7 @@ import com.androidnetworking.interfaces.ParsedRequestListener
 import com.example.lotus.R
 import com.example.lotus.models.DataUser
 import com.example.lotus.models.Respon
+import com.example.lotus.models.Token
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.home.HomeActivity
@@ -111,9 +112,6 @@ class LoginActivity : AppCompatActivity() {
                     } else {
                         "username"
                     }
-                Log.d("type", type)
-                Log.d("", EMAIL_ADDRESS.toString())
-                Log.d("", username.toString())
                 loading.visibility = View.VISIBLE
                 AndroidNetworking.post(EnvService.ENV_API + "/users/login")
                     .addBodyParameter("key", username.text.toString())
@@ -128,12 +126,15 @@ class LoginActivity : AppCompatActivity() {
                                 loading.visibility = View.INVISIBLE
                                 val strRes = gson.toJson(respon.data)
                                 val dataJson = gson.fromJson(strRes, DataUser::class.java)
-                                Log.d("Data", respon.data.toString())
-                                Log.d("nama", dataJson?.user?.name.toString())
+                                val data = gson.fromJson(strRes, Token::class.java)
                                 loginViewModel.login(dataJson.user.name.toString(), password.text.toString())
 
                                 SharedPrefManager.getInstance(applicationContext).saveUser(dataJson.user)
+                                SharedPrefManager.getInstance(applicationContext).saveToken(data)
+                                val token = data.toString()
 
+                                val intent = Intent(applicationContext, HomeActivity::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             }
                         }
 
@@ -157,11 +158,11 @@ class LoginActivity : AppCompatActivity() {
         startActivity(Intent(this, HomeActivity::class.java))
 
         // TODO : initiate successful logged in experience
-        Toast.makeText(
-            applicationContext,
-            "$welcome $displayName",
-            Toast.LENGTH_LONG
-        ).show()
+//        Toast.makeText(
+//            applicationContext,
+//            "$welcome $displayName",
+//            Toast.LENGTH_LONG
+//        ).show()
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {

@@ -1,5 +1,6 @@
 package com.example.lotus.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.text.TextUtils
@@ -131,19 +132,16 @@ class HomeFragment : Fragment() {
 
         }
 
-        toolbar.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.explore -> {
-                    true
-                }
-                R.id.direct_message -> {
-                    true
-                }
-                R.id.profile -> {
-                    true
-                }
-                else -> false
+        toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.direct_message ->
+                    toolbar.context.startActivity(Intent(context, MainActivityDM::class.java))
             }
+            when (it.itemId) {
+                R.id.explore ->
+                    toolbar.context.startActivity(Intent(context, GeneralActivity::class.java))
+            }
+            true
         }
 
     }

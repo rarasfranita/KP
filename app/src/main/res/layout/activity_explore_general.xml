@@ -25,6 +25,7 @@
                     app:elevation="10dp"
                     app:navigationIcon="@drawable/ic_arrow_back_black"
                     app:title="Explore"
+                    app:menu="@menu/post"
                     app:titleTextColor="#6B6B6B" />
         </com.google.android.material.appbar.AppBarLayout>
 
