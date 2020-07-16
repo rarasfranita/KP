@@ -38,7 +38,6 @@ import kotlinx.android.synthetic.main.fragment_home.*
 class HomeActivity : AppCompatActivity() {
     private val TAG = "HomeActivity"
     private var manager: FragmentManager? = null
-//    var dialog: Dialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +46,6 @@ class HomeActivity : AppCompatActivity() {
         } catch (e: NullPointerException) {
         }
         setContentView(R.layout.activity_main)
-//        Dialog(this)
         val fabPost = findViewById<View>(R.id.fab_post)
 
         fabPost.setOnClickListener(View.OnClickListener { fabPostOnClick() })
@@ -162,8 +160,8 @@ class HomeActivity : AppCompatActivity() {
 
     fun downloadMedia(medias: ArrayList<MediaData>){
         val downloadsPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-        Log.d("DOWNLOAD PATH", downloadsPath.toString())
-        for (media in medias) {
+
+        for ((i, media) in medias.withIndex()) {
             val fileName = media.link?.removeRange(0, media.link.length-10)
 
             AndroidNetworking.download(media.link, downloadsPath.toString(), fileName)
@@ -178,7 +176,7 @@ class HomeActivity : AppCompatActivity() {
                     ) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             val channel1 = NotificationChannel(
-                                "channelId",
+                                i.toString(),
                                 "Progress Notification",
                                 //IMPORTANCE_HIGH = shows a notification as peek notification.
                                 //IMPORTANCE_LOW = shows the notification in the status bar.
@@ -190,21 +188,18 @@ class HomeActivity : AppCompatActivity() {
                             )
                             manager.createNotificationChannel(channel1)
                         }
-//                        Log.d("Progress", "downloaded: $bytesDownloaded from total $totalBytes")
-//                        val progress = findViewById<TextView>(R.id.progressDownload)
-//                        progress.text = "$bytesDownloaded/$totalBytes"
                     }
                 })
                 .startDownload(object : DownloadListener {
                     override fun onDownloadComplete() {
-                        Log.d("Complete", "TEEE")
-                        Toast.makeText(this@HomeActivity, "Download Complete", Toast.LENGTH_SHORT).show()
-//                        dialog?.dismiss()
-                        // do anything after completion
+                        if (i.equals(medias.size-1)){
+                            Toast.makeText(this@HomeActivity, "Download Complete", Toast.LENGTH_SHORT).show()
+                        }
                     }
 
                     override fun onError(error: ANError?) {
                         // handle error
+                        Toast.makeText(this@HomeActivity, "Error while downloading media, ${error!!.errorDetail}", Toast.LENGTH_SHORT).show()
                         Log.d("Error download", error?.errorCode.toString())
                         Log.d("Error download", error!!.errorDetail)
                     }
@@ -215,16 +210,17 @@ class HomeActivity : AppCompatActivity() {
     fun showDialog(medias: ArrayList<MediaData>) {
         val dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(false)
         dialog.setContentView(R.layout.layout_menu_post)
         val download = dialog.findViewById<LinearLayout>(R.id.downloadMedia)
         download.setOnClickListener {
-            downloadMedia(medias)
-            dialog.dismiss()
+            if (medias.size < 1){
+                Toast.makeText(this@HomeActivity, "No media to be downloaded", Toast.LENGTH_SHORT).show()
+            }else {
+                downloadMedia(medias)
+                dialog.dismiss()
+            }
         }
-//        noBtn.setOnClickListener { dialog.dismiss() }
         dialog.show()
-
     }
 
 }
