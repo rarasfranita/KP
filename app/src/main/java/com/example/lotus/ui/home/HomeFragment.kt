@@ -23,8 +23,11 @@ import com.example.lotus.R
 import com.example.lotus.models.Post
 import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
+<<<<<<< HEAD
 import com.example.lotus.ui.dm.MainActivityDM
 import com.example.lotus.ui.explore.general.GeneralActivity
+=======
+>>>>>>> c5505c436ecdd01b7c4abff3ca9f69364ea20854
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_home.*
 
