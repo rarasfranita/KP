@@ -5,10 +5,13 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.androidnetworking.AndroidNetworking
@@ -20,6 +23,7 @@ import com.example.lotus.R
 import com.example.lotus.models.Notification
 import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
+import com.example.lotus.ui.detailpost.DetailPost
 import com.example.lotus.ui.home.RecyclerViewLoadMoreScroll
 import com.github.nkzawa.emitter.Emitter
 import com.github.nkzawa.socketio.client.IO
@@ -46,6 +50,7 @@ class NotificationActivity : AppCompatActivity() {
     lateinit var adapter: NotificationAdapter
     lateinit var scrollListener: RecyclerViewLoadMoreScroll
     lateinit var mLayoutManager: RecyclerView.LayoutManager
+    private var manager: FragmentManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +61,7 @@ class NotificationActivity : AppCompatActivity() {
         Log.d("SOCKET", "${mSocket.connected()},  ${mSocket.connect()}")
         getNotifications()
         onSlider()
+        manager = getSupportFragmentManager()
 
         reloadNotification.setOnRefreshListener {
             getNotifications()
@@ -142,6 +148,19 @@ class NotificationActivity : AppCompatActivity() {
             notify(id, builder)
         }
 
+    }
+
+    fun detailPost(postId: String) {
+        val bundle = Bundle().apply {
+            putString("postId", postId)
+        }
+        appbarNotification.visibility = View.INVISIBLE
+        val dataPost = DetailPost()
+        dataPost.arguments = bundle
+        manager?.beginTransaction()
+            ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            ?.replace(R.id.containerNotification, dataPost)
+            ?.commit()
     }
 
     fun onSlider(){
