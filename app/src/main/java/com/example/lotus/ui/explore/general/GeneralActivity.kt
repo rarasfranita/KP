@@ -21,10 +21,9 @@ import com.baoyz.widget.PullRefreshLayout
 import com.example.lotus.R
 import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
-import com.example.lotus.ui.explore.detailpost.DetailPostHashtag
+//import com.example.lotus.ui.explore.detailpost.DetailPostHashtag
 import com.example.lotus.ui.explore.general.adapter.GeneralMediaAdapter
 import com.example.lotus.ui.explore.general.adapter.GeneralTextAdapter
-import com.example.lotus.ui.explore.general.detailpostExplore.DetailPosttGeneral
 import com.example.lotus.ui.explore.general.fragment.ListMediaGeneral
 import com.example.lotus.ui.explore.general.fragment.ListTextGeneral
 import com.example.lotus.ui.explore.general.model.Data
@@ -91,9 +90,7 @@ class GeneralActivity : AppCompatActivity() {
             .setTag(this)
             .setPriority(Priority.LOW)
             .build()
-            .getAsObject(
-                Respons::class.java,
-                object : ParsedRequestListener<Respons> {
+            .getAsObject(Respons::class.java, object : ParsedRequestListener<Respons> {
                     override fun onResponse(respon: Respons) {
                         dataExplore.clear()
                         srlMediaGeneral.setRefreshing(false)
@@ -178,21 +175,6 @@ class GeneralActivity : AppCompatActivity() {
         explore.adapter = adapter
     }
 
-    //move to detail post
-    fun detailPostFromExplore(item: Data) {
-        appBarLayout?.visibility = View.INVISIBLE
-        tabs.visibility = View.INVISIBLE
-        edSearchbar.visibility = View.INVISIBLE
-        val bundle = Bundle()
-        bundle.putParcelable("data", item.posts!![0])
-        val dataPost = DetailPosttGeneral()
-        dataPost.arguments = bundle
-        manager?.beginTransaction()
-            ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            ?.replace(R.id.fragmentExplore, dataPost)
-            ?.commit()
-    }
-
     fun backToHome(view: View) {
         appBarLayout?.visibility = View.VISIBLE
         tabs.visibility = View.VISIBLE
@@ -202,19 +184,19 @@ class GeneralActivity : AppCompatActivity() {
     }
 
     //move to hashtagActivity
-    fun more(data: Data) {
-        appBarLayout?.visibility = View.GONE
-        tabs.visibility = View.GONE
-        edSearchbar.visibility = View.GONE
-        val bundle = Bundle()
-        bundle.putParcelable("data", data)
-        val dataPost = DetailPostHashtag()
-        dataPost.arguments = bundle
-        manager?.beginTransaction()
-            ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            ?.replace(R.id.fragmentExplore, dataPost)
-            ?.commit()
-    }
+//    fun more(data: Data) {
+//        appBarLayout?.visibility = View.GONE
+//        tabs.visibility = View.GONE
+//        edSearchbar.visibility = View.GONE
+//        val bundle = Bundle()
+//        bundle.putParcelable("data", data)
+//        val dataPost = DetailPostHashtag()
+//        dataPost.arguments = bundle
+//        manager?.beginTransaction()
+//            ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+//            ?.replace(R.id.fragmentExplore, dataPost)
+//            ?.commit()
+//    }
 
     internal class ViewPagerAdapter(fragmentManager: FragmentManager) :
         FragmentPagerAdapter(fragmentManager) {

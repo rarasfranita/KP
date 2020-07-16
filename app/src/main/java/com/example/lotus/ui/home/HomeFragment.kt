@@ -22,6 +22,8 @@ import com.example.lotus.R
 import com.example.lotus.models.Post
 import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
+import com.example.lotus.ui.dm.MainActivityDM
+import com.example.lotus.ui.explore.general.GeneralActivity
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -143,6 +145,7 @@ class HomeFragment : Fragment() {
                 else -> false
             }
         }
+
     }
 
     private fun setRVScrollListener(v: View) {

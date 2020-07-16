@@ -19,7 +19,7 @@ import com.androidnetworking.interfaces.ParsedRequestListener
 import com.baoyz.widget.PullRefreshLayout
 import com.example.lotus.R
 import com.example.lotus.service.EnvService
-import com.example.lotus.ui.explore.detailpost.DetailPostHashtag
+//import com.example.lotus.ui.explore.detailpost.DetailPostHashtag
 import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.explore.hashtag.adapter.HashtagMediaAdapter
 import com.example.lotus.ui.explore.hashtag.adapter.HashtagTextAdapter
@@ -182,19 +182,19 @@ class HashtagActivity : AppCompatActivity() {
         hashtag.layoutManager = LinearLayoutManager(this)
     }
 
-    fun detailPost(data: Data) {
-        LinLayout1.visibility = View.GONE
-        tabsHashtag.visibility = View.GONE
-        val bundle = Bundle()
-        bundle.putParcelable("data", data)
-        val dataPost = DetailPostHashtag()
-        dataPost.arguments = bundle
-        manager?.beginTransaction()
-            ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            ?.replace(R.id.fragment_list_media_hashtag, dataPost)
-            ?.commit()
-
-    }
+//    fun detailPost(data: Data) {
+//        LinLayout1.visibility = View.GONE
+//        tabsHashtag.visibility = View.GONE
+//        val bundle = Bundle()
+//        bundle.putParcelable("data", data)
+//        val dataPost = DetailPostHashtag()
+//        dataPost.arguments = bundle
+//        manager?.beginTransaction()
+//            ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+//            ?.replace(R.id.fragment_list_media_hashtag, dataPost)
+//            ?.commit()
+//
+//    }
 
     fun backToHome(view: View) {
         LinLayout1?.visibility = View.VISIBLE

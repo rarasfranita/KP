@@ -2,7 +2,6 @@ package com.example.lotus.ui.login
 
 import android.app.Activity
 import android.content.Intent
-import android.nfc.Tag
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -17,8 +16,17 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.androidnetworking.AndroidNetworking
+import com.androidnetworking.common.Priority
+import com.androidnetworking.error.ANError
+import com.androidnetworking.interfaces.ParsedRequestListener
 import com.example.lotus.R
+import com.example.lotus.models.DataUser
+import com.example.lotus.models.Respon
+import com.example.lotus.models.User
+import com.example.lotus.service.EnvService
 import com.example.lotus.ui.home.HomeActivity
+import com.google.gson.Gson
 
 
 class LoginActivity : AppCompatActivity() {
@@ -27,7 +35,6 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_login)
 
         val username = findViewById<EditText>(R.id.username)
@@ -95,8 +102,33 @@ class LoginActivity : AppCompatActivity() {
             }
 
             login.setOnClickListener {
+                val type = "username"
                 loading.visibility = View.VISIBLE
-                loginViewModel.login(username.text.toString(), password.text.toString())
+                AndroidNetworking.post(EnvService.ENV_API + "/users/login")
+                    .addBodyParameter("key", username.text.toString())
+                    .addBodyParameter("password", password.text.toString())
+                    .addBodyParameter("type", type)
+                    .setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsObject(Respon::class.java, object : ParsedRequestListener<Respon> {
+                        override fun onResponse(respon: Respon) {
+                            val gson = Gson()
+                            if (respon.code.toString() == "200") {
+                                val strRes = gson.toJson(respon.data)
+                                val dataJson = gson.fromJson(strRes, DataUser::class.java)
+                                Log.d("nama", dataJson?.user?.name.toString())
+                            }
+                        }
+
+                        override fun onError(error: ANError) {
+                            Log.d("onError: Failed", error.toString()); //untuk log pada onerror
+                            Toast.makeText(
+                                getApplicationContext(),
+                                "gagal login",
+                                Toast.LENGTH_SHORT
+                            ).show();
+                        }
+                    })
             }
         }
     }
