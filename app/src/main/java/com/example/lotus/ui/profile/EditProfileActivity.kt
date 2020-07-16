@@ -16,48 +16,5 @@ class EditProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.edit_profile_activity)
-
-        //viewpager
-        val tableLayout: TabLayout = findViewById(R.id.tab_Layout)
-        val viewPager: ViewPager = findViewById(R.id.view_Pager)
-        val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
-
-        viewPagerAdapter.addFragment(MediaProfile(), title = "media")
-        viewPagerAdapter.addFragment(TextFragment(), title = "text")
-
-        viewPager.adapter = viewPagerAdapter
-        tableLayout.setupWithViewPager(viewPager)
-    }
-    private fun showImages (images: List<Image>){
-        rvprofilemedia.layoutManager = LinearLayoutManager(this)
-        rvprofilemedia.adapter=ImageAdapter(images)
-    }
-
-    internal class ViewPagerAdapter(fragmentManager: FragmentManager) :
-        FragmentPagerAdapter(fragmentManager) {
-        private val fragments: ArrayList<Fragment>
-        private val titles: ArrayList<String>
-
-        init {
-            fragments = ArrayList<Fragment>()
-            titles = ArrayList<String>()
-        }
-
-        override fun getItem(position: Int): Fragment {
-            return fragments[position]
-        }
-
-        override fun getCount(): Int {
-            return fragments.size
-        }
-
-        fun addFragment(fragment: Fragment, title: String) {
-            fragments.add(fragment)
-            titles.add(title)
-        }
-
-        override fun getPageTitle(i: Int): CharSequence? {
-            return titles[i]
-        }
     }
 }

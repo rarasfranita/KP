@@ -4,9 +4,12 @@ import android.content.Intent
 import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -17,6 +20,7 @@ import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.media_profile_fragment.*
 import kotlinx.android.synthetic.main.snippet_myprofile.*
+import kotlinx.android.synthetic.main.snippet_profile_toolbar.*
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var button: Button
@@ -37,7 +41,6 @@ class ProfileActivity : AppCompatActivity() {
         tableLayout.setupWithViewPager(viewPager)
 
         ShowMyProfile()
-        ShowUserProfile()
     }
 
     private fun ShowMyProfile(){
@@ -83,15 +86,29 @@ class ProfileActivity : AppCompatActivity() {
             return titles[i]
         }
     }
-    private fun popupMyProfile(){
-        val popupMenu= PopupMenu(applicationContext,ivEllipses)
-        popupMenu.inflate(R.menu.popup_menu)
-        popupMenu.setOnMenuItemClickListener {
-            when(it.itemId){
-         //       R.id.navSecurity -> {
-           //     }
-            }
-        }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        var mnInflater = menuInflater
+        mnInflater.inflate(R.menu.popup_menu,menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
+   /** override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.navSecurity -> {
+                Toast.makeText(this,"goChangePassoword",Toast.LENGTH_SHORT)
+            }
+            R.id.navRate-> {
+                Toast.makeText(this,"goChangePassoword",Toast.LENGTH_SHORT)
+            }
+            R.id.navRate -> {
+                Toast.makeText(this,"goChangePassoword",Toast.LENGTH_SHORT)
+            }
+            R.id.navLogout -> {
+                Toast.makeText(this,"goChangePassoword",Toast.LENGTH_SHORT)
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+*/
 }
