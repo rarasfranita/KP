@@ -1,20 +1,18 @@
 package com.example.lotus.ui.detailpost
 
-import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
-import androidx.annotation.RequiresApi
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,8 +23,6 @@ import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.AndroidNetworking.get
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
-import com.androidnetworking.interfaces.DownloadListener
-import com.androidnetworking.interfaces.DownloadProgressListener
 import com.androidnetworking.interfaces.ParsedRequestListener
 import com.asura.library.posters.Poster
 import com.asura.library.posters.RemoteImage
@@ -85,61 +81,10 @@ class DetailPost : Fragment() {
         listenCommentIcon(v)
         listenRepostIcon(v)
         listenLikeIcon(v)
-        listenMenuPost(v)
 
         return v
     }
 
-    fun downloadMedia(medias: ArrayList<MediaData>){
-        val downloadsPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-
-        for ((i, media) in medias.withIndex()) {
-            val fileName = media.link?.removeRange(0, media.link.length-10)
-
-            AndroidNetworking.download(media.link, downloadsPath.toString(), fileName)
-                .setTag("downloadTest")
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .setDownloadProgressListener(object : DownloadProgressListener {
-                    @RequiresApi(Build.VERSION_CODES.O)
-                    override fun onProgress(
-                        bytesDownloaded: Long,
-                        totalBytes: Long
-                    ) {}
-                })
-                .startDownload(object : DownloadListener {
-                    override fun onDownloadComplete() {
-                        if (i.equals(medias.size-1)){
-                            Toast.makeText(context, "Download Complete", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-
-                    override fun onError(error: ANError?) {
-                        // handle error
-                        Toast.makeText(context, "Error while downloading media, ${error!!.errorDetail}", Toast.LENGTH_SHORT).show()
-                        Log.d("Error download", error?.errorCode.toString())
-                        Log.d("Error download", error!!.errorDetail)
-                    }
-                })
-        }
-    }
-
-    fun showDialog() {
-        val medias = postData?.media
-        val dialog = Dialog(requireContext())
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.layout_menu_post)
-        val download = dialog.findViewById<LinearLayout>(R.id.downloadMedia)
-        download.setOnClickListener {
-            if (medias?.size!! < 1){
-                Toast.makeText(context, "No media to be downloaded", Toast.LENGTH_SHORT).show()
-            }else{
-                downloadMedia(medias!!)
-                dialog.dismiss()
-            }
-        }
-        dialog.show()
-    }
 
     fun sendComment(v: View){
         val btnSend = v.findViewById<View>(R.id.imageSendComment)
@@ -202,14 +147,6 @@ class DetailPost : Fragment() {
                             }
                         })
             }
-        }
-    }
-
-    fun listenMenuPost(view: View){
-        val menu = view.findViewById<ImageView>(R.id.menuPost)
-
-        menu.setOnClickListener {
-            showDialog()
         }
     }
 

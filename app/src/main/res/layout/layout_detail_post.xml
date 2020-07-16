@@ -40,15 +40,6 @@
                 android:layout_toRightOf="@+id/imageAvatarPost"
                 android:text="Lotus Check"/>
 
-            <ImageView
-                android:id="@+id/menuPost"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="20dp"
-                android:src="@drawable/ic_ellipses" />
-
 
          </RelativeLayout>
 
