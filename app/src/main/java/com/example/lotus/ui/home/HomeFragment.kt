@@ -80,7 +80,7 @@ class HomeFragment : Fragment() {
             .addPathParameter("id", idBucket.toString())
             .addHeaders("Authorization", "Bearer " + token)
             .setTag(this)
-            .setPriority(Priority.LOW)
+            .setPriority(Priority.HIGH)
             .build()
             .getAsObject(
                 Respons::class.java,

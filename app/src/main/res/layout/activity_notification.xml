@@ -45,7 +45,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/rvNotification">
+            android:id="@+id/rvNotification"
+            android:paddingBottom="60dp">
         </androidx.recyclerview.widget.RecyclerView>
 
     </com.baoyz.widget.PullRefreshLayout>
