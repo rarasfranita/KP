@@ -80,7 +80,7 @@ class NotificationActivity : AppCompatActivity() {
 
             Log.d("name", name)
 
-//            createNotification(Notification("HELLO", name))
+            createNotification("HELLO", name)
 
         })
     }
@@ -127,7 +127,7 @@ class NotificationActivity : AppCompatActivity() {
                 })
     }
 
-    private fun createNotification(data: Notification) {
+    private fun createNotification(title: String, content: String) {
         val id = 1
         val fullScreenIntent = Intent(this, NotificationActivity::class.java)
         val fullScreenPendingIntent = PendingIntent.getActivity(this, 0,
@@ -136,8 +136,8 @@ class NotificationActivity : AppCompatActivity() {
         var builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.logo_lotus)
             .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.logo_lotus))
-//            .setContentTitle(data.title)
-//            .setContentText(data.content)
+            .setContentTitle(title)
+            .setContentText(content)
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setColor(getResources().getColor(R.color.colorPrimary))
             .setPriority(NotificationCompat.PRIORITY_MAX)
