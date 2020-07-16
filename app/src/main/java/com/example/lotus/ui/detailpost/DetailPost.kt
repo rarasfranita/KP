@@ -54,6 +54,7 @@ class DetailPost : Fragment() {
     var likeStatus: Int? = 0
     var likeCount: Int = 0
     var commentCount: Int = 0
+    var postID: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,13 +70,20 @@ class DetailPost : Fragment() {
         val bundle = this.arguments
         if (bundle != null) {
             postData = bundle.getParcelable("data")
+            postID = bundle.getString("postId")
         }
 
-        likeStatus = postData?.liked
-        likeCount = postData?.likesCount!!
-        commentCount = postData?.commentsCount!!
+        if (postData != null){
+            likeStatus = postData?.liked
+            likeCount = postData?.likesCount!!
+            commentCount = postData?.commentsCount!!
+            setView(v)
+        }else if (postID != null){
+            populateCommentData(v, postID!!)
+        }
 
-        setView(v)
+
+
         initRecyclerView(v)
         sendComment(v)
         listenCommentIcon(v)
@@ -107,7 +115,7 @@ class DetailPost : Fragment() {
                                 if (respon.code.toString() == "200") {
                                     Log.d("Add Comment: ", "Success")
                                     v.inputComment.setText("")
-                                    populateCommentData()
+                                    populateCommentData(v, postData?.postId.toString())
                                 }else {
                                     Log.e("ERROR!!!", "Add Comment Data ${respon.code}")
                                 }
@@ -135,7 +143,7 @@ class DetailPost : Fragment() {
                                     Log.d("Add Comment: ", "Success")
                                     v.inputComment.setText("")
                                     commentID = null
-                                    populateCommentData()
+                                    populateCommentData(v, postData?.postId.toString())
                                 }else {
                                     Log.e("ERROR!!!", "Add Comment Data ${respon.code}")
                                 }
@@ -323,13 +331,13 @@ class DetailPost : Fragment() {
 
         recyclerView.adapter = rowAdapter
 
-        populateCommentData()
+        populateCommentData(v, postData?.postId.toString())
     }
 
-    fun populateCommentData(){
+    fun populateCommentData(v: View, postID: String){
         get(EnvService.ENV_API + "/posts/{postID}/comments/all")
             .addHeaders("Authorization", "Bearer " + token)
-            .addPathParameter("postID", postData?.postId)
+            .addPathParameter("postID", postID)
             .setPriority(Priority.MEDIUM)
             .build()
             .getAsObject(
@@ -368,6 +376,27 @@ class DetailPost : Fragment() {
                                 )))
 
                                 rowAdapter.notifyDataSetChanged()
+                            }
+
+                            if (postID != null){
+                                postData = Post(
+                                    data.id,
+                                    data.username,
+                                    data.profilePicture,
+                                    data.name,
+                                    data.likesCount,
+                                    data.commentsCount,
+                                    data.views,
+                                    data.date,
+                                    data.text,
+                                    data.liked,
+                                    data.postId,
+                                    data.belongsTo,
+                                    data.tag,
+                                    data.media
+                                )
+                                Log.d("POST DATA", postData?.username.toString())
+                                setView(v)
                             }
 
                         }else {

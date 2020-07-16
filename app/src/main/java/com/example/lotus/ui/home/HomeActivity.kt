@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -37,6 +38,10 @@ import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeActivity : AppCompatActivity() {
     private val TAG = "HomeActivity"
+    var x1:Float = 0.toFloat()
+    var x2:Float = 0.toFloat()
+    var y1:Float = 0.toFloat()
+    var y2:Float = 0.toFloat()
     private var manager: FragmentManager? = null
 //    var dialog: Dialog? = null
 
@@ -218,13 +223,35 @@ class HomeActivity : AppCompatActivity() {
         dialog.setCancelable(false)
         dialog.setContentView(R.layout.layout_menu_post)
         val download = dialog.findViewById<LinearLayout>(R.id.downloadMedia)
+        val share = dialog.findViewById<LinearLayout>(R.id.sharePost)
         download.setOnClickListener {
             downloadMedia(medias)
             dialog.dismiss()
         }
-//        noBtn.setOnClickListener { dialog.dismiss() }
+
+        share.setOnClickListener {
+            if (medias.size < 1){
+                Toast.makeText(this@HomeActivity, "No media to be downloaded", Toast.LENGTH_SHORT).show()
+            }else {
+                shareMediaToOtherApp(medias)
+                dialog.dismiss()
+            }
+        }
+
         dialog.show()
 
+    }
+
+    fun shareMediaToOtherApp(medias: ArrayList<MediaData>){
+        for (media in medias){
+            val uri: Uri = Uri.parse(media.link)
+            val shareIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_STREAM, media.link)
+                type = "*"
+            }
+            startActivity(Intent.createChooser(shareIntent, "Share To"))
+        }
     }
 
 }
