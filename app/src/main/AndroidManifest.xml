@@ -35,14 +35,14 @@
 
         <!--            jangan lupa diganti lagi sebelum di push-->
         <activity
-            android:name=".ui.SplashActivity"
+            android:name=".ui.home.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
 
         <activity android:name=".ui.CreatePostActivity" />
-        <activity android:name=".ui.home.HomeActivity">
+        <activity android:name=".ui.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.SEARCH" />

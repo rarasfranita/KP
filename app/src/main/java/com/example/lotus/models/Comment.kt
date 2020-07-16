@@ -1,11 +1,14 @@
 package com.example.lotus.models;
 
-public class Comment (
-    val comment: String,
-    val username: String,
-    val avatar: String,
-    val time: String,
-    val like: String,
-    var childComment: MutableList<ChildComment>?){
-}
+class Comment (
+    val id: String?,
+    val parentId: String?,
+    val userId: String?,
+    val text: String?,
+    val username: String?,
+    val profilePicture: String?,
+    val createdAt: String?,
+    val name: String?,
+    var replies: MutableList<ChildComment>?
+)
 
