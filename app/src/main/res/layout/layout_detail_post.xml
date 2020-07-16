@@ -39,6 +39,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/imageAvatarPost"
                 android:text="Lotus Check"/>
+
             <ImageView
                 android:id="@+id/ivEllipsesPost"
                 android:layout_width="30dp"
