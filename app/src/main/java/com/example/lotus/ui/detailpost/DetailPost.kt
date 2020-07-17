@@ -32,9 +32,11 @@ import com.asura.library.views.PosterSlider
 import com.example.lotus.R
 import com.example.lotus.models.*
 import com.example.lotus.service.EnvService
+import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.CreatePostActivity
 import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.home.HomeActivity
+import com.example.lotus.ui.profile.ProfileActivity
 import com.example.lotus.utils.dateToFormatTime
 import com.example.lotus.utils.dislikePost
 import com.example.lotus.utils.likePost
@@ -69,7 +71,6 @@ class DetailPost : Fragment() {
     ): View? {
         super.onCreate(savedInstanceState)
         val v = inflater.inflate(R.layout.fragment_detail_post, container, false)
-
         val bundle = this.arguments
         if (bundle != null) {
             postData = bundle.getParcelable("data")
@@ -91,10 +92,38 @@ class DetailPost : Fragment() {
         listenRepostIcon(v)
         listenLikeIcon(v)
         toolBarListener(v)
+        setImageProfileAndListen(v)
+        listenAvatarAndUsername(v)
 
         return v
     }
 
+    private fun listenAvatarAndUsername(v: View) {
+        val avatar = v.imageAvatarPost
+        val username = v.textUsernamePost
+
+        avatar.setOnClickListener {
+            val intent = Intent(this.activity, ProfileActivity::class.java)
+            intent.putExtra("username", "username")
+            startActivity(intent)
+        }
+    }
+
+    private fun setImageProfileAndListen(v: View) {
+        val imageSend = v.findViewById<ImageView>(R.id.profileAtCommentSend)
+        val profilePicture = SharedPrefManager.getInstance(requireContext()).user.avatar
+
+        if (profilePicture != null){
+            imageSend.load(profilePicture){
+                transformations(CircleCropTransformation())
+            }
+        }
+
+        imageSend.setOnClickListener {
+            val intent = Intent(this.activity, ProfileActivity::class.java)
+            startActivity(intent)
+        }
+    }
 
     fun sendComment(v: View){
         val btnSend = v.findViewById<View>(R.id.imageSendComment)

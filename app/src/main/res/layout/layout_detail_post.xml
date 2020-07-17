@@ -270,7 +270,8 @@
       <ImageView
           android:layout_width="30dp"
           android:layout_height="match_parent"
-          android:src="@drawable/ic_profile"/>
+          android:src="@drawable/ic_profile"
+          android:id="@+id/profileAtCommentSend"/>
 
       <EditText
           android:layout_width="match_parent"
