@@ -314,7 +314,7 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
                 intent.putExtra("Extra", "DetailPost")
                 intent.putExtra("Media", listPost[position].media)
                 intent.putExtra("Text", listPost[position].text)
-                intent.putExtra("postID", listPost[position].postId)
+                intent.putExtra("PostID", listPost[position].postId)
                 intent.putExtra("Username", listPost[position].username)
                 intent.putExtra("Tags", listPost[position].tag)
 

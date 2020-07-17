@@ -231,7 +231,7 @@ class DetailPost : Fragment() {
             intent.putExtra("Extra", "DetailPost")
             intent.putExtra("Media", postData?.media)
             intent.putExtra("Text", postData?.text)
-            intent.putExtra("postID", postData?.postId)
+            intent.putExtra("PostID", postData?.postId)
             intent.putExtra("Username", postData?.username)
             intent.putExtra("Tags", postData?.tag)
             startActivity(intent)
