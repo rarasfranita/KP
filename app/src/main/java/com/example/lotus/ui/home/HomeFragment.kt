@@ -40,9 +40,9 @@ class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
     private val TAG = "HomeFragment"
-    private val token = "5f02b3361718f5360aeff6d2"
+    var username: String? = null
+    var token: String? = null
     var dataFeed = ArrayList<Post>()
-    val username = "testaccount4"
     var idBucket = -1
 
     lateinit var adapter: PostFeedAdapter
@@ -59,6 +59,8 @@ class HomeFragment : Fragment() {
         val v = inflater.inflate(R.layout.fragment_home, container, false)
         val reloadFeed: PullRefreshLayout = v.findViewById(R.id.reloadFeed)
 
+        username = SharedPrefManager.getInstance(requireContext()).user.username
+        token = SharedPrefManager.getInstance(requireActivity()).token.token
         listenAppToolbar(v)
         v!!.setOnTouchListener { v, event ->
             Log.d(TAG, event.toString())
@@ -183,7 +185,7 @@ class HomeFragment : Fragment() {
         scrollListener.setOnLoadMoreListener(object :
             OnLoadMoreListener {
             override fun onLoadMore() {
-                LoadMoreData()
+//                LoadMoreData()
             }
         })
 
@@ -196,7 +198,7 @@ class HomeFragment : Fragment() {
         adapter.addLoadingView()
         val moreData: ArrayList<Post> = ArrayList()
         Handler().postDelayed({
-            AndroidNetworking.get(EnvService.ENV_API + "/feeds/{username}/0")
+            AndroidNetworking.get(EnvService.ENV_API + "/feeds/{username}/-1")
                 .addPathParameter("username", username)
                 .addHeaders("Authorization", "Bearer " + token)
                 .setTag(this)

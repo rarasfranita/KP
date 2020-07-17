@@ -1,5 +1,6 @@
 package com.example.lotus.ui.detailpost
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -8,11 +9,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
@@ -39,8 +38,8 @@ import com.example.lotus.ui.home.HomeActivity
 import com.example.lotus.ui.profile.ProfileActivity
 import com.example.lotus.utils.dateToFormatTime
 import com.example.lotus.utils.dislikePost
+import com.example.lotus.utils.downloadMedia
 import com.example.lotus.utils.likePost
-import com.example.lotus.utils.token
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.layout_detail_post.*
 import kotlinx.android.synthetic.main.layout_detail_post.view.*
@@ -48,13 +47,17 @@ import matrixsystems.nestedexpandablerecyclerview.RowAdapter
 
 
 class DetailPost : Fragment() {
-    private val TAG = "[DetailPost] [Fragment]"
-    val userID = "5f0466e2e524346040f53178"
     lateinit var rowAdapter: RowAdapter
     lateinit var rows : MutableList<CommentRowModel>
     lateinit var recyclerView : RecyclerView
+
+    private val TAG = "[DetailPost] [Fragment]"
     private var posterSlider: PosterSlider? = null
     private var commentID: String? = null
+
+    var token: String? = null
+    var userID: String? = null
+    var username: String? = null
     var postData: Post? = null
     var likeStatus: Int? = 0
     var likeCount: Int = 0
@@ -71,6 +74,11 @@ class DetailPost : Fragment() {
     ): View? {
         super.onCreate(savedInstanceState)
         val v = inflater.inflate(R.layout.fragment_detail_post, container, false)
+
+        token = SharedPrefManager.getInstance(requireContext()).token.token
+        userID = SharedPrefManager.getInstance(requireContext()).user._id
+        username = SharedPrefManager.getInstance(requireContext()).user.username
+
         val bundle = this.arguments
         if (bundle != null) {
             postData = bundle.getParcelable("data")
@@ -78,9 +86,6 @@ class DetailPost : Fragment() {
         }
 
         if (postData != null){
-            likeStatus = postData?.liked
-            likeCount = postData?.likesCount!!
-            commentCount = postData?.commentsCount!!
             setView(v)
         }else if (postID != null){
             populateCommentData(v, postID!!)
@@ -94,6 +99,7 @@ class DetailPost : Fragment() {
         toolBarListener(v)
         setImageProfileAndListen(v)
         listenAvatarAndUsername(v)
+        listenMenu(v)
 
         return v
     }
@@ -104,7 +110,13 @@ class DetailPost : Fragment() {
 
         avatar.setOnClickListener {
             val intent = Intent(this.activity, ProfileActivity::class.java)
-            intent.putExtra("username", "username")
+            intent.putExtra("username", username.text.toString())
+            startActivity(intent)
+        }
+
+        username.setOnClickListener {
+            val intent = Intent(this.activity, ProfileActivity::class.java)
+            intent.putExtra("username", username.text.toString())
             startActivity(intent)
         }
     }
@@ -129,69 +141,81 @@ class DetailPost : Fragment() {
         val btnSend = v.findViewById<View>(R.id.imageSendComment)
         btnSend.setOnClickListener{
             val s = v.inputComment.text
-            closeEditTextComment()
 
-            if (commentID == null){
-                AndroidNetworking.post(EnvService.ENV_API + "/posts/{postID}/comments")
-                    .addHeaders("Authorization", "Bearer " + token)
-                    .addPathParameter("postID", postData?.postId)
-                    .addBodyParameter("userId", userID)
-                    .addBodyParameter("text", s.toString())
-                    .setPriority(Priority.MEDIUM)
-                    .build()
-                    .getAsObject(
-                        Respon::class.java,
-                        object : ParsedRequestListener<Respon> {
-                            override fun onResponse(respon: Respon) {
-                                if (respon.code.toString() == "200") {
-                                    Log.d("Add Comment: ", "Success")
-                                    v.inputComment.setText("")
-                                    populateCommentData(v, postData?.postId.toString())
-                                }else {
-                                    Log.e("ERROR!!!", "Add Comment Data ${respon.code}")
-                                    Log.e("ERROR", "Add Comment: ${respon.data}")
+            if (!s.toString().equals("")){
+                closeEditTextComment()
+
+                if (commentID == null){
+                    AndroidNetworking.post(EnvService.ENV_API + "/posts/{postID}/comments")
+                        .addHeaders("Authorization", "Bearer " + token)
+                        .addPathParameter("postID", postData?.postId)
+                        .addBodyParameter("userId", userID)
+                        .addBodyParameter("text", s.toString())
+                        .setPriority(Priority.MEDIUM)
+                        .build()
+                        .getAsObject(
+                            Respon::class.java,
+                            object : ParsedRequestListener<Respon> {
+                                override fun onResponse(respon: Respon) {
+                                    if (respon.code.toString() == "200") {
+                                        Log.d("Add Comment: ", "Success")
+                                        v.inputComment.setText("")
+                                        populateCommentData(v, postData?.postId.toString())
+                                    }else {
+                                        Log.e("ERROR!!!", "Add Comment Data ${respon.code}")
+                                        Log.e("ERROR", "Add Comment: ${respon.data}")
+                                    }
                                 }
-                            }
 
-                            override fun onError(anError: ANError) {
-                                Log.e("ERROR!!!", "Add Comment ${anError.errorCode}")
+                                override fun onError(anError: ANError) {
+                                    Log.e("ERROR!!!", "Add Comment ${anError.errorCode}")
 
-                            }
-                        })
-            }else {
-                AndroidNetworking.post(EnvService.ENV_API + "/posts/{postID}/comments/{commentID}/replies")
-                    .addHeaders("Authorization", "Bearer " + token)
-                    .addPathParameter("postID", postData?.postId)
-                    .addPathParameter("commentID", commentID)
-                    .addBodyParameter("userId", userID)
-                    .addBodyParameter("text", s.toString())
-                    .setPriority(Priority.MEDIUM)
-                    .build()
-                    .getAsObject(
-                        Respon::class.java,
-                        object : ParsedRequestListener<Respon> {
-                            override fun onResponse(respon: Respon) {
-                                if (respon.code.toString() == "200") {
-                                    Log.d("Add Comment: ", "Success")
-                                    v.inputComment.setText("")
-                                    commentID = null
-                                    populateCommentData(v, postData?.postId.toString())
-                                }else {
-                                    Log.e("ERROR!!!", "Add Comment Data ${respon.code}")
                                 }
-                            }
+                            })
+                }else {
+                    AndroidNetworking.post(EnvService.ENV_API + "/posts/{postID}/comments/{commentID}/replies")
+                        .addHeaders("Authorization", "Bearer " + token)
+                        .addPathParameter("postID", postData?.postId)
+                        .addPathParameter("commentID", commentID)
+                        .addBodyParameter("userId", userID)
+                        .addBodyParameter("text", s.toString())
+                        .setPriority(Priority.MEDIUM)
+                        .build()
+                        .getAsObject(
+                            Respon::class.java,
+                            object : ParsedRequestListener<Respon> {
+                                override fun onResponse(respon: Respon) {
+                                    if (respon.code.toString() == "200") {
+                                        Log.d("Add Comment: ", "Success")
+                                        v.inputComment.setText("")
+                                        commentID = null
+                                        populateCommentData(v, postData?.postId.toString())
+                                    }else {
+                                        Log.e("ERROR!!!", "Add Comment Data ${respon.code}")
+                                    }
+                                }
 
-                            override fun onError(anError: ANError) {
-                                Log.e("ERROR!!!", "Add Comment ${anError.errorCode}")
+                                override fun onError(anError: ANError) {
+                                    Log.e("ERROR!!!", "Add Comment ${anError.errorCode}")
 
-                            }
-                        })
+                                }
+                            })
+                }
             }
+
         }
     }
 
     fun setCommentID(id: String){
         this.commentID = id
+    }
+
+    fun listenMenu(v: View){
+        val menu = v.findViewById<ImageView>(R.id.menuPost)
+
+        menu.setOnClickListener {
+            showDialog()
+        }
     }
 
     fun listenCommentIcon(view: View){
@@ -224,12 +248,16 @@ class DetailPost : Fragment() {
         val likeIcon = view.findViewById<RelativeLayout>(R.id.likeLayoutPost)
         likeIcon.setOnClickListener {
             if(likeStatus.toString() == "1"){
-                dislikePost(postData?.postId.toString(), postData?.belongsTo.toString())
+                dislikePost(postData?.postId.toString(), userID.toString(),
+                    token.toString()
+                )
                 likeStatus = 0
                 likeCount--
                 setLike(view, likeStatus, likeCount)
             }else {
-                likePost(postData?.postId.toString(), postData?.belongsTo.toString())
+                likePost(postData?.postId.toString(), userID.toString(),
+                    token.toString()
+                )
                 likeStatus = 1
                 likeCount++
                 setLike(view, likeStatus, likeCount)
@@ -245,7 +273,7 @@ class DetailPost : Fragment() {
             intent.putExtra("Extra", "DetailPost")
             intent.putExtra("Media", postData?.media)
             intent.putExtra("Text", postData?.text)
-            intent.putExtra("postID", postData?.postId)
+            intent.putExtra("PostID", postData?.postId)
             intent.putExtra("Username", postData?.username)
             intent.putExtra("Tags", postData?.tag)
             startActivity(intent)
@@ -253,6 +281,9 @@ class DetailPost : Fragment() {
     }
 
     fun setView(view: View){
+        likeStatus = postData?.liked
+        likeCount = postData?.likesCount!!
+        commentCount = postData?.commentsCount!!
         val username :TextView = view.findViewById<View>(R.id.textUsernamePost) as TextView
         val caption : TextView = view.findViewById<View>(R.id.textCaption) as TextView
         val ava : ImageView = view.findViewById<View>(R.id.imageAvatarPost) as ImageView
@@ -454,6 +485,42 @@ class DetailPost : Fragment() {
                 (context as GeneralActivity).setAppBarVisible()
             }
             getActivity()?.onBackPressed()
+        }
+    }
+
+    fun showDialog() {
+        val dialog = Dialog(this.requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.layout_menu_post)
+        val download = dialog.findViewById<LinearLayout>(R.id.downloadMedia)
+        val share = dialog.findViewById<LinearLayout>(R.id.sharePost)
+        download.setOnClickListener {
+            downloadMedia(postData?.media!!, requireContext())
+            dialog.dismiss()
+        }
+
+        share.setOnClickListener {
+            if (postData?.media!!.size < 1){
+                Toast.makeText(context, "No media to be downloaded", Toast.LENGTH_SHORT).show()
+            }else {
+                shareMediaToOtherApp(postData?.media!!)
+                dialog.dismiss()
+            }
+        }
+
+        dialog.show()
+
+    }
+
+    fun shareMediaToOtherApp(medias: ArrayList<MediaData>){
+        for (media in medias){
+            val uri: Uri = Uri.parse(media.link)
+            val shareIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_STREAM, media.link)
+                type = "*"
+            }
+            startActivity(Intent.createChooser(shareIntent, "Share To"))
         }
     }
 

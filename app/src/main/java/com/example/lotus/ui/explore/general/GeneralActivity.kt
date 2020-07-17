@@ -28,8 +28,6 @@ import com.example.lotus.ui.explore.general.adapter.GeneralTextAdapter
 import com.example.lotus.ui.explore.general.fragment.ListMediaGeneral
 import com.example.lotus.ui.explore.general.fragment.ListTextGeneral
 import com.example.lotus.ui.explore.general.model.Data
-import com.example.lotus.ui.home.HomeActivity
-import com.example.lotus.ui.login.LoginActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_explore_general.*
