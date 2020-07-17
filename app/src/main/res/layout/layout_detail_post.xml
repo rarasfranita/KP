@@ -19,7 +19,7 @@
              android:id="@+id/relLayout1"
              android:layout_width="match_parent"
              android:layout_height="50dp"
-             android:gravity="center_horizontal">
+             android:gravity="left">
 
             <ImageView
                 android:id="@+id/imageAvatarPost"

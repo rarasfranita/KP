@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tagarGeneralText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:fontFamily="@font/lato"
+            android:text="#ini hastag"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:id="@+id/RL1"
+            android:layout_below="@+id/tagarGeneralText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white">
+
+            <RelativeLayout
+                android:id="@+id/relLayout1GeneralText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_horizontal">
+
+                <ImageView
+                    android:id="@+id/imageAvatar1GeneralText"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/ic_profile"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    android:id="@+id/textUsername1GeneralText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/imageAvatar1GeneralText"
+                    android:text="Lotus Check" />
+
+                <ImageView
+                    android:id="@+id/ivEllipses1GeneralText"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/ic_ellipses" />
+
+            </RelativeLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardPostTextGeneralText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relLayout1GeneralText"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="7pt"
+                app:cardElevation="3dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textStatusDetailGeneralText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:text="Hello world" />
+
+                    <TextView
+                        android:id="@+id/textHashtagGeneralText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/textStatusDetailGeneralText"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:textColor="@color/colorPrimary" />
+                </LinearLayout>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <LinearLayout
+                android:id="@+id/relLayout3GeneralText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@+id/cardPostTextGeneralText"
+                android:background="@android:color/white">
+
+                <RelativeLayout
+                    android:id="@+id/likeLayoutGeneralText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp">
+
+                    <ImageView
+                        android:id="@+id/icLikeTrue1GeneralText"
+                        android:layout_width="25dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_like_true"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/icLikeFalse1GeneralText"
+                        android:layout_width="25dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_like_false" />
+
+                    <TextView
+                        android:id="@+id/textIctLikes1GeneralText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="30dp"
+                        android:text="0" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/likeLayoutGeneralText"
+                    android:gravity="left"
+                    android:paddingLeft="20dp">
+
+                    <ImageView
+                        android:id="@+id/icCommentGeneralText"
+                        android:layout_width="25dp"
+                        android:layout_height="50dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_comment" />
+
+                    <TextView
+                        android:id="@+id/textIcCommentGeneralText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_toRightOf="@+id/icCommentGeneralText"
+                        android:gravity="center"
+                        android:paddingLeft="5dp"
+                        android:text="0" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="end"
+                    android:paddingRight="20dp">
+
+                    <ImageView
+                        android:id="@+id/icShareGeneralText"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="18dp"
+                        android:src="@drawable/ic_share"
+                        android:visibility="visible" />
+                </RelativeLayout>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <!--         layout 2-->
+        <RelativeLayout
+            android:id="@+id/RL2"
+            android:layout_below="@+id/RL1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white">
+
+            <RelativeLayout
+                android:id="@+id/relLayout4GeneralText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_horizontal">
+
+                <ImageView
+                    android:id="@+id/imageAvatar2GeneralText"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/ic_profile"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    android:id="@+id/textUsername2GeneralText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/imageAvatar2GeneralText"
+                    android:text="Lotus Check" />
+
+                <ImageView
+                    android:id="@+id/ivEllipses2GeneralText"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/ic_ellipses" />
+
+            </RelativeLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardPostText2GeneralText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relLayout4GeneralText"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="7pt"
+                app:cardElevation="3dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textStatusDetail2GeneralText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:text="Hello world" />
+
+                    <TextView
+                        android:id="@+id/textHashtagFeed2GeneralText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/textStatusDetailGeneralText"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:textColor="@color/colorPrimary" />
+                </LinearLayout>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <LinearLayout
+                android:id="@+id/relLayout5GeneralText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@+id/cardPostText2GeneralText"
+                android:background="@android:color/white">
+
+                <RelativeLayout
+                    android:id="@+id/likeLayout2GeneralText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp">
+
+                    <ImageView
+                        android:id="@+id/icLikeTrue2GeneralText"
+                        android:layout_width="25dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_like_true"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/icLikeFalse2GeneralText"
+                        android:layout_width="25dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_like_false" />
+
+                    <TextView
+                        android:id="@+id/textIctLikes2GeneralText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="30dp"
+                        android:text="0" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/likeLayoutGeneralText"
+                    android:gravity="left"
+                    android:paddingLeft="20dp">
+
+                    <ImageView
+                        android:id="@+id/icComment2GeneralText"
+                        android:layout_width="25dp"
+                        android:layout_height="50dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_comment" />
+
+                    <TextView
+                        android:id="@+id/textIcComment2GeneralText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_toRightOf="@+id/icComment2GeneralText"
+                        android:gravity="center"
+                        android:paddingLeft="5dp"
+                        android:text="0" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="end"
+                    android:paddingRight="20dp">
+
+                    <ImageView
+                        android:id="@+id/icShare2GeneralText"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="18dp"
+                        android:src="@drawable/ic_share"
+                        android:visibility="visible" />
+                </RelativeLayout>
+            </LinearLayout>
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/moreTextGeneralText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_margin="10dp"
+            android:fontFamily="@font/lato"
+            android:text="More >>"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/RL2"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="12sp"
+            />
+
+    </RelativeLayout>
+
+</LinearLayout>

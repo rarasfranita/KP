@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.explore.general.detailpostExplore.DetailPosttGeneral">
+
+   <ScrollView
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:id="@+id/scrollViewGeneral"
+       android:paddingBottom="50dp"
+       android:layout_marginTop="10dp">
+      <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="@android:color/white">
+
+         <RelativeLayout
+             android:id="@+id/relLayout1General"
+             android:layout_width="match_parent"
+             android:layout_height="50dp">
+
+            <ImageView
+                android:id="@+id/imageAvatarGeneral"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="20dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_profile" />
+
+            <TextView
+                android:id="@+id/textUsernameGeneral"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/imageAvatarGeneral"
+                android:text="Lotus Check"
+                android:textColor="@android:color/black" />
+
+            <ImageView
+                android:id="@+id/imgFollow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="153dp"
+                android:layout_marginRight="52dp"
+                android:layout_toRightOf="@+id/username"
+                android:src="@drawable/ic_follow" />
+
+            <ImageView
+                android:id="@+id/ivEllipses"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/ic_ellipses" />
+
+         </RelativeLayout>
+
+         <RelativeLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_below="@id/relLayout1General"
+             android:id="@+id/relLayoutGeneral"
+             android:paddingLeft="10dp"
+             android:paddingRight="10dp"
+             >
+            <com.example.lotus.utils.DynamicSquareLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:id="@+id/mediaWrapGeneral"
+                >
+               <com.google.android.material.card.MaterialCardView
+                   android:id="@+id/cardGeneralMedia"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   app:cardCornerRadius="10pt"
+                   app:cardElevation="3dp"
+                   app:cardUseCompatPadding="true"
+                   android:layout_centerHorizontal="true">
+
+                  <com.asura.library.views.PosterSlider
+                      android:id="@+id/mediaGeneral"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:background="@color/colorAccent"
+                      android:scaleType="centerCrop"
+                      app:defaultIndicator="circle"/>
+
+               </com.google.android.material.card.MaterialCardView>
+            </com.example.lotus.utils.DynamicSquareLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardTextGeneral"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cardCornerRadius="10pt"
+                app:cardElevation="3dp"
+                app:cardUseCompatPadding="true"
+                android:layout_centerHorizontal="true">
+
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:orientation="vertical">
+                  <TextView
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:text="Hello world"
+                      android:id="@+id/textStatusDetailGeneral"
+                      android:paddingTop="20dp"
+                      android:paddingLeft="20dp"
+                      android:paddingRight="20dp"
+                      android:background="@color/white"/>
+
+                  <TextView
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:textColor="@color/colorPrimary"
+                      android:id="@+id/textHashtagGeneral"
+                      android:paddingBottom="20dp"
+                      android:paddingLeft="20dp"
+                      android:paddingRight="20dp"/>
+               </LinearLayout>
+
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+         </RelativeLayout>
+         <LinearLayout
+             android:id="@+id/relLayout2"
+             android:layout_width="match_parent"
+             android:layout_height="50dp"
+             android:layout_below="@+id/relLayoutGeneral"
+             android:background="@android:color/white">
+
+            <RelativeLayout
+                android:id="@+id/likeLayoutGeneral"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp">
+
+               <ImageView
+                   android:id="@+id/icLikeTrueGeneral"
+                   android:layout_width="25dp"
+                   android:layout_height="50dp"
+                   android:src="@drawable/ic_like_true"
+                   android:visibility="gone"/>
+
+               <ImageView
+                   android:id="@+id/icLikeFalseGeneral"
+                   android:layout_width="25dp"
+                   android:layout_height="50dp"
+                   android:src="@drawable/ic_like_false"/>
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="50dp"
+                   android:id="@+id/textIctLikesGeneral"
+                   android:text="0"
+                   android:paddingLeft="30dp"
+                   android:gravity="center_vertical"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_toRightOf="@+id/likeLayoutGeneral"
+                android:paddingLeft="20dp">
+               <ImageView
+                   android:id="@+id/icCommentGeneral"
+                   android:layout_width="25dp"
+                   android:layout_height="50dp"
+                   android:layout_centerVertical="true"
+                   android:src="@drawable/ic_comment" />
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="50dp"
+                   android:id="@+id/textIcCommentGeneral"
+                   android:text="0"
+                   android:gravity="center"
+                   android:paddingLeft="5dp"
+                   android:layout_toRightOf="@+id/icCommentGeneral"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="end"
+                android:paddingRight="20dp">
+               <ImageView
+                   android:id="@+id/icShareGeneral"
+                   android:layout_width="25dp"
+                   android:layout_height="25dp"
+                   android:layout_centerVertical="true"
+                   android:layout_marginLeft="18dp"
+                   android:src="@drawable/ic_share"
+                   android:visibility="visible"
+                   />
+            </RelativeLayout>
+
+
+         </LinearLayout>
+
+         <RelativeLayout
+             android:id="@+id/relLayout3General"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_below="@+id/relLayout2"
+             android:background="@android:color/white"
+             android:paddingRight="20dp"
+             android:paddingLeft="20dp">
+
+            <TextView
+                android:id="@+id/textCaptionGeneral"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/image_likes"
+                android:text="this is caption"
+                android:textColor="@color/black76" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textCaptionGeneral"
+                android:textColor="@color/colorPrimary"
+                android:id="@+id/textHashtag"/>
+
+
+         </RelativeLayout>
+
+         <TextView
+             android:id="@+id/textTimeGeneral"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_below="@+id/relLayout3General"
+             android:layout_marginBottom="10dp"
+             android:layout_marginLeft="20dp"
+             android:textSize="10dp"
+             android:text="3 Days ago"
+             android:textColor="@android:color/darker_gray" />
+
+         <RelativeLayout
+             android:id="@+id/relLayout4"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_below="@+id/textTimeGeneral"
+             android:background="@android:color/white"
+             android:paddingRight="20dp"
+             android:paddingLeft="20dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_viewGeneral"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+         </RelativeLayout>
+
+      </RelativeLayout>
+   </ScrollView>
+
+   <LinearLayout android:id="@+id/footerCreateComment"
+       android:layout_alignParentBottom="true"
+       android:layout_height="wrap_content"
+       android:layout_width="fill_parent"
+       android:background="@color/white"
+       android:orientation="horizontal"
+       android:paddingLeft="20dp"
+       android:paddingRight="20dp"
+       android:paddingTop="5dp"
+       android:paddingBottom="5dp">
+      <ImageView
+          android:layout_width="30dp"
+          android:layout_height="match_parent"
+          android:src="@drawable/ic_profile"/>
+
+      <EditText
+          android:layout_width="match_parent"
+          android:layout_height="40dp"
+          android:id="@+id/inputCommentGeneral"
+          android:hint="Add your comment"
+          android:background="@null"
+          android:paddingLeft="10dp"
+          android:textColor="@color/black76"
+          android:gravity="center_vertical"
+          />
+
+      <ImageView
+          android:layout_width="match_parent"
+          android:layout_height="30dp"
+          android:layout_marginLeft="-40dp"
+          android:src="@drawable/ic_send"
+          android:layout_gravity="center_vertical"
+          android:id="@+id/imageSendCommentGeneral"
+          />
+   </LinearLayout>
+
+</RelativeLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

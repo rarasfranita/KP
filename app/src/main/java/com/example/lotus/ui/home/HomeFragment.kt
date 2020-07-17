@@ -1,10 +1,12 @@
 package com.example.lotus.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -22,6 +24,9 @@ import com.example.lotus.R
 import com.example.lotus.models.Post
 import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
+import com.example.lotus.ui.dm.MainActivityDM
+import com.example.lotus.ui.explore.general.GeneralActivity
+import com.example.lotus.ui.notification.NotificationActivity
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -47,10 +52,17 @@ class HomeFragment : Fragment() {
         homeViewModel =
             ViewModelProviders.of(this).get(HomeViewModel::class.java)
         val v = inflater.inflate(R.layout.fragment_home, container, false)
-        val reloadFeed: PullRefreshLayout = v.findViewById(R.id.prlFeed)
+        val reloadFeed: PullRefreshLayout = v.findViewById(R.id.reloadFeed)
 
         listenAppToolbar(v)
-        getFeedsData(reloadFeed)
+        v!!.setOnTouchListener { v, event ->
+            Log.d(TAG, event.toString())
+            if (event.action == MotionEvent.ACTION_MOVE) {
+                Log.d(TAG, event.toString())
+            }
+            true
+        }
+        getFeedsData(null)
 //        setRVScrollListener(v) TODO
 
         reloadFeed.setOnRefreshListener {
@@ -60,21 +72,23 @@ class HomeFragment : Fragment() {
         return v
     }
 
-    fun getFeedsData(v: PullRefreshLayout){
-        v.setRefreshing(true)
+    fun getFeedsData(v: PullRefreshLayout?){
+        if (v !=  null){
+            v.setRefreshing(true)
+        }
 
         AndroidNetworking.get(EnvService.ENV_API + "/feeds/{username}/-1")
             .addPathParameter("username", username)
             .addPathParameter("id", idBucket.toString())
             .addHeaders("Authorization", "Bearer " + token)
             .setTag(this)
-            .setPriority(Priority.LOW)
+            .setPriority(Priority.HIGH)
             .build()
             .getAsObject(
                 Respons::class.java,
                 object : ParsedRequestListener<Respons> {
                     override fun onResponse(respon: Respons) {
-                        prlFeed.setRefreshing(false)
+                        reloadFeed.setRefreshing(false)
                         val gson = Gson()
                         var tempDataFeed = ArrayList<Post>()
                         if (respon.code.toString() == "200") {
@@ -98,7 +112,7 @@ class HomeFragment : Fragment() {
                     }
 
                     override fun onError(anError: ANError) {
-                        prlFeed.setRefreshing(false)
+                        reloadFeed.setRefreshing(false)
                         Toast.makeText(context, "Error ${anError.errorCode}", Toast.LENGTH_SHORT).show()
                         Log.d("Errornya disini kah?", anError.toString())
                     }
@@ -125,24 +139,26 @@ class HomeFragment : Fragment() {
 
         val logoView: View? = getToolbarLogoIcon(toolbar)
         logoView?.setOnClickListener{
-            // TODO Route to Notification
-
+            startActivity(Intent(context, NotificationActivity::class.java))
         }
+
 
         toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.explore -> {
-                    true
+                    toolbar.context.startActivity(Intent(context, GeneralActivity::class.java))
                 }
                 R.id.direct_message -> {
-                    true
+                    toolbar.context.startActivity(Intent(context, MainActivityDM::class.java))
                 }
                 R.id.profile -> {
                     true
                 }
                 else -> false
             }
+            true
         }
+
     }
 
     private fun setRVScrollListener(v: View) {
