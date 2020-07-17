@@ -45,8 +45,6 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
     val userID = SharedPrefManager.getInstance(context).user._id
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        Log.d("USERID DI Postfeedadapter", userID.toString())
-
         return if (viewType == Constant.VIEW_TYPE_ITEM) {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_mainfeed_listitem, parent, false)
             ItemViewHolder(view)
