@@ -1,20 +1,18 @@
 package com.example.lotus.ui.detailpost
 
-import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
-import androidx.annotation.RequiresApi
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,8 +23,6 @@ import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.AndroidNetworking.get
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
-import com.androidnetworking.interfaces.DownloadListener
-import com.androidnetworking.interfaces.DownloadProgressListener
 import com.androidnetworking.interfaces.ParsedRequestListener
 import com.asura.library.posters.Poster
 import com.asura.library.posters.RemoteImage
@@ -58,6 +54,7 @@ class DetailPost : Fragment() {
     var likeStatus: Int? = 0
     var likeCount: Int = 0
     var commentCount: Int = 0
+    var postID: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,73 +70,29 @@ class DetailPost : Fragment() {
         val bundle = this.arguments
         if (bundle != null) {
             postData = bundle.getParcelable("data")
+            postID = bundle.getString("postId")
         }
 
-        likeStatus = postData?.liked
-        likeCount = postData?.likesCount!!
-        commentCount = postData?.commentsCount!!
+        if (postData != null){
+            likeStatus = postData?.liked
+            likeCount = postData?.likesCount!!
+            commentCount = postData?.commentsCount!!
+            setView(v)
+        }else if (postID != null){
+            populateCommentData(v, postID!!)
+        }
 
-        setView(v)
+
+
         initRecyclerView(v)
         sendComment(v)
         listenCommentIcon(v)
         listenRepostIcon(v)
         listenLikeIcon(v)
-        listenMenuPost(v)
 
         return v
     }
 
-    fun downloadMedia(medias: ArrayList<MediaData>){
-        val downloadsPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-
-        for ((i, media) in medias.withIndex()) {
-            val fileName = media.link?.removeRange(0, media.link.length-10)
-
-            AndroidNetworking.download(media.link, downloadsPath.toString(), fileName)
-                .setTag("downloadTest")
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .setDownloadProgressListener(object : DownloadProgressListener {
-                    @RequiresApi(Build.VERSION_CODES.O)
-                    override fun onProgress(
-                        bytesDownloaded: Long,
-                        totalBytes: Long
-                    ) {}
-                })
-                .startDownload(object : DownloadListener {
-                    override fun onDownloadComplete() {
-                        if (i.equals(medias.size-1)){
-                            Toast.makeText(context, "Download Complete", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-
-                    override fun onError(error: ANError?) {
-                        // handle error
-                        Toast.makeText(context, "Error while downloading media, ${error!!.errorDetail}", Toast.LENGTH_SHORT).show()
-                        Log.d("Error download", error?.errorCode.toString())
-                        Log.d("Error download", error!!.errorDetail)
-                    }
-                })
-        }
-    }
-
-    fun showDialog() {
-        val medias = postData?.media
-        val dialog = Dialog(requireContext())
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.layout_menu_post)
-        val download = dialog.findViewById<LinearLayout>(R.id.downloadMedia)
-        download.setOnClickListener {
-            if (medias?.size!! < 1){
-                Toast.makeText(context, "No media to be downloaded", Toast.LENGTH_SHORT).show()
-            }else{
-                downloadMedia(medias!!)
-                dialog.dismiss()
-            }
-        }
-        dialog.show()
-    }
 
     fun sendComment(v: View){
         val btnSend = v.findViewById<View>(R.id.imageSendComment)
@@ -162,7 +115,7 @@ class DetailPost : Fragment() {
                                 if (respon.code.toString() == "200") {
                                     Log.d("Add Comment: ", "Success")
                                     v.inputComment.setText("")
-                                    populateCommentData()
+                                    populateCommentData(v, postData?.postId.toString())
                                 }else {
                                     Log.e("ERROR!!!", "Add Comment Data ${respon.code}")
                                 }
@@ -190,7 +143,7 @@ class DetailPost : Fragment() {
                                     Log.d("Add Comment: ", "Success")
                                     v.inputComment.setText("")
                                     commentID = null
-                                    populateCommentData()
+                                    populateCommentData(v, postData?.postId.toString())
                                 }else {
                                     Log.e("ERROR!!!", "Add Comment Data ${respon.code}")
                                 }
@@ -202,14 +155,6 @@ class DetailPost : Fragment() {
                             }
                         })
             }
-        }
-    }
-
-    fun listenMenuPost(view: View){
-        val menu = view.findViewById<ImageView>(R.id.menuPost)
-
-        menu.setOnClickListener {
-            showDialog()
         }
     }
 
@@ -386,13 +331,13 @@ class DetailPost : Fragment() {
 
         recyclerView.adapter = rowAdapter
 
-        populateCommentData()
+        populateCommentData(v, postData?.postId.toString())
     }
 
-    fun populateCommentData(){
+    fun populateCommentData(v: View, postID: String){
         get(EnvService.ENV_API + "/posts/{postID}/comments/all")
             .addHeaders("Authorization", "Bearer " + token)
-            .addPathParameter("postID", postData?.postId)
+            .addPathParameter("postID", postID)
             .setPriority(Priority.MEDIUM)
             .build()
             .getAsObject(
@@ -431,6 +376,27 @@ class DetailPost : Fragment() {
                                 )))
 
                                 rowAdapter.notifyDataSetChanged()
+                            }
+
+                            if (postID != null){
+                                postData = Post(
+                                    data.id,
+                                    data.username,
+                                    data.profilePicture,
+                                    data.name,
+                                    data.likesCount,
+                                    data.commentsCount,
+                                    data.views,
+                                    data.date,
+                                    data.text,
+                                    data.liked,
+                                    data.postId,
+                                    data.belongsTo,
+                                    data.tag,
+                                    data.media
+                                )
+                                Log.d("POST DATA", postData?.username.toString())
+                                setView(v)
                             }
 
                         }else {

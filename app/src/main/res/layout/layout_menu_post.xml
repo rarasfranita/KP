@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="50dp"
+    android:layout_width="250dp"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:paddingLeft="30dp"
-        android:paddingRight="30dp"
+        android:paddingTop="10dp"
         tools:ignore="MissingConstraints"
         android:id="@+id/downloadMedia">
         <ImageView
@@ -26,5 +26,25 @@
             android:gravity="center_vertical"/>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/downloadMedia"
+        android:paddingLeft="30dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_baseline_share_24"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Share To Other App"
+            android:paddingLeft="20dp"
+            android:gravity="center_vertical"
+            android:id="@+id/sharePost"
+            />
+    </LinearLayout>
 
 </LinearLayout>
