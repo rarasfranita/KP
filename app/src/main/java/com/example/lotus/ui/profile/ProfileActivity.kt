@@ -42,10 +42,12 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_profile)
 
         val extra = intent.getStringExtra("username")
-        if (extra != null){
+        if (extra != null && extra != username){
+            showUserProfile()
             getProfileData(extra)
         }else{
             setProfile(SharedPrefManager.getInstance(this).user)
+            showMyProfile()
         }
         //viewpager
         val tableLayout: TabLayout = findViewById(R.id.tab_Layout)
@@ -57,8 +59,6 @@ class ProfileActivity : AppCompatActivity() {
 
         viewPager.adapter = viewPagerAdapter
         tableLayout.setupWithViewPager(viewPager)
-
-        ShowMyProfile()
     }
 
     fun getProfileData(username: String){
@@ -104,36 +104,17 @@ class ProfileActivity : AppCompatActivity() {
         totalPost.text = data.postsCount.toString()
     }
 
-//    fun setMyProfile(){
-//        val name = SharedPrefManager.getInstance(this).user.name
-//        val profPic = SharedPrefManager.getInstance(this).user.avatar
-//        val bio = SharedPrefManager.getInstance(this).user.bio
-//        val postCount = SharedPrefManager.getInstance(this).user.postsCount
-//        Log.d("AVATAR", profPic.toString())
-//
-//        if (profPic != null){
-//            profilePicture.load(profPic){
-//                transformations(CircleCropTransformation())
-//            }
-//        }
-//
-//        usernameProfile.text = "$username's profile"
-//        nameprofile.text = name
-//        tvBiografi.text = bio
-//        totalPost.text = postCount.toString()
-//
-//    }
-
-    private fun ShowMyProfile(){
+    private fun showMyProfile(){
         btnEditProfile.visibility= View.VISIBLE
         follow.visibility = View.GONE
         ivcollection.visibility=View.GONE
     }
 
-    private fun ShowUserProfile(){
+    private fun showUserProfile(){
         follow.visibility=View.VISIBLE
         btnEditProfile.visibility=View.GONE
     }
+
     private fun showImages (images: List<Image>){
         rvprofilemedia.layoutManager = LinearLayoutManager(this)
         rvprofilemedia.adapter=ImageAdapter(images)
