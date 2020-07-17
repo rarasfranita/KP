@@ -241,7 +241,12 @@ class GeneralActivity : AppCompatActivity() {
         manager?.beginTransaction()
             ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             ?.replace(R.id.fragmentExplore, dataPost)
+            ?.addToBackStack("Explore")
             ?.commit()
+    }
+
+    fun setAppBarVisible(){
+        appBarLayout.visibility = View.VISIBLE
     }
 
 }

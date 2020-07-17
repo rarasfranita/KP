@@ -33,6 +33,7 @@ import com.example.lotus.R
 import com.example.lotus.models.*
 import com.example.lotus.service.EnvService
 import com.example.lotus.ui.CreatePostActivity
+import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.home.HomeActivity
 import com.example.lotus.utils.dateToFormatTime
 import com.example.lotus.utils.dislikePost
@@ -419,6 +420,9 @@ class DetailPost : Fragment() {
 
             if (context is HomeActivity){
                 (context as HomeActivity).setfabPostVisible()
+            }
+            else if (context is GeneralActivity){
+                (context as GeneralActivity).setAppBarVisible()
             }
             getActivity()?.onBackPressed()
         }

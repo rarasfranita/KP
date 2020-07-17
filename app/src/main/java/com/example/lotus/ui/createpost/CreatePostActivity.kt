@@ -142,7 +142,7 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
         val toolbar: Toolbar = findViewById(R.id.tbCreatePost) as Toolbar
 
         toolbar.setNavigationOnClickListener {
-            startActivity(Intent(this, HomeActivity::class.java))
+            this.onBackPressed()
         }
     }
 
