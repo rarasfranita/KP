@@ -28,7 +28,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.baoyz.widget.PullRefreshLayout
-        android:id="@+id/prlFeed"
+        android:id="@+id/reloadFeed"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:refreshColor="@color/colorPrimary"

@@ -1,4 +1,4 @@
-package com.example.lotus.ui.notifications
+package com.example.lotus.ui.tipitaka
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.lotus.R
 
-class NotificationsFragment : Fragment() {
+class TipitakaFragment : Fragment() {
 
-    private lateinit var notificationsViewModel: NotificationsViewModel
+    private lateinit var tipitakaViewModel: TipitakaViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        notificationsViewModel =
-            ViewModelProviders.of(this).get(NotificationsViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_notifications, container, false)
+        tipitakaViewModel =
+            ViewModelProviders.of(this).get(TipitakaViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_tipitaka, container, false)
 //        val textView: TextView = root.findViewById(R.id.text_notifications)
-        notificationsViewModel.text.observe(viewLifecycleOwner, Observer {
+        tipitakaViewModel.text.observe(viewLifecycleOwner, Observer {
 //            textView.text = it
         })
         return root

@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 class Post(
-    val id: Int?,
+    val id: String?,
     val username: String?,
     val profilePicture: String?,
     val name: String?,
@@ -20,7 +20,7 @@ class Post(
     val media: ArrayList<MediaData>?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readInt(),
+        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),

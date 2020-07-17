@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_dm"
+    app:startDestination="@id/homeFragmentDM">
+
+    <fragment
+        android:id="@+id/homeFragmentDM"
+        android:name="com.example.lotus.ui.dm.HomeFragmentDM"
+        android:label="HomeFragmentDM"
+        tools:layout="@layout/fragment_homedm">
+        <!--        dari home ke new-->
+        <action
+            android:id="@+id/action_homeFragmentDM_to_newMessageFragment"
+            app:destination="@id/newMessageFragment" />
+
+        <!--        dari home ke chat-->
+        <action
+            android:id="@+id/action_homeFragmentDM_to_listChatFragment"
+            app:destination="@id/listChatFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newMessageFragment"
+        android:name="com.example.lotus.ui.dm.NewMessageFragment"
+        android:label="NewMessageFragment"
+        tools:layout="@layout/fragment_new_message">
+        <!--        dari new ke home-->
+
+        <action
+            android:id="@+id/action_newMessageFragment_to_homeFragmentDM"
+            app:destination="@id/homeFragmentDM" />
+        <!--        dari new ke chat-->
+        <action
+            android:id="@+id/action_newMessageFragment_to_listChatFragment"
+            app:destination="@id/listChatFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/listChatFragment"
+        android:name="com.example.lotus.ui.dm.ListChatFragment"
+        android:label="ListChatFragment"
+        tools:layout="@layout/fragment_list_chat" />
+</navigation>

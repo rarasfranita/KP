@@ -1,11 +1,8 @@
 package com.example.lotus.ui.profile
 
-import android.content.Intent
 import android.media.Image
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.PopupMenu
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -14,7 +11,6 @@ import androidx.viewpager.widget.ViewPager
 import com.example.lotus.R
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.media_profile_fragment.*
-import kotlinx.android.synthetic.main.snippet_myprofile.*
 
 class ProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,16 +59,6 @@ class ProfileActivity : AppCompatActivity() {
 
         override fun getPageTitle(i: Int): CharSequence? {
             return titles[i]
-        }
-    }
-    private fun popupMyProfile(){
-        val popupMenu= PopupMenu(applicationContext,ivEllipses)
-        popupMenu.inflate(R.menu.popup_menu)
-        popupMenu.setOnMenuItemClickListener {
-            when(it.itemId){
-         //       R.id.navSecurity -> {
-           //     }
-            }
         }
     }
 

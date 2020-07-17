@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:id="@+id/LLImage1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tagar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:fontFamily="@font/lato"
+            android:text="#ini hastag"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/LLExploreMedia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.example.lotus.utils.DynamicSquareLayout
+                android:id="@+id/dynamicSquare1"
+                android:layout_width="0dp"
+                android:layout_height="117dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardCornerRadius="10pt"
+                    app:cardElevation="3dp">
+
+                    <ImageView
+                        android:id="@+id/imageMediaExplore1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorAccent"
+                        android:scaleType="centerCrop" />
+
+                </com.google.android.material.card.MaterialCardView>
+            </com.example.lotus.utils.DynamicSquareLayout>
+
+            <com.example.lotus.utils.DynamicSquareLayout
+                android:id="@+id/dynamicSquare2"
+                android:layout_width="0dp"
+                android:layout_height="117dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardCornerRadius="10pt"
+                    app:cardElevation="3dp">
+
+                    <ImageView
+                        android:id="@+id/imageMediaExplore2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorAccent"
+                        android:scaleType="centerCrop" />
+
+                </com.google.android.material.card.MaterialCardView>
+            </com.example.lotus.utils.DynamicSquareLayout>
+
+            <com.example.lotus.utils.DynamicSquareLayout
+                android:id="@+id/dynamicSquare3"
+                android:layout_width="0dp"
+                android:layout_height="117dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardCornerRadius="10pt"
+                    app:cardElevation="3dp">
+
+                    <ImageView
+                        android:id="@+id/imageMediaExplore3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorAccent"
+                        android:scaleType="centerCrop" />
+
+                </com.google.android.material.card.MaterialCardView>
+            </com.example.lotus.utils.DynamicSquareLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/moreMedia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_margin="10dp"
+            android:fontFamily="@font/lato"
+            android:text="More >>"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
