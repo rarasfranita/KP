@@ -103,64 +103,68 @@ class DetailPost : Fragment() {
         val btnSend = v.findViewById<View>(R.id.imageSendComment)
         btnSend.setOnClickListener{
             val s = v.inputComment.text
-            closeEditTextComment()
 
-            if (commentID == null){
-                AndroidNetworking.post(EnvService.ENV_API + "/posts/{postID}/comments")
-                    .addHeaders("Authorization", "Bearer " + token)
-                    .addPathParameter("postID", postData?.postId)
-                    .addBodyParameter("userId", userID)
-                    .addBodyParameter("text", s.toString())
-                    .setPriority(Priority.MEDIUM)
-                    .build()
-                    .getAsObject(
-                        Respon::class.java,
-                        object : ParsedRequestListener<Respon> {
-                            override fun onResponse(respon: Respon) {
-                                if (respon.code.toString() == "200") {
-                                    Log.d("Add Comment: ", "Success")
-                                    v.inputComment.setText("")
-                                    populateCommentData(v, postData?.postId.toString())
-                                }else {
-                                    Log.e("ERROR!!!", "Add Comment Data ${respon.code}")
-                                    Log.e("ERROR", "Add Comment: ${respon.data}")
+            if (!s.toString().equals("")){
+                closeEditTextComment()
+
+                if (commentID == null){
+                    AndroidNetworking.post(EnvService.ENV_API + "/posts/{postID}/comments")
+                        .addHeaders("Authorization", "Bearer " + token)
+                        .addPathParameter("postID", postData?.postId)
+                        .addBodyParameter("userId", userID)
+                        .addBodyParameter("text", s.toString())
+                        .setPriority(Priority.MEDIUM)
+                        .build()
+                        .getAsObject(
+                            Respon::class.java,
+                            object : ParsedRequestListener<Respon> {
+                                override fun onResponse(respon: Respon) {
+                                    if (respon.code.toString() == "200") {
+                                        Log.d("Add Comment: ", "Success")
+                                        v.inputComment.setText("")
+                                        populateCommentData(v, postData?.postId.toString())
+                                    }else {
+                                        Log.e("ERROR!!!", "Add Comment Data ${respon.code}")
+                                        Log.e("ERROR", "Add Comment: ${respon.data}")
+                                    }
                                 }
-                            }
 
-                            override fun onError(anError: ANError) {
-                                Log.e("ERROR!!!", "Add Comment ${anError.errorCode}")
+                                override fun onError(anError: ANError) {
+                                    Log.e("ERROR!!!", "Add Comment ${anError.errorCode}")
 
-                            }
-                        })
-            }else {
-                AndroidNetworking.post(EnvService.ENV_API + "/posts/{postID}/comments/{commentID}/replies")
-                    .addHeaders("Authorization", "Bearer " + token)
-                    .addPathParameter("postID", postData?.postId)
-                    .addPathParameter("commentID", commentID)
-                    .addBodyParameter("userId", userID)
-                    .addBodyParameter("text", s.toString())
-                    .setPriority(Priority.MEDIUM)
-                    .build()
-                    .getAsObject(
-                        Respon::class.java,
-                        object : ParsedRequestListener<Respon> {
-                            override fun onResponse(respon: Respon) {
-                                if (respon.code.toString() == "200") {
-                                    Log.d("Add Comment: ", "Success")
-                                    v.inputComment.setText("")
-                                    commentID = null
-                                    populateCommentData(v, postData?.postId.toString())
-                                }else {
-                                    Log.e("ERROR!!!", "Add Comment Data ${respon.code}")
                                 }
-                            }
+                            })
+                }else {
+                    AndroidNetworking.post(EnvService.ENV_API + "/posts/{postID}/comments/{commentID}/replies")
+                        .addHeaders("Authorization", "Bearer " + token)
+                        .addPathParameter("postID", postData?.postId)
+                        .addPathParameter("commentID", commentID)
+                        .addBodyParameter("userId", userID)
+                        .addBodyParameter("text", s.toString())
+                        .setPriority(Priority.MEDIUM)
+                        .build()
+                        .getAsObject(
+                            Respon::class.java,
+                            object : ParsedRequestListener<Respon> {
+                                override fun onResponse(respon: Respon) {
+                                    if (respon.code.toString() == "200") {
+                                        Log.d("Add Comment: ", "Success")
+                                        v.inputComment.setText("")
+                                        commentID = null
+                                        populateCommentData(v, postData?.postId.toString())
+                                    }else {
+                                        Log.e("ERROR!!!", "Add Comment Data ${respon.code}")
+                                    }
+                                }
 
-                            override fun onError(anError: ANError) {
-                                Log.e("ERROR!!!", "Add Comment ${anError.errorCode}")
+                                override fun onError(anError: ANError) {
+                                    Log.e("ERROR!!!", "Add Comment ${anError.errorCode}")
 
-                            }
-                        })
+                                }
+                            })
+                }
             }
+
         }
     }
 

@@ -245,7 +245,8 @@
              android:layout_below="@+id/textTimePost"
              android:background="@android:color/white"
              android:paddingRight="20dp"
-             android:paddingLeft="20dp">
+             android:paddingLeft="20dp"
+             >
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"
