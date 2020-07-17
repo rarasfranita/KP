@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollViewPost"
+        android:paddingBottom="50dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white">
+
+            <RelativeLayout
+                android:id="@+id/relLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_horizontal">
+
+                <ImageView
+                    android:id="@+id/imageAvatarPost"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/ic_profile"
+                    android:scaleType="centerCrop"/>
+
+                <TextView
+                    android:id="@+id/textUsernamePost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/imageAvatarPost"
+                    android:text="Lotus Check"/>
+                <ImageView
+                    android:id="@+id/ivEllipsesPost"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/ic_ellipses" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/relLayout1"
+                android:id="@+id/relLayoutPost"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                >
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardPostText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardCornerRadius="10pt"
+                    app:cardElevation="3dp"
+                    app:cardUseCompatPadding="true"
+                    android:layout_centerHorizontal="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Hello world"
+                            android:id="@+id/textStatusDetail"
+                            android:paddingTop="20dp"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp"
+                            android:background="@color/white"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/textStatusDetail"
+                            android:textColor="@color/colorPrimary"
+                            android:id="@+id/textHashtagPost"
+                            android:paddingBottom="20dp"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+            </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/relLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@+id/relLayoutPost"
+                android:background="@android:color/white">
+
+                <RelativeLayout
+                    android:id="@+id/likeLayoutPost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp">
+
+                    <ImageView
+                        android:id="@+id/icLikeTrue"
+                        android:layout_width="25dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_like_true"
+                        android:visibility="gone"/>
+
+                    <ImageView
+                        android:id="@+id/icLikeFalse"
+                        android:layout_width="25dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_like_false"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:id="@+id/textIctLikesPost"
+                        android:text="0"
+                        android:paddingLeft="30dp"
+                        android:gravity="center_vertical"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:layout_toRightOf="@+id/likeLayoutPost"
+                    android:paddingLeft="20dp">
+                    <ImageView
+                        android:id="@+id/icCommentPost"
+                        android:layout_width="25dp"
+                        android:layout_height="50dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_comment" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:id="@+id/textIcCommentPost"
+                        android:text="0"
+                        android:gravity="center"
+                        android:paddingLeft="5dp"
+                        android:layout_toRightOf="@+id/icCommentPost"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="end"
+                    android:paddingRight="20dp">
+                    <ImageView
+                        android:id="@+id/icSharePost"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="18dp"
+                        android:src="@drawable/ic_share"
+                        android:visibility="visible"
+                        />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/relLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relLayout2"
+                android:background="@android:color/white"
+                android:paddingRight="20dp"
+                android:paddingLeft="20dp">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:id="@+id/image_comments_link"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="15dp"
+                    android:onClick="detailPost"
+                    android:text="View all comments"
+                    android:textColor="@android:color/darker_gray" />
+                <TextView
+                    android:id="@+id/textTimePost2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/image_comments_link"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:textSize="10dp"
+                    android:text="3 Days ago"
+                    android:textColor="@android:color/darker_gray" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

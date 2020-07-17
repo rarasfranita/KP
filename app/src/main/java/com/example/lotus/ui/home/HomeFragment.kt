@@ -1,5 +1,6 @@
 package com.example.lotus.ui.home
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -21,6 +22,7 @@ import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.ParsedRequestListener
 import com.baoyz.widget.PullRefreshLayout
 import com.example.lotus.R
+import com.example.lotus.ui.profile.ProfileActivity
 import com.example.lotus.models.Post
 import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
@@ -152,7 +154,7 @@ class HomeFragment : Fragment() {
                     toolbar.context.startActivity(Intent(context, MainActivityDM::class.java))
                 }
                 R.id.profile -> {
-                    true
+                    toolbar.context.startActivity(Intent(context,ProfileActivity::class.java))
                 }
                 else -> false
             }
