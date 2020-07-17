@@ -1,6 +1,6 @@
 package com.example.lotus.ui.explore.general
 
-import android.content.Intent
+//import com.example.lotus.ui.explore.detailpost.DetailPostHashtag
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -9,6 +9,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
@@ -21,6 +22,7 @@ import com.example.lotus.R
 import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
+import com.example.lotus.ui.detailpost.DetailPost
 import com.example.lotus.ui.explore.general.adapter.GeneralMediaAdapter
 import com.example.lotus.ui.explore.general.adapter.GeneralTextAdapter
 import com.example.lotus.ui.explore.general.fragment.ListMediaGeneral
@@ -77,8 +79,7 @@ class GeneralActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById<Toolbar>(R.id.tbExplore)
 
         toolbar.setNavigationOnClickListener {
-            val intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
+            this.onBackPressed()
         }
         toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -222,6 +223,24 @@ class GeneralActivity : AppCompatActivity() {
             return titles[i]
 
         }
+    }
+
+    fun detailPost(postId: String) {
+        val bundle = Bundle().apply {
+            putString("postId", postId)
+        }
+        appBarLayout.visibility = View.INVISIBLE
+        val dataPost = DetailPost()
+        dataPost.arguments = bundle
+        manager?.beginTransaction()
+            ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            ?.replace(R.id.fragmentExplore, dataPost)
+            ?.addToBackStack("Explore")
+            ?.commit()
+    }
+
+    fun setAppBarVisible(){
+        appBarLayout.visibility = View.VISIBLE
     }
 
 }
