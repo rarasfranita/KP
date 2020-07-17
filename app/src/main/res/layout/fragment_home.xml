@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment"
-    android:id="@+id/fragmentHome">
+    android:id="@+id/fragmentHome"
+    android:paddingBottom="1dp">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
