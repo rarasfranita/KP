@@ -1,6 +1,5 @@
 package com.example.lotus.ui.home
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -10,25 +9,29 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import coil.api.load
+import coil.transform.CircleCropTransformation
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.ParsedRequestListener
 import com.baoyz.widget.PullRefreshLayout
 import com.example.lotus.R
-import com.example.lotus.ui.profile.ProfileActivity
 import com.example.lotus.models.Post
 import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
+import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.dm.MainActivityDM
 import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.notification.NotificationActivity
+import com.example.lotus.ui.profile.ProfileActivity
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -128,6 +131,16 @@ class HomeFragment : Fragment() {
         homeFeed.adapter = adapter
         homeFeed.setHasFixedSize(true)
         homeFeed.layoutManager = LinearLayoutManager(context)
+    }
+
+    fun setProfilePictureToolbar(v: ImageView){
+        val profilePicture = SharedPrefManager.getInstance(requireContext()).user.avatar
+
+        if (profilePicture != null){
+            v.load(profilePicture){
+                transformations(CircleCropTransformation())
+            }
+        }
     }
 
     private fun listenAppToolbar(v: View){
