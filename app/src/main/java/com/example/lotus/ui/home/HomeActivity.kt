@@ -25,6 +25,7 @@ import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.CreatePostActivity
 import com.example.lotus.ui.detailpost.DetailPost
 import com.example.lotus.ui.notification.NotificationActivity
+import com.example.lotus.ui.profile.ProfileActivity
 import com.example.lotus.utils.downloadMedia
 import com.github.nkzawa.emitter.Emitter
 import com.github.nkzawa.socketio.client.IO
@@ -159,6 +160,12 @@ class HomeActivity : AppCompatActivity() {
             ?.replace(R.id.fragmentHome, dataPost)
             ?.addToBackStack("Home")
             ?.commit()
+    }
+
+    fun gotoProfilePicture(username: String){
+        val intent = Intent(this@HomeActivity, ProfileActivity::class.java)
+        intent.putExtra("username", username)
+        startActivity(intent)
     }
 
     fun setfabPostVisible(){
