@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.FragmentManager
@@ -24,19 +25,15 @@ import com.example.lotus.R
 import com.example.lotus.models.Notification
 import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
+import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.detailpost.DetailPost
 import com.example.lotus.ui.home.RecyclerViewLoadMoreScroll
-import com.github.nkzawa.emitter.Emitter
-import com.github.nkzawa.socketio.client.IO
-import com.github.nkzawa.socketio.client.Socket
 import com.google.gson.Gson
 import com.r0adkll.slidr.Slidr
 import com.r0adkll.slidr.model.SlidrConfig
 import com.r0adkll.slidr.model.SlidrPosition
 import kotlinx.android.synthetic.main.activity_notification.*
 import kotlinx.android.synthetic.main.fragment_home.*
-import org.json.JSONException
-import org.json.JSONObject
 
 
 class NotificationActivity : AppCompatActivity() {
@@ -46,7 +43,8 @@ class NotificationActivity : AppCompatActivity() {
     private val token = "5f02b3361718f5360aeff6d2"
     var notificationsData = ArrayList<Notification>()
     val username = "testaccount4"
-    private val mSocket: Socket = IO.socket("http://34.101.109.136:3000")
+    var userID = SharedPrefManager.getInstance(this).user._id
+//    private val mSocket: Socket = IO.socket("http://34.101.109.136:3000")
 
     lateinit var adapter: NotificationAdapter
     lateinit var scrollListener: RecyclerViewLoadMoreScroll
@@ -60,9 +58,9 @@ class NotificationActivity : AppCompatActivity() {
         val datanull = findViewById<LinearLayout>(R.id.dataNull)
         datanull.visibility = View.GONE
 
-        mSocket.on("isi", onNewMessage)
-        mSocket.connect()
-        Log.d("SOCKET", "${mSocket.connected()},  ${mSocket.connect()}")
+//        mSocket.on(userID, onNewMessage)
+//        mSocket.connect()
+//        Log.d("SOCKET", "${mSocket.connected()},  ${mSocket.connect()}")
         getNotifications()
         onSlider()
         manager = getSupportFragmentManager()
@@ -70,24 +68,25 @@ class NotificationActivity : AppCompatActivity() {
         reloadNotification.setOnRefreshListener {
             getNotifications()
         }
+        listenAppToolbar()
     }
 
-    private val onNewMessage = Emitter.Listener { args ->
-        this.runOnUiThread(Runnable {
-            val data = args[0] as JSONObject
-            val name: String
-            try {
-                name = data.getString("name")
-            } catch (e: JSONException) {
-                return@Runnable
-            }
-
-            Log.d("name", name)
-
-            createNotification("HELLO", name)
-
-        })
-    }
+//    private val onNewMessage = Emitter.Listener { args ->
+//        this.runOnUiThread(Runnable {
+//            val data = args[0] as JSONObject
+//            val name: String
+//            try {
+//                name = data.getString("name")
+//            } catch (e: JSONException) {
+//                return@Runnable
+//            }
+//
+//            Log.d("name", name)
+//
+//            createNotification("HELLO", name)
+//
+//        })
+//    }
 
     fun loadNotification(data: ArrayList<Notification>, notification: RecyclerView){
         adapter = NotificationAdapter(data, this)
@@ -176,6 +175,15 @@ class NotificationActivity : AppCompatActivity() {
             .position(SlidrPosition.RIGHT)
 
         Slidr.attach(this, config.build())
+    }
+
+    private fun listenAppToolbar() {
+        val toolbar: Toolbar = findViewById<Toolbar>(R.id.toolbarNotification)
+
+        toolbar.setNavigationOnClickListener {
+            this.onBackPressed()
+        }
+
     }
 
 }

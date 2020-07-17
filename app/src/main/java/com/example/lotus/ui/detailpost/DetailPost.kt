@@ -13,6 +13,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,11 +32,13 @@ import com.asura.library.views.PosterSlider
 import com.example.lotus.R
 import com.example.lotus.models.*
 import com.example.lotus.service.EnvService
+import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.CreatePostActivity
+import com.example.lotus.ui.explore.general.GeneralActivity
+import com.example.lotus.ui.home.HomeActivity
 import com.example.lotus.utils.dateToFormatTime
 import com.example.lotus.utils.dislikePost
 import com.example.lotus.utils.likePost
-import com.example.lotus.utils.token
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.layout_detail_post.*
 import kotlinx.android.synthetic.main.layout_detail_post.view.*
@@ -43,13 +46,16 @@ import matrixsystems.nestedexpandablerecyclerview.RowAdapter
 
 
 class DetailPost : Fragment() {
-    private val TAG = "[DetailPost] [Fragment]"
-    val userID = "5f0466e2e524346040f53178"
     lateinit var rowAdapter: RowAdapter
     lateinit var rows : MutableList<CommentRowModel>
     lateinit var recyclerView : RecyclerView
+
+    private val TAG = "[DetailPost] [Fragment]"
     private var posterSlider: PosterSlider? = null
     private var commentID: String? = null
+
+    var token: String? = null
+    var userID: String? = null
     var postData: Post? = null
     var likeStatus: Int? = 0
     var likeCount: Int = 0
@@ -67,6 +73,9 @@ class DetailPost : Fragment() {
         super.onCreate(savedInstanceState)
         val v = inflater.inflate(R.layout.fragment_detail_post, container, false)
 
+        token = SharedPrefManager.getInstance(requireContext()).token.token
+        userID = SharedPrefManager.getInstance(requireContext()).user._id
+
         val bundle = this.arguments
         if (bundle != null) {
             postData = bundle.getParcelable("data")
@@ -82,13 +91,12 @@ class DetailPost : Fragment() {
             populateCommentData(v, postID!!)
         }
 
-
-
         initRecyclerView(v)
         sendComment(v)
         listenCommentIcon(v)
         listenRepostIcon(v)
         listenLikeIcon(v)
+        toolBarListener(v)
 
         return v
     }
@@ -118,6 +126,7 @@ class DetailPost : Fragment() {
                                     populateCommentData(v, postData?.postId.toString())
                                 }else {
                                     Log.e("ERROR!!!", "Add Comment Data ${respon.code}")
+                                    Log.e("ERROR", "Add Comment: ${respon.data}")
                                 }
                             }
 
@@ -192,12 +201,16 @@ class DetailPost : Fragment() {
         val likeIcon = view.findViewById<RelativeLayout>(R.id.likeLayoutPost)
         likeIcon.setOnClickListener {
             if(likeStatus.toString() == "1"){
-                dislikePost(postData?.postId.toString(), postData?.belongsTo.toString())
+                dislikePost(postData?.postId.toString(), postData?.belongsTo.toString(),
+                    token.toString()
+                )
                 likeStatus = 0
                 likeCount--
                 setLike(view, likeStatus, likeCount)
             }else {
-                likePost(postData?.postId.toString(), postData?.belongsTo.toString())
+                likePost(postData?.postId.toString(), postData?.belongsTo.toString(),
+                    token.toString()
+                )
                 likeStatus = 1
                 likeCount++
                 setLike(view, likeStatus, likeCount)
@@ -334,10 +347,10 @@ class DetailPost : Fragment() {
         populateCommentData(v, postData?.postId.toString())
     }
 
-    fun populateCommentData(v: View, postID: String){
-        get(EnvService.ENV_API + "/posts/{postID}/comments/all")
+    fun populateCommentData(v: View, id: String){
+        get(EnvService.ENV_API + "/posts/{postID}/comments/all?viewer=$userID")
             .addHeaders("Authorization", "Bearer " + token)
-            .addPathParameter("postID", postID)
+            .addPathParameter("postID", id)
             .setPriority(Priority.MEDIUM)
             .build()
             .getAsObject(
@@ -395,7 +408,6 @@ class DetailPost : Fragment() {
                                     data.tag,
                                     data.media
                                 )
-                                Log.d("POST DATA", postData?.username.toString())
                                 setView(v)
                             }
 
@@ -405,9 +417,25 @@ class DetailPost : Fragment() {
                     }
 
                     override fun onError(anError: ANError) {
-                        Log.e("ERROR!!!", "Like Post ${anError.errorCode}")
+                        Log.e("ERROR!!!", "Get Comment ${anError.errorCode}")
 
                     }
                 })
     }
+
+    private fun toolBarListener(view: View){
+        val toolbar: Toolbar = view.findViewById(R.id.tbDetailPost) as Toolbar
+
+        toolbar.setNavigationOnClickListener {
+
+            if (context is HomeActivity){
+                (context as HomeActivity).setfabPostVisible()
+            }
+            else if (context is GeneralActivity){
+                (context as GeneralActivity).setAppBarVisible()
+            }
+            getActivity()?.onBackPressed()
+        }
+    }
+
 }

@@ -24,9 +24,11 @@ import com.example.lotus.R
 import com.example.lotus.models.Post
 import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
+import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.dm.MainActivityDM
 import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.notification.NotificationActivity
+import com.example.lotus.ui.profile.ProfileActivity
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -35,9 +37,9 @@ class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
     private val TAG = "HomeFragment"
-    private val token = "5f02b3361718f5360aeff6d2"
+    var username: String? = null
+    var token: String? = null
     var dataFeed = ArrayList<Post>()
-    val username = "testaccount4"
     var idBucket = -1
 
     lateinit var adapter: PostFeedAdapter
@@ -53,6 +55,9 @@ class HomeFragment : Fragment() {
             ViewModelProviders.of(this).get(HomeViewModel::class.java)
         val v = inflater.inflate(R.layout.fragment_home, container, false)
         val reloadFeed: PullRefreshLayout = v.findViewById(R.id.reloadFeed)
+
+        username = SharedPrefManager.getInstance(requireContext()).user.username
+        token = SharedPrefManager.getInstance(requireActivity()).token.token
 
         listenAppToolbar(v)
         v!!.setOnTouchListener { v, event ->
@@ -77,7 +82,7 @@ class HomeFragment : Fragment() {
             v.setRefreshing(true)
         }
 
-        AndroidNetworking.get(EnvService.ENV_API + "/feeds/{username}/{id}")
+        AndroidNetworking.get(EnvService.ENV_API + "/feeds/{username}/-1")
             .addPathParameter("username", username)
             .addPathParameter("id", idBucket.toString())
             .addHeaders("Authorization", "Bearer " + token)
@@ -152,7 +157,7 @@ class HomeFragment : Fragment() {
                     toolbar.context.startActivity(Intent(context, MainActivityDM::class.java))
                 }
                 R.id.profile -> {
-                    true
+                    toolbar.context.startActivity(Intent(context,ProfileActivity::class.java))
                 }
                 else -> false
             }
@@ -168,7 +173,7 @@ class HomeFragment : Fragment() {
         scrollListener.setOnLoadMoreListener(object :
             OnLoadMoreListener {
             override fun onLoadMore() {
-                LoadMoreData()
+//                LoadMoreData()
             }
         })
 
@@ -181,7 +186,7 @@ class HomeFragment : Fragment() {
         adapter.addLoadingView()
         val moreData: ArrayList<Post> = ArrayList()
         Handler().postDelayed({
-            AndroidNetworking.get(EnvService.ENV_API + "/feeds/{username}/0")
+            AndroidNetworking.get(EnvService.ENV_API + "/feeds/{username}/-1")
                 .addPathParameter("username", username)
                 .addHeaders("Authorization", "Bearer " + token)
                 .setTag(this)

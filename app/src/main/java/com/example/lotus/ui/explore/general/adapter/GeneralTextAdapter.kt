@@ -23,7 +23,6 @@ import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.explore.general.model.Data
 import com.example.lotus.ui.explore.general.model.Post
 import com.example.lotus.ui.explore.hashtag.HashtagActivity
-import com.example.lotus.utils.DynamicSquareLayout
 
 class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val context: Context) :
     RecyclerView.Adapter<GeneralTextAdapter.Holder>() {
@@ -124,8 +123,9 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
                 val dataPost = DetailPost()
                 dataPost.arguments = bundle
 
-                Toast.makeText(mContext, "idnya! $ani",
-                    Toast.LENGTH_SHORT).show();
+                if (mContext is GeneralActivity) {
+                    (mContext as GeneralActivity).detailPost(ani.toString())
+                }
             }
             RL2.setOnClickListener {
                 val ani = data.posts?.get(1)?.id
@@ -134,8 +134,9 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
                 val dataPost = DetailPost()
                 dataPost.arguments = bundle
 
-                Toast.makeText(mContext, "idnya! $ani",
-                    Toast.LENGTH_SHORT).show();
+                if (mContext is GeneralActivity) {
+                    (mContext as GeneralActivity).detailPost(ani.toString())
+                }
             }
         }
 

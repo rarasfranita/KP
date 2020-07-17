@@ -1,6 +1,6 @@
 package com.example.lotus.ui.explore.general
 
-import android.content.Intent
+//import com.example.lotus.ui.explore.detailpost.DetailPostHashtag
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -21,13 +21,13 @@ import com.baoyz.widget.PullRefreshLayout
 import com.example.lotus.R
 import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
-//import com.example.lotus.ui.explore.detailpost.DetailPostHashtag
+import com.example.lotus.storage.SharedPrefManager
+import com.example.lotus.ui.detailpost.DetailPost
 import com.example.lotus.ui.explore.general.adapter.GeneralMediaAdapter
 import com.example.lotus.ui.explore.general.adapter.GeneralTextAdapter
 import com.example.lotus.ui.explore.general.fragment.ListMediaGeneral
 import com.example.lotus.ui.explore.general.fragment.ListTextGeneral
 import com.example.lotus.ui.explore.general.model.Data
-import com.example.lotus.ui.home.HomeActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_explore_general.*
@@ -35,8 +35,9 @@ import kotlinx.android.synthetic.main.activity_explore_general.*
 
 class GeneralActivity : AppCompatActivity() {
     private var manager: FragmentManager? = null
-    private val token = "5f09a143ff07b60aaafd008d"
     var dataExplore = ArrayList<Data>()
+    var username = SharedPrefManager.getInstance(this).user.username
+    var token = SharedPrefManager.getInstance(this).token.token
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         try {
@@ -76,8 +77,14 @@ class GeneralActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById<Toolbar>(R.id.tbExplore)
 
         toolbar.setNavigationOnClickListener {
-            val intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
+            this.onBackPressed()
+        }
+        toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.explore ->
+                    SharedPrefManager.getInstance(this).clear()
+            }
+            true
         }
 
     }
@@ -85,43 +92,41 @@ class GeneralActivity : AppCompatActivity() {
     private fun getExploreMedia() {
         dataExplore.clear()
         srlMediaGeneral.setRefreshing(true)
-        AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore?username=testaccount1&index=0&type=media")
+        AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore?{username}&type=media")
+            .addQueryParameter("username", "$username")
             .addHeaders("Authorization", "Bearer $token")
             .setTag(this)
             .setPriority(Priority.LOW)
             .build()
-            .getAsObject(
-                Respons::class.java,
-                object : ParsedRequestListener<Respons> {
-                    override fun onResponse(respon: Respons) {
+            .getAsObject(Respons::class.java, object : ParsedRequestListener<Respons> {
+                override fun onResponse(respon: Respons) {
+                    dataExplore.clear()
+                    srlMediaGeneral.setRefreshing(false)
+                    val gson = Gson()
+                    if (respon.code.toString() == "200") {
                         dataExplore.clear()
-                        srlMediaGeneral.setRefreshing(false)
-                        val gson = Gson()
-                        if (respon.code.toString() == "200") {
-                            dataExplore.clear()
-                            for (res in respon.data) {
-                                val strRes = gson.toJson(res)
-                                val dataJson = gson.fromJson(strRes, Data::class.java)
-                                dataExplore.add(dataJson)
-                            }
-                            loadExploreMedia(dataExplore, findViewById(R.id.rvExploreMedia))
-
-                        } else {
+                        for (res in respon.data) {
+                            val strRes = gson.toJson(res)
+                            val dataJson = gson.fromJson(strRes, Data::class.java)
+                            dataExplore.add(dataJson)
                         }
-                    }
+                        loadExploreMedia(dataExplore, findViewById(R.id.rvExploreMedia))
 
-                    override fun onError(anError: ANError) {
-                        dataExplore.clear()
-                        srlMediaGeneral.setRefreshing(false)
-                        Log.d("asuu nya media explore : ", anError.toString())
-                        // Next go to error page (Popup error)
+                    } else {
                     }
-                })
+                }
+
+                override fun onError(anError: ANError) {
+                    dataExplore.clear()
+                    srlMediaGeneral.setRefreshing(false)
+                }
+            })
     }
 
     private fun getExploreText() {
         dataExplore.clear()
-        AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore?username=testaccount1&index=0&type=text")
+        AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore?{username}&type=text")
+            .addQueryParameter("username", "$username")
             .addHeaders("Authorization", "Bearer $token")
             .setTag(this)
             .setPriority(Priority.LOW)
@@ -133,6 +138,8 @@ class GeneralActivity : AppCompatActivity() {
                         dataExplore.clear()
                         val gson = Gson()
                         if (respon.code.toString() == "200") {
+                            Log.d("token", token.toString())
+                            Log.d("username", username.toString())
                             dataExplore.clear()
                             for (res in respon.data) {
                                 val strRes = gson.toJson(res)
@@ -185,20 +192,6 @@ class GeneralActivity : AppCompatActivity() {
             ?.replace(R.id.fragmentExplore, ListMediaGeneral())?.commit()
     }
 
-    //move to hashtagActivity
-//    fun more(data: Data) {
-//        appBarLayout?.visibility = View.GONE
-//        tabs.visibility = View.GONE
-//        edSearchbar.visibility = View.GONE
-//        val bundle = Bundle()
-//        bundle.putParcelable("data", data)
-//        val dataPost = DetailPostHashtag()
-//        dataPost.arguments = bundle
-//        manager?.beginTransaction()
-//            ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-//            ?.replace(R.id.fragmentExplore, dataPost)
-//            ?.commit()
-//    }
 
     internal class ViewPagerAdapter(fragmentManager: FragmentManager) :
         FragmentPagerAdapter(fragmentManager) {
@@ -228,6 +221,24 @@ class GeneralActivity : AppCompatActivity() {
             return titles[i]
 
         }
+    }
+
+    fun detailPost(postId: String) {
+        val bundle = Bundle().apply {
+            putString("postId", postId)
+        }
+        appBarLayout.visibility = View.INVISIBLE
+        val dataPost = DetailPost()
+        dataPost.arguments = bundle
+        manager?.beginTransaction()
+            ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            ?.replace(R.id.fragmentExplore, dataPost)
+            ?.addToBackStack("Explore")
+            ?.commit()
+    }
+
+    fun setAppBarVisible(){
+        appBarLayout.visibility = View.VISIBLE
     }
 
 }

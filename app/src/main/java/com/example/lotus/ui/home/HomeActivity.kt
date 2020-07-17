@@ -30,6 +30,7 @@ import com.androidnetworking.interfaces.DownloadProgressListener
 import com.example.lotus.R
 import com.example.lotus.models.MediaData
 import com.example.lotus.models.Post
+import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.CreatePostActivity
 import com.example.lotus.ui.detailpost.DetailPost
 import com.example.lotus.ui.notification.NotificationActivity
@@ -41,16 +42,15 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_sheet.*
-import kotlinx.android.synthetic.main.fragment_home.*
 import org.json.JSONException
 import org.json.JSONObject
-
 
 class HomeActivity : AppCompatActivity() {
     private val TAG = "HomeActivity"
     private val mSocket: Socket = IO.socket("http://34.101.109.136:3000")
     private var manager: FragmentManager? = null
-//    var dialog: Dialog? = null
+    var userID = SharedPrefManager.getInstance(this).user._id
+    var token = SharedPrefManager.getInstance(this).token.token
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,15 +59,17 @@ class HomeActivity : AppCompatActivity() {
         } catch (e: NullPointerException) {
         }
         setContentView(R.layout.activity_main)
-//        Dialog(this)
+
+        bottom_sheet.visibility = View.GONE // For temporary
+        // navigationMenuLogic()
         val fabPost = findViewById<View>(R.id.fab_post)
 
         fabPost.setOnClickListener(View.OnClickListener { fabPostOnClick() })
-        navigationMenuLogic()
 
-        mSocket.on("isi", onNewMessage)
+        mSocket.on(userID.toString(), onNewMessage)
         mSocket.connect()
         Log.d("SOCKET", "${mSocket.connected()},  ${mSocket.connect()}")
+
         manager = getSupportFragmentManager()
 
         AndroidNetworking.initialize(getApplicationContext());
@@ -78,9 +80,10 @@ class HomeActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun navigationMenuLogic(){
+    private fun navigationMenuLogic() {
         val llBottomSheet =
             findViewById<View>(R.id.bottom_sheet) as LinearLayout
+        bottom_sheet.visibility = View.GONE
 
         val bottomSheetBehavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(llBottomSheet)
         bottomSheetBehavior.isHideable = false
@@ -103,7 +106,7 @@ class HomeActivity : AppCompatActivity() {
         val btmNav =
             findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
-        val btmNav2  =
+        val btmNav2 =
             findViewById<BottomNavigationView>(R.id.bottom_navigation_2)
 
         btmNav2.menu.findItem(R.id.navigation_calendar).setCheckable(false)
@@ -153,26 +156,21 @@ class HomeActivity : AppCompatActivity() {
         btmNav.getMenu().findItem(R.id.navigation_meditation).setCheckable(active);
     }
 
-    fun detailPost(item: Post) {
+    fun gotoDetailPost(item: Post) {
         val bundle = Bundle()
         bundle.putParcelable("data", item)
         val dataPost = DetailPost()
         dataPost.arguments = bundle
-        appBarLayout?.setVisibility(View.INVISIBLE)
-        bottom_sheet?.setVisibility(View.INVISIBLE)
         fab_post?.setVisibility(View.INVISIBLE)
         manager?.beginTransaction()
             ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             ?.replace(R.id.fragmentHome, dataPost)
+            ?.addToBackStack("Home")
             ?.commit()
     }
 
-    fun backToHome(view: View) {
-        appBarLayout?.setVisibility(View.VISIBLE)
-        bottom_sheet?.setVisibility(View.VISIBLE)
-        fab_post?.setVisibility(View.VISIBLE)
-        manager?.beginTransaction()
-            ?.replace(R.id.fragmentHome, HomeFragment())?.commit()
+    fun setfabPostVisible(){
+        fab_post?.visibility = View.VISIBLE
     }
 
     fun downloadMedia(medias: ArrayList<MediaData>){
@@ -268,15 +266,25 @@ class HomeActivity : AppCompatActivity() {
         this.runOnUiThread(Runnable {
             val data = args[0] as JSONObject
             val name: String
+            val type: String
+            var content: String = ""
             try {
                 name = data.getString("name")
+                type = data.getString("type")
             } catch (e: JSONException) {
                 return@Runnable
             }
 
-            Log.d("name", name)
+            if (type == "LIKE"){
+                content = "Like yout post."
+            }else if (type == "COMMENT"){
+                content = "Comment yout post."
+            }else if (type == "FOLLOW"){
+                content = "Following you."
+            }
 
-            createNotification("HELLO", name)
+            Log.d("Socket on", mSocket.connected().toString())
+            createNotification(name, content)
 
         })
     }

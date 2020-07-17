@@ -1,25 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/ablCreatePost"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/relLayout1">
+        tools:ignore="MissingConstraints"
+        app:elevation="0dp">
 
-        <include layout="@layout/snippet_post_toolbar"/>
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tbDetailPost"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/white"
+            app:elevation="0dp"
+            app:navigationIcon="@drawable/ic_arrow_back_black">
 
-    </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/post"
+                android:textSize="20dp"
+                android:id="@+id/postingTitle"/>
+        </com.google.android.material.appbar.MaterialToolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/relLayout2"
-        android:layout_below="@+id/relLayout1">
+        android:paddingTop="?attr/actionBarSize">
 
-        <include layout="@layout/layout_detail_post"/>
+        <include
+            layout="@layout/layout_detail_post"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp" />
 
     </RelativeLayout>
 

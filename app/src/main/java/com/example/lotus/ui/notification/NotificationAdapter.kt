@@ -21,13 +21,14 @@ import com.example.lotus.R
 import com.example.lotus.models.Notification
 import com.example.lotus.models.Respon
 import com.example.lotus.service.EnvService
+import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.detailpost.DetailPost
 import com.example.lotus.ui.home.PostFeedAdapter
 import com.example.lotus.utils.dateToFormatTime
-import com.example.lotus.utils.token
 import com.google.android.material.card.MaterialCardView
 
 class NotificationAdapter(private var notificationsDatas: ArrayList<Notification>, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    val token = SharedPrefManager.getInstance(context).token.token
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return PostFeedAdapter.ItemViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_notification, parent, false))

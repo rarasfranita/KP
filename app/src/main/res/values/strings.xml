@@ -25,6 +25,11 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="forget_password">Forget Password?</string>
+    <string name="profile_s_name">Profile\'s_name</string>
+    <string name="bio">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="postingan">Post</string>
+
     <string name="title_activity_direct_message">DirectMessage</string>
     <!--
     This string is used for square devices and overridden by hello_world in
@@ -52,6 +57,27 @@
     <string name="hint_caption">Tell the story about goodness...</string>
     <string name="image">image</string>
     <string name="video">video</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="title_activity_profile_child">ProfileChildActivity</string>
+    <string name="editprofile">Edit Profile</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="name">Name</string>
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="number">Phone Number</string>
+    <string name="birth">Date of Birth</string>
+    <string name="gender">Gender</string>
+    <string name="security">Security</string>
+    <string name="biografi">bio</string>
+    <string name="ChangePassword">Change Password</string>
+    <string name="newPassword">New Password</string>
+    <string name="confirmpassword">Confirm Password</string>
+    <string name="title_activity_edit_profile">EditProfileActivity</string>
     <string name="repost">Repost</string>
     <string name="choose">Choose</string>
     <string name="task_cancelled">Task Cancelled</string>
