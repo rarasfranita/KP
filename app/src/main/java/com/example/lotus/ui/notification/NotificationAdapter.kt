@@ -8,7 +8,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import coil.transform.CircleCropTransformation
@@ -42,7 +45,9 @@ class NotificationAdapter(private var notificationsDatas: ArrayList<Notification
         item.bindNotification(notificationsDatas[position], context)
         item.cardNotification.setOnClickListener {
             if (notificationsDatas[position].type == "FOLLOW"){
-                Toast.makeText(context, "TO PROFILE ${notificationsDatas[position].follower?.name}", Toast.LENGTH_SHORT).show()
+                if (context is NotificationActivity) {
+                    context.gotoProfilePicture(notificationsDatas[position].follower?.username.toString())
+                }
             }else {
                 val i: Intent = Intent(context, DetailPost::class.java)
                 i.putExtra("postID", notificationsDatas[position].postId)
