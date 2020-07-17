@@ -13,6 +13,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,6 +33,7 @@ import com.example.lotus.R
 import com.example.lotus.models.*
 import com.example.lotus.service.EnvService
 import com.example.lotus.ui.CreatePostActivity
+import com.example.lotus.ui.home.HomeActivity
 import com.example.lotus.utils.dateToFormatTime
 import com.example.lotus.utils.dislikePost
 import com.example.lotus.utils.likePost
@@ -82,13 +84,12 @@ class DetailPost : Fragment() {
             populateCommentData(v, postID!!)
         }
 
-
-
         initRecyclerView(v)
         sendComment(v)
         listenCommentIcon(v)
         listenRepostIcon(v)
         listenLikeIcon(v)
+        toolBarListener(v)
 
         return v
     }
@@ -410,4 +411,17 @@ class DetailPost : Fragment() {
                     }
                 })
     }
+
+    private fun toolBarListener(view: View){
+        val toolbar: Toolbar = view.findViewById(R.id.tbDetailPost) as Toolbar
+
+        toolbar.setNavigationOnClickListener {
+
+            if (context is HomeActivity){
+                (context as HomeActivity).setfabPostVisible()
+            }
+            getActivity()?.onBackPressed()
+        }
+    }
+
 }
