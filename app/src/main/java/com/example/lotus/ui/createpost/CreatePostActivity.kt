@@ -21,6 +21,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import coil.api.load
+import coil.transform.CircleCropTransformation
 import com.abedelazizshe.lightcompressorlibrary.CompressionListener
 import com.abedelazizshe.lightcompressorlibrary.VideoCompressor
 import com.abedelazizshe.lightcompressorlibrary.VideoQuality
@@ -37,6 +39,7 @@ import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.createpost.AddHashtag
 import com.example.lotus.ui.createpost.CallbackListener
 import com.example.lotus.ui.home.HomeActivity
+import com.example.lotus.ui.profile.ProfileActivity
 import com.example.lotus.utils.getFileSize
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.gson.Gson
@@ -52,6 +55,7 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
     private val userID = SharedPrefManager.getInstance(this).user._id
     private val username = SharedPrefManager.getInstance(this).user.username
     private val token = SharedPrefManager.getInstance(this).token.token
+    private val avatar = SharedPrefManager.getInstance(this).user.avatar
 
     private val mediaPostDatas: ArrayList<MediaPost> = ArrayList()
     private var mediaRepostDatas: ArrayList<MediaData> = ArrayList()
@@ -78,6 +82,16 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
         setRepostContent(mediaRepostDatas)
         posting()
         editHashtag()
+
+        if (avatar != null){
+            profilePicture.load(avatar){
+                transformations(CircleCropTransformation())
+            }
+        }
+
+        profilePicture.setOnClickListener {
+            gotoProfilePicture()
+        }
     }
 
     override fun onResume() {
@@ -121,6 +135,11 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
         } else {
             repostBottom.visibility = View.GONE
         }
+    }
+
+    fun gotoProfilePicture(){
+        val intent = Intent(this@CreatePostActivity, ProfileActivity::class.java)
+        startActivity(intent)
     }
 
     fun setRepostContent(data: ArrayList<MediaData>) {
