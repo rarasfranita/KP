@@ -215,9 +215,9 @@ class HomeActivity : AppCompatActivity() {
             }
 
             if (type == "LIKE"){
-                content = "Like yout post."
+                content = "Like your post."
             }else if (type == "COMMENT"){
-                content = "Comment yout post."
+                content = "Comment your post."
             }else if (type == "FOLLOW"){
                 content = "Following you."
             }

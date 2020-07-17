@@ -33,6 +33,7 @@ import com.example.lotus.models.MediaData
 import com.example.lotus.models.MediaPost
 import com.example.lotus.models.Respon
 import com.example.lotus.service.EnvService
+import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.createpost.AddHashtag
 import com.example.lotus.ui.createpost.CallbackListener
 import com.example.lotus.ui.home.HomeActivity
@@ -48,8 +49,8 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
     val TAG = "CreatePost Activity"
     val REQUEST_VIDEO_CAPTURE = 1
     lateinit var alertDialog: AlertDialog
-    private val username = "testaccount4"
-    private val token = "5f02b3ac10032c371426b525"
+    private val username = SharedPrefManager.getInstance(this).user.username
+    private val token = SharedPrefManager.getInstance(this).token.token
 
     private val mediaPostDatas: ArrayList<MediaPost> = ArrayList()
     private var mediaRepostDatas: ArrayList<MediaData> = ArrayList()

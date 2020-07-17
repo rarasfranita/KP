@@ -37,7 +37,7 @@ class NotificationAdapter(private var notificationsDatas: ArrayList<Notification
     override fun getItemCount(): Int = notificationsDatas?.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val username = "testaccount4"
+        val username = SharedPrefManager.getInstance(context).user.username
         val item = ItemViewHolder(holder.itemView)
         item.bindNotification(notificationsDatas[position], context)
         item.cardNotification.setOnClickListener {
@@ -55,7 +55,6 @@ class NotificationAdapter(private var notificationsDatas: ArrayList<Notification
 
         item.follow.setOnClickListener {
             if (notificationsDatas[position].isFollowing!!.equals(0)){
-                Log.d("KESINI GASIH", "")
                 AndroidNetworking.get(EnvService.ENV_API + "/users/$username/follow/${notificationsDatas[position].follower?.username}")
                     .addHeaders("Authorization", "Bearer " + token)
                     .setPriority(Priority.MEDIUM)
@@ -63,9 +62,9 @@ class NotificationAdapter(private var notificationsDatas: ArrayList<Notification
                     .getAsObject(
                         Respon::class.java,
                         object : ParsedRequestListener<Respon> {
-                            @SuppressLint("ResourceAsColor")
                             override fun onResponse(respon: Respon) {
                                 if (respon.code.toString() == "200") {
+                                    Log.d("Respon Data Follow", respon.data.toString())
                                     item.setFollowing()
                                 }else {
                                     Log.e("ERROR!!!", "Following ${respon.code}")

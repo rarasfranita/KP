@@ -83,9 +83,6 @@ class DetailPost : Fragment() {
         }
 
         if (postData != null){
-            likeStatus = postData?.liked
-            likeCount = postData?.likesCount!!
-            commentCount = postData?.commentsCount!!
             setView(v)
         }else if (postID != null){
             populateCommentData(v, postID!!)
@@ -209,14 +206,14 @@ class DetailPost : Fragment() {
         val likeIcon = view.findViewById<RelativeLayout>(R.id.likeLayoutPost)
         likeIcon.setOnClickListener {
             if(likeStatus.toString() == "1"){
-                dislikePost(postData?.postId.toString(), postData?.belongsTo.toString(),
+                dislikePost(postData?.postId.toString(), userID.toString(),
                     token.toString()
                 )
                 likeStatus = 0
                 likeCount--
                 setLike(view, likeStatus, likeCount)
             }else {
-                likePost(postData?.postId.toString(), postData?.belongsTo.toString(),
+                likePost(postData?.postId.toString(), userID.toString(),
                     token.toString()
                 )
                 likeStatus = 1
@@ -242,6 +239,9 @@ class DetailPost : Fragment() {
     }
 
     fun setView(view: View){
+        likeStatus = postData?.liked
+        likeCount = postData?.likesCount!!
+        commentCount = postData?.commentsCount!!
         val username :TextView = view.findViewById<View>(R.id.textUsernamePost) as TextView
         val caption : TextView = view.findViewById<View>(R.id.textCaption) as TextView
         val ava : ImageView = view.findViewById<View>(R.id.imageAvatarPost) as ImageView

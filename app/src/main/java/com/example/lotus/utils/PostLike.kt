@@ -9,6 +9,7 @@ import com.example.lotus.models.Respon
 import com.example.lotus.service.EnvService
 
 fun likePost(postID: String, userID: String, token: String){
+    Log.d("TEST LIKE YOO", "postID: $postID, userID: $userID")
     AndroidNetworking.get(EnvService.ENV_API + "/posts/{postID}/likes/{userID}")
         .addHeaders("Authorization", "Bearer " + token)
         .addPathParameter("postID", postID)

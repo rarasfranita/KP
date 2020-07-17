@@ -1,8 +1,5 @@
 package com.example.lotus.ui.notification
 
-import android.app.PendingIntent
-import android.content.Intent
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -10,8 +7,6 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,12 +34,9 @@ import kotlinx.android.synthetic.main.fragment_home.*
 class NotificationActivity : AppCompatActivity() {
     var TAG = "[Notification Activity]"
 
-    val CHANNEL_ID = "my-id"
-    private val token = "5f02b3361718f5360aeff6d2"
+    var token = SharedPrefManager.getInstance(this).token.token
     var notificationsData = ArrayList<Notification>()
-    val username = "testaccount4"
     var userID = SharedPrefManager.getInstance(this).user._id
-//    private val mSocket: Socket = IO.socket("http://34.101.109.136:3000")
 
     lateinit var adapter: NotificationAdapter
     lateinit var scrollListener: RecyclerViewLoadMoreScroll
@@ -58,9 +50,6 @@ class NotificationActivity : AppCompatActivity() {
         val datanull = findViewById<LinearLayout>(R.id.dataNull)
         datanull.visibility = View.GONE
 
-//        mSocket.on(userID, onNewMessage)
-//        mSocket.connect()
-//        Log.d("SOCKET", "${mSocket.connected()},  ${mSocket.connect()}")
         getNotifications()
         onSlider()
         manager = getSupportFragmentManager()
@@ -70,23 +59,6 @@ class NotificationActivity : AppCompatActivity() {
         }
         listenAppToolbar()
     }
-
-//    private val onNewMessage = Emitter.Listener { args ->
-//        this.runOnUiThread(Runnable {
-//            val data = args[0] as JSONObject
-//            val name: String
-//            try {
-//                name = data.getString("name")
-//            } catch (e: JSONException) {
-//                return@Runnable
-//            }
-//
-//            Log.d("name", name)
-//
-//            createNotification("HELLO", name)
-//
-//        })
-//    }
 
     fun loadNotification(data: ArrayList<Notification>, notification: RecyclerView){
         adapter = NotificationAdapter(data, this)
@@ -99,7 +71,7 @@ class NotificationActivity : AppCompatActivity() {
 
     private fun getNotifications(){
         AndroidNetworking.get(EnvService.ENV_API + "/users/{userid}/notifications")
-            .addPathParameter("userid", "5f0589e0f5cb8c4c1659c124")
+            .addPathParameter("userid", userID.toString())
             .addHeaders("Authorization", "Bearer " + token)
             .setTag(this)
             .setPriority(Priority.LOW)
@@ -132,29 +104,6 @@ class NotificationActivity : AppCompatActivity() {
                         Log.d("Errornya disini kah?", anError.toString())
                     }
                 })
-    }
-
-    private fun createNotification(title: String, content: String) {
-        val id = 1
-        val fullScreenIntent = Intent(this, NotificationActivity::class.java)
-        val fullScreenPendingIntent = PendingIntent.getActivity(this, 0,
-            fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-
-        var builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.logo_lotus)
-            .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.logo_lotus))
-            .setContentTitle(title)
-            .setContentText(content)
-            .setDefaults(NotificationCompat.DEFAULT_ALL)
-            .setColor(getResources().getColor(R.color.colorPrimary))
-            .setPriority(NotificationCompat.PRIORITY_MAX)
-            .setFullScreenIntent(fullScreenPendingIntent, true)
-            .build()
-
-        with(NotificationManagerCompat.from(this)) {
-            notify(id, builder)
-        }
-
     }
 
     fun detailPost(postId: String) {
