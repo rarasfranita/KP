@@ -165,7 +165,7 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
                     val clickableSpan = object : ClickableSpan() {
                         override fun onClick(p0: View) {
                             if (mContext is HomeActivity) {
-                                postData?.let { (mContext as HomeActivity).detailPost(it) }
+                                postData?.let { (mContext as HomeActivity).gotoDetailPost(it) }
                             }
                         }
                     }
@@ -192,7 +192,7 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
                 val clickableSpan = object : ClickableSpan() {
                     override fun onClick(p0: View) {
                         if (mContext is HomeActivity) {
-                            postData?.let { (mContext as HomeActivity).detailPost(it) }
+                            postData?.let { (mContext as HomeActivity).gotoDetailPost(it) }
                         }
                     }
                 }
@@ -224,7 +224,7 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
                         val clickableSpan = object : ClickableSpan() {
                             override fun onClick(p0: View) {
                                 if (mContext is HomeActivity) {
-                                    postData?.let { (mContext as HomeActivity).detailPost(it) }
+                                    postData?.let { (mContext as HomeActivity).gotoDetailPost(it) }
                                 }
                             }
                         }
@@ -296,13 +296,13 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
 
             holder.itemView.viewAllComment.setOnClickListener {
                 if (mContext is HomeActivity) {
-                    (mContext as HomeActivity).detailPost(listPost[position])
+                    (mContext as HomeActivity).gotoDetailPost(listPost[position])
                 }
             }
 
             holder.itemView.rlCommentFeed.setOnClickListener {
                 if (mContext is HomeActivity) {
-                    (mContext as HomeActivity).detailPost(listPost[position])
+                    (mContext as HomeActivity).gotoDetailPost(listPost[position])
                 }
             }
 

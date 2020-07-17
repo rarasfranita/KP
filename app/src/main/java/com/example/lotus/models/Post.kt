@@ -38,7 +38,7 @@ class Post(
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(id as Int)
+        parcel.writeString(id)
         parcel.writeString(username)
         parcel.writeString(profilePicture)
         parcel.writeString(name)

@@ -145,7 +145,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/btmBotton">
             </androidx.recyclerview.widget.RecyclerView>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnUploadImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -156,10 +156,9 @@
                 android:paddingBottom="10dp"
                 android:onClick="selectPhoto"
                 app:strokeColor="@color/colorAccent"
-                app:strokeWidth="1dp"
-                style="?android:attr/borderlessButtonStyle"/>
+                app:strokeWidth="0.5pt"/>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnUploadVideo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -169,8 +168,7 @@
                 android:textColor="@color/colorPrimaryDark"
                 android:onClick="showDialog"
                 app:strokeColor="@color/colorAccent"
-                app:strokeWidth="1dp"
-                style="?android:attr/borderlessButtonStyle"/>
+                app:strokeWidth="0.5dp"/>
         </LinearLayout>
 
         <LinearLayout

@@ -55,7 +55,7 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
     private var mediaRepostDatas: ArrayList<MediaData> = ArrayList()
     private var tags: ArrayList<String> = ArrayList()
     private var tagsStringShow: String = ""
-    private var tagStringSend: String = ""
+    private var tagsStringSend: String = ""
     private var repost: Boolean = false
     private var postId: String = ""
 
@@ -107,9 +107,9 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
                 for ((i, tag) in tags.withIndex()){
                     tagsStringShow += "#$tag "
                     if (i < tags.size - 1){
-                        tagStringSend +="$tag,"
+                        tagsStringSend +="$tag,"
                     }else
-                        tagStringSend += tag
+                        tagsStringSend += tag
                 }
                 textHashtagRepost.text = tagsStringShow
             }else{
@@ -142,7 +142,7 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
         val toolbar: Toolbar = findViewById(R.id.tbCreatePost) as Toolbar
 
         toolbar.setNavigationOnClickListener {
-            startActivity(Intent(this, HomeActivity::class.java))
+            this.onBackPressed()
         }
     }
 
@@ -308,8 +308,9 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
         val tag2 = findViewById<TextView>(R.id.textHashtagRepost)
         val arrTags = data.split(",").toTypedArray()
 
-        tagStringSend = data
+        tagsStringSend = data
         tags = arrayListOf()
+        tagsStringShow = ""
 
         for (tag in arrTags){
             if (tag != ""){
@@ -345,8 +346,8 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
             }else{
                 if (repost){
                     val uploadRepost = AndroidNetworking.post(EnvService.ENV_API + "/posts/{username}")
-                    if (tagStringSend != ""){
-                        uploadRepost.addBodyParameter("tag", tagStringSend)
+                    if (tagsStringSend != ""){
+                        uploadRepost.addBodyParameter("tag", tagsStringSend)
                     }
                     uploadRepost
                         .addPathParameter("username", username)
@@ -386,8 +387,8 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
                         uploadPost.addMultipartFile("media",  auxFile)
                     }
 
-                    if (tagStringSend != ""){
-                        uploadPost.addMultipartParameter("tag", tagStringSend )
+                    if (tagsStringSend != ""){
+                        uploadPost.addMultipartParameter("tag", tagsStringSend )
                     }
 
                     uploadPost

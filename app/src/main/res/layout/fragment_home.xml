@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment"
-    android:id="@+id/fragmentHome">
+    android:id="@+id/fragmentHome"
+    android:paddingBottom="1dp">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -38,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-            android:paddingBottom="150dp"/>
+            android:paddingBottom="60dp"/>
     </com.baoyz.widget.PullRefreshLayout>
 
 

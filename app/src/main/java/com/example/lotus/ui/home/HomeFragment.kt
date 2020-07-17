@@ -77,7 +77,7 @@ class HomeFragment : Fragment() {
             v.setRefreshing(true)
         }
 
-        AndroidNetworking.get(EnvService.ENV_API + "/feeds/{username}/{id}")
+        AndroidNetworking.get(EnvService.ENV_API + "/feeds/{username}/-1")
             .addPathParameter("username", username)
             .addPathParameter("id", idBucket.toString())
             .addHeaders("Authorization", "Bearer " + token)
