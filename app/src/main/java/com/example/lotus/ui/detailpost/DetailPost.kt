@@ -1,5 +1,6 @@
 package com.example.lotus.ui.detailpost
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -8,11 +9,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
@@ -38,6 +37,7 @@ import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.home.HomeActivity
 import com.example.lotus.utils.dateToFormatTime
 import com.example.lotus.utils.dislikePost
+import com.example.lotus.utils.downloadMedia
 import com.example.lotus.utils.likePost
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.layout_detail_post.*
@@ -97,10 +97,10 @@ class DetailPost : Fragment() {
         listenRepostIcon(v)
         listenLikeIcon(v)
         toolBarListener(v)
+        listenMenu(v)
 
         return v
     }
-
 
     fun sendComment(v: View){
         val btnSend = v.findViewById<View>(R.id.imageSendComment)
@@ -169,6 +169,14 @@ class DetailPost : Fragment() {
 
     fun setCommentID(id: String){
         this.commentID = id
+    }
+
+    fun listenMenu(v: View){
+        val menu = v.findViewById<ImageView>(R.id.menuPost)
+
+        menu.setOnClickListener {
+            showDialog()
+        }
     }
 
     fun listenCommentIcon(view: View){
@@ -435,6 +443,42 @@ class DetailPost : Fragment() {
                 (context as GeneralActivity).setAppBarVisible()
             }
             getActivity()?.onBackPressed()
+        }
+    }
+
+    fun showDialog() {
+        val dialog = Dialog(this.requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.layout_menu_post)
+        val download = dialog.findViewById<LinearLayout>(R.id.downloadMedia)
+        val share = dialog.findViewById<LinearLayout>(R.id.sharePost)
+        download.setOnClickListener {
+            downloadMedia(postData?.media!!, requireContext())
+            dialog.dismiss()
+        }
+
+        share.setOnClickListener {
+            if (postData?.media!!.size < 1){
+                Toast.makeText(context, "No media to be downloaded", Toast.LENGTH_SHORT).show()
+            }else {
+                shareMediaToOtherApp(postData?.media!!)
+                dialog.dismiss()
+            }
+        }
+
+        dialog.show()
+
+    }
+
+    fun shareMediaToOtherApp(medias: ArrayList<MediaData>){
+        for (media in medias){
+            val uri: Uri = Uri.parse(media.link)
+            val shareIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_STREAM, media.link)
+                type = "*"
+            }
+            startActivity(Intent.createChooser(shareIntent, "Share To"))
         }
     }
 
