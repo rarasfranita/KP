@@ -58,7 +58,6 @@ class HomeFragment : Fragment() {
 
         username = SharedPrefManager.getInstance(requireContext()).user.username
         token = SharedPrefManager.getInstance(requireActivity()).token.token
-
         listenAppToolbar(v)
         v!!.setOnTouchListener { v, event ->
             Log.d(TAG, event.toString())

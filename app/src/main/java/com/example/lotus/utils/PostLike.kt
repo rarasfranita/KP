@@ -9,7 +9,7 @@ import com.example.lotus.models.Respon
 import com.example.lotus.service.EnvService
 
 fun likePost(postID: String, userID: String, token: String){
-    Log.d("TEST LIKE YOO", "postID: $postID, userID: $userID")
+    Log.d("CEK LIKEPOST", "$postID,dan $userID")
     AndroidNetworking.get(EnvService.ENV_API + "/posts/{postID}/likes/{userID}")
         .addHeaders("Authorization", "Bearer " + token)
         .addPathParameter("postID", postID)
@@ -23,7 +23,7 @@ fun likePost(postID: String, userID: String, token: String){
                     if (respon.code.toString() == "200") {
                         Log.d("Like", "Success")
                     }else {
-                        Log.e("ERROR!!!", "Like Post ${respon.code}")
+                        Log.e("ERROR!!!", "Like Post ${respon.code}, ${respon.data}")
                     }
                 }
 
@@ -48,7 +48,7 @@ fun dislikePost(postID: String, userID: String, token: String){
                     if (respon.code.toString() == "200") {
                         Log.d("Dislike", "Success")
                     }else {
-                        Log.e("ERROR!!!", "Dislike Post ${respon.code}")
+                        Log.e("ERROR!!!", "Dislike Post ${respon.code}, ${respon.data}")
                     }
                 }
 

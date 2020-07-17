@@ -75,6 +75,7 @@ class DetailPost : Fragment() {
 
         token = SharedPrefManager.getInstance(requireContext()).token.token
         userID = SharedPrefManager.getInstance(requireContext()).user._id
+        Log.d("USERID DI DETAIL POST", userID.toString())
 
         val bundle = this.arguments
         if (bundle != null) {

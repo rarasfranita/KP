@@ -13,6 +13,7 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,8 +42,10 @@ import kotlinx.android.synthetic.main.progress_loading.view.*
 
 class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val token = SharedPrefManager.getInstance(context).token.token
+    val userID = SharedPrefManager.getInstance(context).user._id
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        Log.d("USERID DI Postfeedadapter", userID.toString())
 
         return if (viewType == Constant.VIEW_TYPE_ITEM) {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_mainfeed_listitem, parent, false)
@@ -88,6 +91,7 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
         private var posterSlider: PosterSlider? = null
         private var postData: Post? = null
         private var token: String = null.toString()
+        private var userID: String = null.toString()
 
         var likeStatus: Int? = 0
         var likeCount: Int = 0
@@ -95,6 +99,11 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
 
         fun setToken(token: String){
             this.token = token
+        }
+
+        fun setUserID(userID: String){
+            Log.d("Userid di setuserid", userID)
+            this.userID = userID
         }
 
         fun bindFeed(post: Post, context: Context){
@@ -272,12 +281,12 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
             val likeIcon = view.findViewById<RelativeLayout>(R.id.likeLayoutFeed)
             likeIcon.setOnClickListener {
                 if(likeStatus.toString() == "1"){
-                    dislikePost(postData?.postId.toString(), postData?.belongsTo.toString(), token)
+                    dislikePost(postData?.postId.toString(), userID.toString(), token)
                     likeStatus = 0
                     likeCount--
                     setLike(view, likeStatus, likeCount)
                 }else {
-                    likePost(postData?.postId.toString(), postData?.belongsTo.toString(), token)
+                    likePost(postData?.postId.toString(), userID.toString(), token)
                     likeStatus = 1
                     likeCount++
                     setLike(view, likeStatus, likeCount)
@@ -293,6 +302,7 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
             val item = ItemViewHolder(holder.itemView)
 
             item.setToken(token.toString())
+            item.setUserID(userID.toString())
             item.bindFeed(listPost[position], context)
 
 

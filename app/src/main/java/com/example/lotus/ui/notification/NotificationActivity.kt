@@ -28,7 +28,6 @@ import com.r0adkll.slidr.Slidr
 import com.r0adkll.slidr.model.SlidrConfig
 import com.r0adkll.slidr.model.SlidrPosition
 import kotlinx.android.synthetic.main.activity_notification.*
-import kotlinx.android.synthetic.main.fragment_home.*
 
 
 class NotificationActivity : AppCompatActivity() {
@@ -50,12 +49,12 @@ class NotificationActivity : AppCompatActivity() {
         val datanull = findViewById<LinearLayout>(R.id.dataNull)
         datanull.visibility = View.GONE
 
-        getNotifications()
+        getNotifications(null)
         onSlider()
         manager = getSupportFragmentManager()
 
         reloadNotification.setOnRefreshListener {
-            getNotifications()
+            getNotifications(reloadNotification)
         }
         listenAppToolbar()
     }
@@ -69,7 +68,13 @@ class NotificationActivity : AppCompatActivity() {
         notification.layoutManager = LinearLayoutManager(this)
     }
 
-    private fun getNotifications(){
+    private fun getNotifications(v: PullRefreshLayout?){
+        if (v !=  null){
+            v.setRefreshing(true)
+        }
+
+        Log.d("ID USER DI NOTIFICATION", userID.toString())
+
         AndroidNetworking.get(EnvService.ENV_API + "/users/{userid}/notifications")
             .addPathParameter("userid", userID.toString())
             .addHeaders("Authorization", "Bearer " + token)
@@ -80,11 +85,13 @@ class NotificationActivity : AppCompatActivity() {
                 Respons::class.java,
                 object : ParsedRequestListener<Respons> {
                     override fun onResponse(respon: Respons) {
+                        reloadNotification.setRefreshing(false)
                         val gson = Gson()
                         if (respon.code.toString() == "200") {
                             for ((i, res) in respon.data.withIndex()) {
                                 val strRes = gson.toJson(res)
                                 val dataJson = gson.fromJson(strRes, Notification::class.java)
+                                notificationsData.clear()
                                 notificationsData.add(dataJson)
                             }
 
@@ -99,7 +106,7 @@ class NotificationActivity : AppCompatActivity() {
                     }
 
                     override fun onError(anError: ANError) {
-                        reloadFeed.setRefreshing(false)
+                        reloadNotification.setRefreshing(false)
                         Toast.makeText(this@NotificationActivity, "Error ${anError.errorCode}", Toast.LENGTH_SHORT).show()
                         Log.d("Errornya disini kah?", anError.toString())
                     }
