@@ -1,7 +1,6 @@
 package com.example.lotus.ui.explore.general
 
 //import com.example.lotus.ui.explore.detailpost.DetailPostHashtag
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -28,7 +27,6 @@ import com.example.lotus.ui.explore.general.adapter.GeneralTextAdapter
 import com.example.lotus.ui.explore.general.fragment.ListMediaGeneral
 import com.example.lotus.ui.explore.general.fragment.ListTextGeneral
 import com.example.lotus.ui.explore.general.model.Data
-import com.example.lotus.ui.home.HomeActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_explore_general.*
@@ -77,8 +75,7 @@ class GeneralActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById<Toolbar>(R.id.tbExplore)
 
         toolbar.setNavigationOnClickListener {
-            val intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
+            this.onBackPressed()
         }
 
     }
