@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.View
 import android.view.Window
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +29,7 @@ import com.example.lotus.models.MediaData
 import com.example.lotus.models.Post
 import com.example.lotus.ui.CreatePostActivity
 import com.example.lotus.ui.detailpost.DetailPost
+import com.example.lotus.ui.profile.ProfileActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
@@ -68,7 +70,7 @@ class HomeActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun navigationMenuLogic(){
+    private fun navigationMenuLogic() {
         val llBottomSheet =
             findViewById<View>(R.id.bottom_sheet) as LinearLayout
         bottom_sheet.visibility = View.GONE
@@ -94,7 +96,7 @@ class HomeActivity : AppCompatActivity() {
         val btmNav =
             findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
-        val btmNav2  =
+        val btmNav2 =
             findViewById<BottomNavigationView>(R.id.bottom_navigation_2)
 
         btmNav2.menu.findItem(R.id.navigation_calendar).setCheckable(false)

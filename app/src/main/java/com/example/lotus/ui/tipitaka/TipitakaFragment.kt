@@ -22,9 +22,9 @@ class TipitakaFragment : Fragment() {
         tipitakaViewModel =
             ViewModelProviders.of(this).get(TipitakaViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_tipitaka, container, false)
-        val textView: TextView = root.findViewById(R.id.text_notifications)
+//        val textView: TextView = root.findViewById(R.id.text_notifications)
         tipitakaViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
+//            textView.text = it
         })
         return root
     }

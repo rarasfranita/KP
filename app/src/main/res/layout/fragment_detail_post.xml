@@ -36,7 +36,12 @@
         android:id="@+id/relLayout2"
         android:paddingTop="?attr/actionBarSize">
 
-        <include layout="@layout/layout_detail_post"/>
+        <include
+            layout="@layout/layout_detail_post"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp" />
 
     </RelativeLayout>
 
