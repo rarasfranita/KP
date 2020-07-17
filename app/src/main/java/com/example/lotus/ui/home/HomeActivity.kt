@@ -3,7 +3,9 @@ package com.example.lotus.ui.home
 import android.app.Dialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -15,6 +17,8 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.findNavController
@@ -28,20 +32,23 @@ import com.example.lotus.models.MediaData
 import com.example.lotus.models.Post
 import com.example.lotus.ui.CreatePostActivity
 import com.example.lotus.ui.detailpost.DetailPost
+import com.example.lotus.ui.notification.NotificationActivity
+import com.github.nkzawa.emitter.Emitter
+import com.github.nkzawa.socketio.client.IO
+import com.github.nkzawa.socketio.client.Socket
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import org.json.JSONException
+import org.json.JSONObject
 
 
 class HomeActivity : AppCompatActivity() {
     private val TAG = "HomeActivity"
-    var x1:Float = 0.toFloat()
-    var x2:Float = 0.toFloat()
-    var y1:Float = 0.toFloat()
-    var y2:Float = 0.toFloat()
+    private val mSocket: Socket = IO.socket("http://34.101.109.136:3000")
     private var manager: FragmentManager? = null
 //    var dialog: Dialog? = null
 
@@ -58,6 +65,9 @@ class HomeActivity : AppCompatActivity() {
         fabPost.setOnClickListener(View.OnClickListener { fabPostOnClick() })
         navigationMenuLogic()
 
+        mSocket.on("isi", onNewMessage)
+        mSocket.connect()
+        Log.d("SOCKET", "${mSocket.connected()},  ${mSocket.connect()}")
         manager = getSupportFragmentManager()
 
         AndroidNetworking.initialize(getApplicationContext());
@@ -252,6 +262,46 @@ class HomeActivity : AppCompatActivity() {
             }
             startActivity(Intent.createChooser(shareIntent, "Share To"))
         }
+    }
+
+    private val onNewMessage = Emitter.Listener { args ->
+        this.runOnUiThread(Runnable {
+            val data = args[0] as JSONObject
+            val name: String
+            try {
+                name = data.getString("name")
+            } catch (e: JSONException) {
+                return@Runnable
+            }
+
+            Log.d("name", name)
+
+            createNotification("HELLO", name)
+
+        })
+    }
+
+    private fun createNotification(title: String, content: String) {
+        val id = 1
+        val fullScreenIntent = Intent(this, NotificationActivity::class.java)
+        val fullScreenPendingIntent = PendingIntent.getActivity(this, 0,
+            fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        var builder = NotificationCompat.Builder(this, "CHANNEL_ID")
+            .setSmallIcon(R.drawable.logo_lotus)
+            .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
+            .setContentTitle(title)
+            .setContentText(content)
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setColor(getResources().getColor(R.color.colorPrimary))
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setFullScreenIntent(fullScreenPendingIntent, true)
+            .build()
+
+        with(NotificationManagerCompat.from(this)) {
+            notify(id, builder)
+        }
+
     }
 
 }

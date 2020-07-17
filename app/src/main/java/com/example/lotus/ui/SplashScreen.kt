@@ -8,8 +8,12 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lotus.R
 import com.example.lotus.ui.login.LoginActivity
+import com.github.nkzawa.socketio.client.IO
+import com.github.nkzawa.socketio.client.Socket
+
 
 class SplashActivity : AppCompatActivity() {
+    private val mSocket: Socket = IO.socket("http://34.101.109.136:3000")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

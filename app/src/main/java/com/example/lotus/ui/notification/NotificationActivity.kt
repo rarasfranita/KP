@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
@@ -56,6 +57,9 @@ class NotificationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notification)
         val reloadNotification: PullRefreshLayout = findViewById(R.id.reloadNotification)
+        val datanull = findViewById<LinearLayout>(R.id.dataNull)
+        datanull.visibility = View.GONE
+
         mSocket.on("isi", onNewMessage)
         mSocket.connect()
         Log.d("SOCKET", "${mSocket.connected()},  ${mSocket.connect()}")
@@ -113,7 +117,11 @@ class NotificationActivity : AppCompatActivity() {
                                 notificationsData.add(dataJson)
                             }
 
-                            loadNotification(notificationsData, rvNotification)
+                            if (notificationsData.size < 1){
+                                dataNull.visibility = View.VISIBLE
+                            }else{
+                                loadNotification(notificationsData, rvNotification)
+                            }
                         }else {
                             Toast.makeText(this@NotificationActivity, "Error ${respon.code}", Toast.LENGTH_SHORT).show()
                         }

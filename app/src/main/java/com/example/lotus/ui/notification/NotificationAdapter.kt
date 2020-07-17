@@ -3,6 +3,7 @@ package com.example.lotus.ui.notification
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.ParsedRequestListener
+import com.bumptech.glide.Glide
 import com.example.lotus.R
 import com.example.lotus.models.Notification
 import com.example.lotus.models.Respon
@@ -105,7 +107,15 @@ class NotificationAdapter(private var notificationsDatas: ArrayList<Notification
                 textName.text = notif.sender?.username
 
                 if (notif.media!!.size > 0){
-                    media.load(notif.media[0].link)
+                    if (notif.media[0].type == "video"){
+                        val videoURI = Uri.parse(notif.media[0].link)
+                        context.let {
+                            Glide.with(it).load(videoURI).into(media)
+                        }
+                    }else if (notif.media[0].type == "image"){
+                        media.load(notif.media[0].link)
+                    }
+
                 }
 
                 if(notif.type == "LIKE"){

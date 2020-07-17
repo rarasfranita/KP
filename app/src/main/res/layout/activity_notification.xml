@@ -58,7 +58,7 @@
         android:layout_marginTop="?attr/actionBarSize"
         android:orientation="vertical"
         android:gravity="center"
-        android:id="@+id/nullPage">
+        android:id="@+id/dataNull">
 
         <ImageView
             android:layout_width="match_parent"
