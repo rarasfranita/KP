@@ -35,7 +35,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_sheet.*
-import kotlinx.android.synthetic.main.fragment_home.*
 
 
 class HomeActivity : AppCompatActivity() {
@@ -54,11 +53,12 @@ class HomeActivity : AppCompatActivity() {
         } catch (e: NullPointerException) {
         }
         setContentView(R.layout.activity_main)
-//        Dialog(this)
+
+        bottom_sheet.visibility = View.GONE // For temporary
+        // navigationMenuLogic()
         val fabPost = findViewById<View>(R.id.fab_post)
 
         fabPost.setOnClickListener(View.OnClickListener { fabPostOnClick() })
-        navigationMenuLogic()
 
         manager = getSupportFragmentManager()
 
@@ -73,6 +73,7 @@ class HomeActivity : AppCompatActivity() {
     private fun navigationMenuLogic() {
         val llBottomSheet =
             findViewById<View>(R.id.bottom_sheet) as LinearLayout
+        bottom_sheet.visibility = View.GONE
 
         val bottomSheetBehavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(llBottomSheet)
         bottomSheetBehavior.isHideable = false
@@ -145,26 +146,21 @@ class HomeActivity : AppCompatActivity() {
         btmNav.getMenu().findItem(R.id.navigation_meditation).setCheckable(active);
     }
 
-    fun detailPost(item: Post) {
+    fun gotoDetailPost(item: Post) {
         val bundle = Bundle()
         bundle.putParcelable("data", item)
         val dataPost = DetailPost()
         dataPost.arguments = bundle
-        appBarLayout?.setVisibility(View.INVISIBLE)
-        bottom_sheet?.setVisibility(View.INVISIBLE)
         fab_post?.setVisibility(View.INVISIBLE)
         manager?.beginTransaction()
             ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             ?.replace(R.id.fragmentHome, dataPost)
+            ?.addToBackStack("Home")
             ?.commit()
     }
 
-    fun backToHome(view: View) {
-        appBarLayout?.setVisibility(View.VISIBLE)
-        bottom_sheet?.setVisibility(View.VISIBLE)
-        fab_post?.setVisibility(View.VISIBLE)
-        manager?.beginTransaction()
-            ?.replace(R.id.fragmentHome, HomeFragment())?.commit()
+    fun setfabPostVisible(){
+        fab_post?.visibility = View.VISIBLE
     }
 
     fun downloadMedia(medias: ArrayList<MediaData>){

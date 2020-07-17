@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.FragmentManager
@@ -66,6 +67,7 @@ class NotificationActivity : AppCompatActivity() {
         reloadNotification.setOnRefreshListener {
             getNotifications()
         }
+        listenAppToolbar()
     }
 
     private val onNewMessage = Emitter.Listener { args ->
@@ -168,6 +170,15 @@ class NotificationActivity : AppCompatActivity() {
             .position(SlidrPosition.RIGHT)
 
         Slidr.attach(this, config.build())
+    }
+
+    private fun listenAppToolbar() {
+        val toolbar: Toolbar = findViewById<Toolbar>(R.id.toolbarNotification)
+
+        toolbar.setNavigationOnClickListener {
+            this.onBackPressed()
+        }
+
     }
 
 }

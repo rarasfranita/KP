@@ -21,10 +21,9 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_centerVertical="true"
-                android:id="@+id/backArrow"
+                android:id="@+id/backArrowDetailPost"
                 android:src="@drawable/ic_backarrow"
-                android:tint="@android:color/black"
-                android:onClick="backToHome"/>
+                android:tint="@android:color/black"/>
 
 
             <TextView

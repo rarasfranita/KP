@@ -13,6 +13,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,6 +33,8 @@ import com.example.lotus.R
 import com.example.lotus.models.*
 import com.example.lotus.service.EnvService
 import com.example.lotus.ui.CreatePostActivity
+import com.example.lotus.ui.explore.general.GeneralActivity
+import com.example.lotus.ui.home.HomeActivity
 import com.example.lotus.utils.dateToFormatTime
 import com.example.lotus.utils.dislikePost
 import com.example.lotus.utils.likePost
@@ -82,13 +85,12 @@ class DetailPost : Fragment() {
             populateCommentData(v, postID!!)
         }
 
-
-
         initRecyclerView(v)
         sendComment(v)
         listenCommentIcon(v)
         listenRepostIcon(v)
         listenLikeIcon(v)
+        toolBarListener(v)
 
         return v
     }
@@ -118,6 +120,7 @@ class DetailPost : Fragment() {
                                     populateCommentData(v, postData?.postId.toString())
                                 }else {
                                     Log.e("ERROR!!!", "Add Comment Data ${respon.code}")
+                                    Log.e("ERROR", "Add Comment: ${respon.data}")
                                 }
                             }
 
@@ -334,10 +337,10 @@ class DetailPost : Fragment() {
         populateCommentData(v, postData?.postId.toString())
     }
 
-    fun populateCommentData(v: View, postID: String){
-        get(EnvService.ENV_API + "/posts/{postID}/comments/all")
+    fun populateCommentData(v: View, id: String){
+        get(EnvService.ENV_API + "/posts/{postID}/comments/all?viewer=$userID")
             .addHeaders("Authorization", "Bearer " + token)
-            .addPathParameter("postID", postID)
+            .addPathParameter("postID", id)
             .setPriority(Priority.MEDIUM)
             .build()
             .getAsObject(
@@ -395,7 +398,6 @@ class DetailPost : Fragment() {
                                     data.tag,
                                     data.media
                                 )
-                                Log.d("POST DATA", postData?.username.toString())
                                 setView(v)
                             }
 
@@ -405,9 +407,25 @@ class DetailPost : Fragment() {
                     }
 
                     override fun onError(anError: ANError) {
-                        Log.e("ERROR!!!", "Like Post ${anError.errorCode}")
+                        Log.e("ERROR!!!", "Get Comment ${anError.errorCode}")
 
                     }
                 })
     }
+
+    private fun toolBarListener(view: View){
+        val toolbar: Toolbar = view.findViewById(R.id.tbDetailPost) as Toolbar
+
+        toolbar.setNavigationOnClickListener {
+
+            if (context is HomeActivity){
+                (context as HomeActivity).setfabPostVisible()
+            }
+            else if (context is GeneralActivity){
+                (context as GeneralActivity).setAppBarVisible()
+            }
+            getActivity()?.onBackPressed()
+        }
+    }
+
 }

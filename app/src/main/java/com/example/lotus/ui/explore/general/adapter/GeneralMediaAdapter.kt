@@ -10,11 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.lotus.R
 import com.example.lotus.ui.detailpost.DetailPost
+import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.explore.general.model.Data
 import com.example.lotus.ui.explore.general.model.Post
 import com.example.lotus.ui.explore.hashtag.HashtagActivity
@@ -87,9 +87,9 @@ class GeneralMediaAdapter(
                 bundle.putString("id", ani)
                 val dataPost = DetailPost()
                 dataPost.arguments = bundle
-
-                Toast.makeText(mContext, "idnya! $ani",
-                    Toast.LENGTH_SHORT).show();
+                if (mContext is GeneralActivity) {
+                    (mContext as GeneralActivity).detailPost(ani.toString())
+                }
             }
             dynamicSquare2.setOnClickListener {
                 val ani = data.posts?.get(1)?.id
@@ -97,9 +97,9 @@ class GeneralMediaAdapter(
                 bundle.putString("id", ani)
                 val dataPost = DetailPost()
                 dataPost.arguments = bundle
-
-                Toast.makeText(mContext, "idnya! $ani",
-                    Toast.LENGTH_SHORT).show();
+                if (mContext is GeneralActivity) {
+                    (mContext as GeneralActivity).detailPost(ani.toString())
+                }
             }
             dynamicSquare3.setOnClickListener {
                 val ani = data.posts?.get(2)?.id
@@ -107,9 +107,9 @@ class GeneralMediaAdapter(
                 bundle.putString("id", ani)
                 val dataPost = DetailPost()
                 dataPost.arguments = bundle
-
-                Toast.makeText(mContext, "idnya! $ani",
-                    Toast.LENGTH_SHORT).show();
+                if (mContext is GeneralActivity) {
+                    (mContext as GeneralActivity).detailPost(ani.toString())
+                }
             }
         }
 
