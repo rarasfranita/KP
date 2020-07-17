@@ -2,19 +2,20 @@ package com.example.lotus.ui.profile
 
 import android.media.Image
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.Button
-import android.widget.PopupMenu
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
+import coil.api.load
+import coil.transform.CircleCropTransformation
 import com.example.lotus.R
+import com.example.lotus.storage.SharedPrefManager
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.media_profile_fragment.*
@@ -22,6 +23,8 @@ import kotlinx.android.synthetic.main.snippet_myprofile.*
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var button: Button
+    private val username = SharedPrefManager.getInstance(this).user.username
+    private val token = SharedPrefManager.getInstance(this).token.token
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,12 +42,36 @@ class ProfileActivity : AppCompatActivity() {
         tableLayout.setupWithViewPager(viewPager)
 
         ShowMyProfile()
+        setProfile()
+    }
+
+    fun getProfileData(){
+
+    }
+
+    fun setProfile(){
+        val name = SharedPrefManager.getInstance(this).user.name
+        val profPic = SharedPrefManager.getInstance(this).user.avatar
+        val bio = SharedPrefManager.getInstance(this).user.bio
+        val postCount = SharedPrefManager.getInstance(this).user.postsCount
+        Log.d("AVATAR", profPic.toString())
+
+        if (profPic != null){
+            profilePicture.load(profPic){
+                transformations(CircleCropTransformation())
+            }
+        }
+
+        usernameProfile.text = "$username's profile"
+        nameprofile.text = name
+        tvBiografi.text = bio
+        totalPost.text = postCount.toString()
+
     }
 
     private fun ShowMyProfile(){
         btnEditProfile.visibility= View.VISIBLE
         follow.visibility = View.GONE
-        following.visibility=View.GONE
         ivcollection.visibility=View.GONE
     }
 
@@ -91,7 +118,11 @@ class ProfileActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-   /** override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    fun backOnClick(view: View) {
+        this.onBackPressed()
+    }
+
+    /** override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.navSecurity -> {
                 Toast.makeText(this,"goChangePassoword",Toast.LENGTH_SHORT)

@@ -156,7 +156,8 @@
                 android:paddingBottom="10dp"
                 android:onClick="selectPhoto"
                 app:strokeColor="@color/colorAccent"
-                app:strokeWidth="0.5pt"/>
+                app:strokeWidth="0.000001dp"
+                app:elevation="0dp"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnUploadVideo"
