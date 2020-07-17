@@ -120,6 +120,7 @@ class DetailPost : Fragment() {
                                     populateCommentData(v, postData?.postId.toString())
                                 }else {
                                     Log.e("ERROR!!!", "Add Comment Data ${respon.code}")
+                                    Log.e("ERROR", "Add Comment: ${respon.data}")
                                 }
                             }
 
@@ -336,10 +337,10 @@ class DetailPost : Fragment() {
         populateCommentData(v, postData?.postId.toString())
     }
 
-    fun populateCommentData(v: View, postID: String){
-        get(EnvService.ENV_API + "/posts/{postID}/comments/all")
+    fun populateCommentData(v: View, id: String){
+        get(EnvService.ENV_API + "/posts/{postID}/comments/all?viewer=$userID")
             .addHeaders("Authorization", "Bearer " + token)
-            .addPathParameter("postID", postID)
+            .addPathParameter("postID", id)
             .setPriority(Priority.MEDIUM)
             .build()
             .getAsObject(
@@ -397,7 +398,6 @@ class DetailPost : Fragment() {
                                     data.tag,
                                     data.media
                                 )
-                                Log.d("POST DATA", postData?.username.toString())
                                 setView(v)
                             }
 
@@ -407,7 +407,7 @@ class DetailPost : Fragment() {
                     }
 
                     override fun onError(anError: ANError) {
-                        Log.e("ERROR!!!", "Like Post ${anError.errorCode}")
+                        Log.e("ERROR!!!", "Get Comment ${anError.errorCode}")
 
                     }
                 })

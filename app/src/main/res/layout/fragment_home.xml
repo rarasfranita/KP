@@ -37,7 +37,8 @@
             android:id="@+id/rvHomeFeed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"/>
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+            android:paddingBottom="50dp"/>
     </com.baoyz.widget.PullRefreshLayout>
 
 
