@@ -27,6 +27,7 @@ import com.example.lotus.models.Respon
 import com.example.lotus.models.Token
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
+import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.home.HomeActivity
 import com.google.gson.Gson
 
@@ -127,13 +128,14 @@ class LoginActivity : AppCompatActivity() {
                                 val strRes = gson.toJson(respon.data)
                                 val dataJson = gson.fromJson(strRes, DataUser::class.java)
                                 val data = gson.fromJson(strRes, Token::class.java)
+
                                 loginViewModel.login(dataJson.user.name.toString(), password.text.toString())
 
                                 SharedPrefManager.getInstance(applicationContext).saveUser(dataJson.user)
                                 SharedPrefManager.getInstance(applicationContext).saveToken(data)
                                 val token = data.toString()
 
-                                val intent = Intent(applicationContext, HomeActivity::class.java)
+                                val intent = Intent(applicationContext, GeneralActivity::class.java)
                                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             } else {
                                 Log.d("onError: Failed", respon.toString())
