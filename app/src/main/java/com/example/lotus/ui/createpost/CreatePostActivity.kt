@@ -368,7 +368,7 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
             }
             progressDialog.setMessage("Loading...")
             progressDialog.show()
-            if (mediaPostDatas.size <= 0 && caption.text.length < 1){
+            if (mediaPostDatas.size <= 0 && captionFinal.length < 1){
                 Toast.makeText(this, R.string.alertNoDataPost, Toast.LENGTH_SHORT).show()
             }else{
                 if (repost){
@@ -395,7 +395,7 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
                                         startActivity(intent)
                                     }else {
                                         Log.d("ERRORNYA YA", "${res.code}, ${res.data}")
-                                        Toast.makeText(applicationContext, "Error ${res.code}, ${res.data}", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(applicationContext, "Error ${res.code}. \n${res.data}", Toast.LENGTH_LONG).show()
                                     }
                                 }
 
