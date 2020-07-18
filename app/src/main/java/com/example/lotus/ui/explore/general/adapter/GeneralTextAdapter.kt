@@ -15,21 +15,26 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import coil.transform.CircleCropTransformation
 import com.example.lotus.R
 import com.example.lotus.storage.SharedPrefManager
+import com.example.lotus.ui.CreatePostActivity
 import com.example.lotus.ui.detailpost.DetailPost
 import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.explore.general.model.Data
 import com.example.lotus.ui.explore.general.model.Post
 import com.example.lotus.ui.explore.hashtag.HashtagActivity
 import com.example.lotus.ui.login.LoginActivity
+import com.example.lotus.utils.dislikePost
+import com.example.lotus.utils.likePost
 
 class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val context: Context) :
     RecyclerView.Adapter<GeneralTextAdapter.Holder>() {
     private var mContext: Context? = null
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         this.mContext = context
@@ -51,6 +56,7 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
         val more: TextView = view.findViewById(R.id.moreTextGeneralText)
         var mContext: Context? = null
         private var likeCount: Int = 0
+        var likeStatus: Int? = 0
         var postData: Data? = null
 
         fun bindFeed(data: Data, context: Context) {
@@ -63,8 +69,43 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
                 listenSendhashtag(view, data)
                 listenSendId(view, data)
                 setMediaPost(view, data.posts, data.posts[0].text)
+                listenLikeIcon(view)
+                listenRepostIcon(view)
+
             }
 
+        }
+
+        fun listenRepostIcon(view: View){
+            val repostIcon = view.findViewById<ImageView>(R.id.icSharePost)
+            repostIcon.setOnClickListener{
+                val intent = Intent(mContext, CreatePostActivity::class.java)
+
+                intent.putExtra("Extra", "DetailPost")
+                intent.putExtra("Media", postData?.media)
+                intent.putExtra("Text", postData?.text)
+                intent.putExtra("postID", postData?.postId)
+                intent.putExtra("Username", postData?.username)
+                intent.putExtra("Tags", postData?.tag)
+                startActivity(intent)
+            }
+        }
+
+        fun listenLikeIcon(view: View){
+            val likeIcon = view.findViewById<RelativeLayout>(R.id.likeLayoutGeneralText)
+            likeIcon.setOnClickListener {
+                if(likeStatus.toString() == "1"){
+                    dislikePost(postData?.posts!![0].id.toString(), postData?.posts!![0].belongsTo.toString())
+                    likeStatus = 0
+                    likeCount--
+                    setLike(view, likeStatus, likeCount)
+                }else {
+                    likePost(postData?.posts!![0].id.toString(), postData?.posts!![0].belongsTo.toString())
+                    likeStatus = 1
+                    likeCount++
+                    setLike(view, likeStatus, likeCount)
+                }
+            }
         }
 
         fun checkLogin() {
@@ -89,10 +130,11 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
         }
 
         fun listenSendId(view: View, data: Data) {
-            val RL1 = view.findViewById<RelativeLayout>(R.id.RL1)
-            val RL2 = view.findViewById<RelativeLayout>(R.id.RL2)
-
-            RL1.setOnClickListener {
+            val textStatusDetailGeneralText = view.findViewById<TextView>(R.id.textStatusDetailGeneralText)
+            val icCommentGeneralText = view.findViewById<ImageView>(R.id.icCommentGeneralText)
+            val textStatusDetail2GeneralText = view.findViewById<TextView>(R.id.textStatusDetail2GeneralText)
+            val icComment2GeneralText = view.findViewById<ImageView>(R.id.icComment2GeneralText)
+            textStatusDetailGeneralText.setOnClickListener {
                 val ani = data.posts?.get(0)?.id
                 val bundle = Bundle()
                 bundle.putString("id", ani)
@@ -104,8 +146,44 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
                     (mContext as GeneralActivity).detailPost(ani.toString())
                 }
             }
-            RL2.setOnClickListener {
-                val ani = data.posts?.get(1)?.id
+            icCommentGeneralText.setOnClickListener {
+                val ani = data.posts?.get(0)?.id
+                val bundle = Bundle()
+                bundle.putString("id", ani)
+                val dataPost = DetailPost()
+                dataPost.arguments = bundle
+
+                if (mContext is GeneralActivity) {
+                    checkLogin()
+                    (mContext as GeneralActivity).detailPost(ani.toString())
+                }
+            }
+            textStatusDetail2GeneralText.setOnClickListener {
+                val ani = data.posts?.get(0)?.id
+                val bundle = Bundle()
+                bundle.putString("id", ani)
+                val dataPost = DetailPost()
+                dataPost.arguments = bundle
+
+                if (mContext is GeneralActivity) {
+                    checkLogin()
+                    (mContext as GeneralActivity).detailPost(ani.toString())
+                }
+            }
+            icComment2GeneralText.setOnClickListener {
+                val ani = data.posts?.get(0)?.id
+                val bundle = Bundle()
+                bundle.putString("id", ani)
+                val dataPost = DetailPost()
+                dataPost.arguments = bundle
+
+                if (mContext is GeneralActivity) {
+                    checkLogin()
+                    (mContext as GeneralActivity).detailPost(ani.toString())
+                }
+            }
+            textStatusDetailGeneralText.setOnClickListener {
+                val ani = data.posts?.get(0)?.id
                 val bundle = Bundle()
                 bundle.putString("id", ani)
                 val dataPost = DetailPost()
