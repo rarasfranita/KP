@@ -30,16 +30,13 @@ class SplashActivity : AppCompatActivity() {
         super.onStart()
 
         if (SharedPrefManager.getInstance(this).isLoggedIn) {
-            val intent = Intent(applicationContext, HomeActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-
-            startActivity(intent)
-        } else {
-            //4second splash time
             Handler().postDelayed({
-                //start main activity
+                startActivity(Intent(this@SplashActivity, HomeActivity::class.java))
+                finish()
+            },4000)
+        } else {
+            Handler().postDelayed({
                 startActivity(Intent(this@SplashActivity, GeneralActivity::class.java))
-                //finish this activity
                 finish()
             },4000)
         }
