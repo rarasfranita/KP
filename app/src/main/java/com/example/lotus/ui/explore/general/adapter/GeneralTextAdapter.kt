@@ -26,6 +26,8 @@ import com.example.lotus.ui.explore.general.model.Data
 import com.example.lotus.ui.explore.general.model.Post
 import com.example.lotus.ui.explore.hashtag.HashtagActivity
 import com.example.lotus.ui.login.LoginActivity
+import com.example.lotus.utils.dislikePost
+import com.example.lotus.utils.likePost
 
 class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val context: Context) :
     RecyclerView.Adapter<GeneralTextAdapter.Holder>() {
@@ -51,18 +53,25 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
         val more: TextView = view.findViewById(R.id.moreTextGeneralText)
         var mContext: Context? = null
         private var likeCount: Int = 0
+        var likeStatus: Int? = 0
         var postData: Data? = null
 
         fun bindFeed(data: Data, context: Context) {
             itemView.apply {
+//                listenLikeIcon(view)
                 Log.d("DATaaaA", data.toString())
-                data.posts!![0].text?.let { Log.d("DATadaaA", it) }
+                data.posts!![0].belongsTo?.let { Log.d("DATadaaA", it) }
                 mContext = context
                 val hashtag: TextView = view.findViewById(R.id.tagarGeneralText)
                 data.hashtag?.let { tagar(hashtag, it) }
                 listenSendhashtag(view, data)
                 listenSendId(view, data)
                 setMediaPost(view, data.posts, data.posts[0].text)
+//                setLike1(view, data.posts[0].liked, likeCount)
+//                setLike2(view, data.posts[1].liked, likeCount)
+
+                Log.d("listenlikeicon", data.toString())
+
             }
 
         }
@@ -88,11 +97,12 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
             }
         }
 
+        // TODO: 18/07/20 change intent like to logic
         fun listenSendId(view: View, data: Data) {
-            val RL1 = view.findViewById<RelativeLayout>(R.id.RL1)
-            val RL2 = view.findViewById<RelativeLayout>(R.id.RL2)
-
-            RL1.setOnClickListener {
+            val icCommentGeneralText = view.findViewById<ImageView>(R.id.icCommentGeneralText)
+            val icComment2GeneralText = view.findViewById<ImageView>(R.id.icComment2GeneralText)
+            icCommentGeneralText.setOnClickListener {
+                checkLogin()
                 val ani = data.posts?.get(0)?.id
                 val bundle = Bundle()
                 bundle.putString("id", ani)
@@ -100,24 +110,21 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
                 dataPost.arguments = bundle
 
                 if (mContext is GeneralActivity) {
-                    checkLogin()
                     (mContext as GeneralActivity).detailPost(ani.toString())
                 }
             }
-            RL2.setOnClickListener {
+            icComment2GeneralText.setOnClickListener {
+                checkLogin()
                 val ani = data.posts?.get(1)?.id
                 val bundle = Bundle()
                 bundle.putString("id", ani)
                 val dataPost = DetailPost()
                 dataPost.arguments = bundle
-
                 if (mContext is GeneralActivity) {
-                    checkLogin()
                     (mContext as GeneralActivity).detailPost(ani.toString())
                 }
             }
         }
-
 
         private fun setMediaPost(view: View, post: ArrayList<Post>?, text: String?) {
             val tag = view.findViewById<TextView>(R.id.textHashtagGeneralText)
@@ -144,12 +151,35 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
 
             if (post != null) {
                 when (post.size) {
-                        // TODO: 18/07/20 change when with for
-                    2,3,4,5,6,7,8,9,10 -> {
+                    // TODO: 18/07/20 change when with for
+                    2, 3, 4, 5, 6, 7, 8, 9, 10 -> {
                         for ((i, post) in post.withIndex()) {
                             when (i) {
                                 0 -> {
-                                    Log.d("hashtaggg", post.tag.toString())
+                                    val likeIcon1 =
+                                        view.findViewById<RelativeLayout>(R.id.likeLayoutGeneralText)
+                                    likeIcon1.setOnClickListener {
+                                        checkLogin()
+                                        if (likeStatus.toString() == "1") {
+                                            dislikePost(
+                                                post.id.toString(),
+                                                post.belongsTo.toString()
+                                            )
+                                            likeStatus = 0
+                                            likeCount--
+                                            setLike1(view, likeStatus, likeCount)
+
+
+                                        } else {
+                                            likePost(
+                                                post.id.toString(),
+                                                post.belongsTo.toString()
+                                            )
+                                            likeStatus = 1
+                                            likeCount++
+                                            setLike1(view, likeStatus, likeCount)
+                                        }
+                                    }
                                     if (post.text?.length!! > 249) {
                                         val cutCaption =
                                             post.text.removeRange(249, post.text.length)
@@ -162,10 +192,9 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
                                                 bundle.putString("id", ani)
                                                 val dataPost = DetailPost()
                                                 dataPost.arguments = bundle
-                                                Toast.makeText(
-                                                    mContext, "idnya! $ani",
-                                                    Toast.LENGTH_SHORT
-                                                ).show();
+                                                if (mContext is GeneralActivity) {
+                                                    (mContext as GeneralActivity).detailPost(ani.toString())
+                                                }
                                             }
                                         }
                                         postTextView1.movementMethod =
@@ -189,10 +218,34 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
                                     username1.text = post.username.toString()
                                     comment1.text = post.commentsCount.toString()
                                     setProfilePicture(ava1, post.profilePicture.toString())
-                                    setLike(view, post.liked, likeCount)
+                                    setLike1(view, post.liked, likeCount)
                                     Log.d("text_2_0", post.text)
                                 }
                                 1 -> {
+                                    val likeIcon2 =
+                                        view.findViewById<RelativeLayout>(R.id.likeLayout2GeneralText)
+                                    likeIcon2.setOnClickListener {
+                                        checkLogin()
+                                        if (likeStatus.toString() == "1") {
+                                            dislikePost(
+                                                post.id.toString(),
+                                                post.belongsTo.toString()
+                                            )
+                                            likeStatus = 0
+                                            likeCount--
+                                            setLike2(view, likeStatus, likeCount)
+                                        } else {
+                                            likePost(
+                                                post.id.toString(),
+                                                post.belongsTo.toString()
+                                            )
+                                            likeStatus = 1
+                                            likeCount++
+                                            setLike2(view, likeStatus, likeCount)
+                                        }
+
+
+                                    }
                                     if (post.text?.length!! > 249) {
                                         val cutCaption =
                                             post.text.removeRange(249, post.text.length)
@@ -205,10 +258,9 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
                                                 bundle.putString("id", ani)
                                                 val dataPost = DetailPost()
                                                 dataPost.arguments = bundle
-                                                Toast.makeText(
-                                                    mContext, "idnya! $ani",
-                                                    Toast.LENGTH_SHORT
-                                                ).show();
+                                                if (mContext is GeneralActivity) {
+                                                    (mContext as GeneralActivity).detailPost(ani.toString())
+                                                }
                                             }
                                         }
                                         postTextView2.movementMethod =
@@ -232,7 +284,7 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
                                     username2.text = post.username
                                     comment2.text = post.commentsCount.toString()
                                     setProfilePicture(ava2, post.profilePicture.toString())
-                                    setLike(view, post.liked, likeCount)
+                                    setLike2(view, post.liked, likeCount)
                                     Log.d("text_2_1", post.text)
                                 }
                             }
@@ -243,6 +295,30 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
                         for ((i, post) in post.withIndex()) {
                             when (i) {
                                 0 -> {
+                                    val likeIcon1 =
+                                        view.findViewById<RelativeLayout>(R.id.likeLayoutGeneralText)
+                                    likeIcon1.setOnClickListener {
+                                        checkLogin()
+                                        if (likeStatus.toString() == "1") {
+                                            dislikePost(
+                                                post.id.toString(),
+                                                post.belongsTo.toString()
+                                            )
+                                            likeStatus = 0
+                                            likeCount--
+                                            setLike1(view, likeStatus, likeCount)
+
+
+                                        } else {
+                                            likePost(
+                                                post.id.toString(),
+                                                post.belongsTo.toString()
+                                            )
+                                            likeStatus = 1
+                                            likeCount++
+                                            setLike1(view, likeStatus, likeCount)
+                                        }
+                                    }
                                     if (post.text?.length!! > 249) {
                                         val cutCaption =
                                             post.text.removeRange(249, post.text.length)
@@ -255,10 +331,9 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
                                                 bundle.putString("id", ani)
                                                 val dataPost = DetailPost()
                                                 dataPost.arguments = bundle
-                                                Toast.makeText(
-                                                    mContext, "idnya! $ani",
-                                                    Toast.LENGTH_SHORT
-                                                ).show();
+                                                if (mContext is GeneralActivity) {
+                                                    (mContext as GeneralActivity).detailPost(ani.toString())
+                                                }
                                             }
                                         }
                                         postTextView1.movementMethod =
@@ -282,7 +357,7 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
                                     username1.text = post.username.toString()
                                     comment1.text = post.commentsCount.toString()
                                     setProfilePicture(ava1, post.profilePicture.toString())
-                                    setLike(view, post.liked, likeCount)
+                                    setLike1(view, post.liked, likeCount)
                                     Log.d("text_1_0", post.text)
 
                                 }
@@ -295,10 +370,26 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
             }
         }
 
-        private fun setLike(view: View, likeStatus: Int?, likeCount: Int) {
+
+        private fun setLike1(view: View, likeStatus: Int?, likeCount: Int) {
             val iconLikeTrue = view.findViewById<ImageView>(R.id.icLikeTrue1GeneralText)
             val iconLikeFalse = view.findViewById<ImageView>(R.id.icLikeFalse1GeneralText)
             val textLikeCount = view.findViewById<TextView>(R.id.textIctLikes1GeneralText)
+
+            if (likeStatus.toString() == "1") {
+                iconLikeTrue.visibility = View.VISIBLE
+                iconLikeFalse.visibility = View.GONE
+            } else {
+                iconLikeTrue.visibility = View.GONE
+                iconLikeFalse.visibility = View.VISIBLE
+            }
+
+            textLikeCount.text = likeCount.toString()
+        }
+        private fun setLike2(view: View, likeStatus: Int?, likeCount: Int) {
+            val iconLikeTrue = view.findViewById<ImageView>(R.id.icLikeTrue2GeneralText)
+            val iconLikeFalse = view.findViewById<ImageView>(R.id.icLikeFalse2GeneralText)
+            val textLikeCount = view.findViewById<TextView>(R.id.textIctLikes2GeneralText)
 
             if (likeStatus.toString() == "1") {
                 iconLikeTrue.visibility = View.VISIBLE

@@ -81,84 +81,167 @@ class HashtagActivity : AppCompatActivity() {
     }
 
     private fun getHashtagMedia(v: PullRefreshLayout?) {
-        v?.setRefreshing(true)
-        val bundle = getIntent().getExtras()
-        var hashtag = bundle?.getString("hashtag")
-        hashtagDiHashtag.text = "#$hashtag"
-        AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore/$hashtag?{username}&index=0&type=media")
-            .addQueryParameter("username", username)
-            .addHeaders("Authorization", "Bearer "+token)
-            .setTag(this)
-            .setPriority(Priority.LOW)
-            .build()
-            .getAsObject(
-                Hashtag::class.java,
-                object : ParsedRequestListener<Hashtag> {
-                    override fun onResponse(respon: Hashtag) {
-                        srlHashtag.setRefreshing(false)
-                        val gson = Gson()
-                        val temp = ArrayList<Data>()
-                        if (respon.code.toString() == "200") {
+        if (SharedPrefManager.getInstance(this).isLoggedIn) {
+            v?.setRefreshing(true)
+            val bundle = getIntent().getExtras()
+            var hashtag = bundle?.getString("hashtag")
+            hashtagDiHashtag.text = "#$hashtag"
+            AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore/{hashtag}?{username}&index=0&type=media")
+                .addPathParameter("hashtag", hashtag)
+                .addQueryParameter("username", username)
+                .setTag(this)
+                .setPriority(Priority.LOW)
+                .build()
+                .getAsObject(
+                    Hashtag::class.java,
+                    object : ParsedRequestListener<Hashtag> {
+                        override fun onResponse(respon: Hashtag) {
                             srlHashtag.setRefreshing(false)
-                            for (res in respon.data) {
-                                val strRes = gson.toJson(res)
-                                val dataJson = gson.fromJson(strRes, Data::class.java)
-                                temp.add(dataJson)
+                            val gson = Gson()
+                            val temp = ArrayList<Data>()
+                            if (respon.code.toString() == "200") {
+                                srlHashtag.setRefreshing(false)
+                                for (res in respon.data) {
+                                    val strRes = gson.toJson(res)
+                                    val dataJson = gson.fromJson(strRes, Data::class.java)
+                                    temp.add(dataJson)
+                                }
+                                dataHashtagM = temp
+                                loadExploreHashtagMedia(dataHashtagM, findViewById(R.id.rvHashtagMedia))
+
+                            } else {
+                                srlHashtag.setRefreshing(false)
                             }
-                            dataHashtagM = temp
-                            loadExploreHashtagMedia(dataHashtagM, findViewById(R.id.rvHashtagMedia))
-
-                        } else {
-                            srlHashtag.setRefreshing(false)
                         }
-                    }
 
-                    override fun onError(anError: ANError) {
-                        srlHashtag.setRefreshing(false)
-                        // Next go to error page (Popup error)
-                    }
-                })
+                        override fun onError(anError: ANError) {
+                            srlHashtag.setRefreshing(false)
+                            // Next go to error page (Popup error)
+                        }
+                    })
+        }
+        else {
+            v?.setRefreshing(true)
+            val bundle = getIntent().getExtras()
+            var hashtag = bundle?.getString("hashtag")
+            hashtagDiHashtag.text = "#$hashtag"
+            AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore/{hashtag}?type=media")
+                .addPathParameter("hashtag", hashtag)
+                .setTag(this)
+                .setPriority(Priority.LOW)
+                .build()
+                .getAsObject(
+                    Hashtag::class.java,
+                    object : ParsedRequestListener<Hashtag> {
+                        override fun onResponse(respon: Hashtag) {
+                            srlHashtag.setRefreshing(false)
+                            val gson = Gson()
+                            val temp = ArrayList<Data>()
+                            if (respon.code.toString() == "200") {
+                                srlHashtag.setRefreshing(false)
+                                for (res in respon.data) {
+                                    val strRes = gson.toJson(res)
+                                    val dataJson = gson.fromJson(strRes, Data::class.java)
+                                    temp.add(dataJson)
+                                }
+                                dataHashtagM = temp
+                                loadExploreHashtagMedia(dataHashtagM, findViewById(R.id.rvHashtagMedia))
+
+                            } else {
+                                srlHashtag.setRefreshing(false)
+                            }
+                        }
+
+                        override fun onError(anError: ANError) {
+                            srlHashtag.setRefreshing(false)
+                            // Next go to error page (Popup error)
+                        }
+                    })
+        }
+
     }
 
     private fun getHashtagText(v: PullRefreshLayout?) {
-        v?.setRefreshing(true)
-        val bundle = getIntent().getExtras()
-        var hashtag = bundle?.getString("hashtag")
-        hashtagDiHashtag.text = "#$hashtag"
-        AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore/$hashtag?{username}&index=0&type=text")
-            .addQueryParameter("username", username)
-            .addHeaders("Authorization", "Bearer "+token)
-            .setTag(this)
-            .setPriority(Priority.LOW)
-            .build()
-            .getAsObject(
-                Hashtag::class.java,
-                object : ParsedRequestListener<Hashtag> {
-                    override fun onResponse(respon: Hashtag) {
-                        srlHashtag.setRefreshing(false)
-                        val gson = Gson()
-                        val temp = ArrayList<Data>()
-                        if (respon.code.toString() == "200") {
+        if (SharedPrefManager.getInstance(this).isLoggedIn) {
+            v?.setRefreshing(true)
+            val bundle = getIntent().getExtras()
+            var hashtag = bundle?.getString("hashtag")
+            hashtagDiHashtag.text = "#$hashtag"
+            AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore/{hashtag}?{username}&type=text")
+                .addPathParameter("hashtag", hashtag)
+                .addQueryParameter("username", username)
+                .setTag(this)
+                .setPriority(Priority.LOW)
+                .build()
+                .getAsObject(
+                    Hashtag::class.java,
+                    object : ParsedRequestListener<Hashtag> {
+                        override fun onResponse(respon: Hashtag) {
                             srlHashtag.setRefreshing(false)
-                            for (res in respon.data) {
-                                val strRes = gson.toJson(res)
-                                val dataJson = gson.fromJson(strRes, Data::class.java)
-                                temp.add(dataJson)
+                            val gson = Gson()
+                            val temp = ArrayList<Data>()
+                            if (respon.code.toString() == "200") {
+                                srlHashtag.setRefreshing(false)
+                                for (res in respon.data) {
+                                    val strRes = gson.toJson(res)
+                                    val dataJson = gson.fromJson(strRes, Data::class.java)
+                                    temp.add(dataJson)
+                                }
+                                dataHashtagT = temp
+                                loadExploreHashtagText(dataHashtagT, findViewById(R.id.rvHashtagText))
+
+                            } else {
+                                srlHashtag.setRefreshing(false)
                             }
-                            dataHashtagT = temp
-                            loadExploreHashtagText(dataHashtagT, findViewById(R.id.rvHashtagText))
-
-                        } else {
-                            srlHashtag.setRefreshing(false)
                         }
-                    }
 
-                    override fun onError(anError: ANError) {
-                        srlHashtag.setRefreshing(false)
-                        Log.d("asuu nya media hashtag:", anError.toString())
-                        // Next go to error page (Popup error)
-                    }
-                })
+                        override fun onError(anError: ANError) {
+                            srlHashtag.setRefreshing(false)
+                            Log.d("asuu nya media hashtag:", anError.toString())
+                            // Next go to error page (Popup error)
+                        }
+                    })
+        }
+        else {
+            v?.setRefreshing(true)
+            val bundle = getIntent().getExtras()
+            var hashtag = bundle?.getString("hashtag")
+            hashtagDiHashtag.text = "#$hashtag"
+            AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore/{hashtag}?type=text")
+                .addPathParameter("hashtag", hashtag)
+                .setTag(this)
+                .setPriority(Priority.LOW)
+                .build()
+                .getAsObject(
+                    Hashtag::class.java,
+                    object : ParsedRequestListener<Hashtag> {
+                        override fun onResponse(respon: Hashtag) {
+                            srlHashtag.setRefreshing(false)
+                            val gson = Gson()
+                            val temp = ArrayList<Data>()
+                            if (respon.code.toString() == "200") {
+                                srlHashtag.setRefreshing(false)
+                                for (res in respon.data) {
+                                    val strRes = gson.toJson(res)
+                                    val dataJson = gson.fromJson(strRes, Data::class.java)
+                                    temp.add(dataJson)
+                                }
+                                dataHashtagT = temp
+                                loadExploreHashtagText(dataHashtagT, findViewById(R.id.rvHashtagText))
+
+                            } else {
+                                srlHashtag.setRefreshing(false)
+                            }
+                        }
+
+                        override fun onError(anError: ANError) {
+                            srlHashtag.setRefreshing(false)
+                            Log.d("asuu nya media hashtag:", anError.toString())
+                            // Next go to error page (Popup error)
+                        }
+                    })
+        }
+
     }
 
     fun loadExploreHashtagMedia(data: ArrayList<Data>, hashtag: RecyclerView) {
