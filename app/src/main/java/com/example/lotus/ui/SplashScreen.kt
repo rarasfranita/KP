@@ -7,6 +7,9 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lotus.R
+import com.example.lotus.storage.SharedPrefManager
+import com.example.lotus.ui.explore.general.GeneralActivity
+import com.example.lotus.ui.home.HomeActivity
 import com.example.lotus.ui.login.LoginActivity
 import com.github.nkzawa.socketio.client.IO
 import com.github.nkzawa.socketio.client.Socket
@@ -23,13 +26,24 @@ class SplashActivity : AppCompatActivity() {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.layout_splash_screen)
 
-        //4second splash time
-        Handler().postDelayed({
-            //start main activity
-            startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
-            //finish this activity
-            finish()
-        },4000)
+
 
     }
+
+    override fun onStart() {
+        super.onStart()
+
+        if (SharedPrefManager.getInstance(this).isLoggedIn) {
+            Handler().postDelayed({
+                startActivity(Intent(this@SplashActivity, HomeActivity::class.java))
+                finish()
+            },4000)
+        } else {
+            Handler().postDelayed({
+                startActivity(Intent(this@SplashActivity, GeneralActivity::class.java))
+                finish()
+            },4000)
+        }
+    }
+
 }

@@ -1,6 +1,5 @@
 package com.example.lotus.ui.explore.general
 
-//import com.example.lotus.ui.explore.detailpost.DetailPostHashtag
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -35,9 +34,9 @@ import kotlinx.android.synthetic.main.activity_explore_general.*
 
 class GeneralActivity : AppCompatActivity() {
     private var manager: FragmentManager? = null
-    var dataExplore = ArrayList<Data>()
+    var dataExploreM = ArrayList<Data>()
+    var dataExploreT = ArrayList<Data>()
     var username = SharedPrefManager.getInstance(this).user.username
-    var token = SharedPrefManager.getInstance(this).token.token
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         try {
@@ -50,10 +49,11 @@ class GeneralActivity : AppCompatActivity() {
         manager = supportFragmentManager
         val srlMediaGeneral: PullRefreshLayout = findViewById(R.id.srlMediaGeneral)
 
+        getExploreMedia(null)
+        getExploreText(null)
         srlMediaGeneral.setOnRefreshListener {
-            dataExplore.clear()
-            getExploreMedia()
-            getExploreText()
+            getExploreText(srlMediaGeneral)
+            getExploreMedia(srlMediaGeneral)
 
         }
         val tabLayout: TabLayout = findViewById(R.id.tabs)
@@ -67,9 +67,6 @@ class GeneralActivity : AppCompatActivity() {
         tabLayout.setupWithViewPager(viewPager)
 
         AndroidNetworking.initialize(applicationContext)
-        dataExplore.clear()
-        getExploreMedia()
-        getExploreText()
 
     }
 
@@ -89,77 +86,136 @@ class GeneralActivity : AppCompatActivity() {
 
     }
 
-    private fun getExploreMedia() {
-        dataExplore.clear()
-        srlMediaGeneral.setRefreshing(true)
-        AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore?{username}&type=media")
-            .addQueryParameter("username", "$username")
-            .addHeaders("Authorization", "Bearer $token")
-            .setTag(this)
-            .setPriority(Priority.LOW)
-            .build()
-            .getAsObject(Respons::class.java, object : ParsedRequestListener<Respons> {
-                override fun onResponse(respon: Respons) {
-                    dataExplore.clear()
-                    srlMediaGeneral.setRefreshing(false)
-                    val gson = Gson()
-                    if (respon.code.toString() == "200") {
-                        dataExplore.clear()
-                        for (res in respon.data) {
-                            val strRes = gson.toJson(res)
-                            val dataJson = gson.fromJson(strRes, Data::class.java)
-                            dataExplore.add(dataJson)
+    private fun getExploreText(v: PullRefreshLayout?) {
+        if (SharedPrefManager.getInstance(this).isLoggedIn) {
+            v?.setRefreshing(true)
+            srlMediaGeneral.setRefreshing(true)
+            AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore?{username}&type=text")
+                .addQueryParameter("username", username)
+                .setTag(this)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsObject(
+                    Respons::class.java,
+                    object : ParsedRequestListener<Respons> {
+                        override fun onResponse(respon: Respons) {
+                            srlMediaGeneral.setRefreshing(false)
+                            val gson = Gson()
+                            val temp = ArrayList<Data>()
+                            if (respon.code.toString() == "200") {
+                                for (res in respon.data) {
+                                    val strRes = gson.toJson(res)
+                                    val dataJson = gson.fromJson(strRes, Data::class.java)
+                                    temp.add(dataJson)
+                                }
+                                dataExploreT = temp
+                                loadExploreText(dataExploreT, findViewById(R.id.rvExploreText))
+
+                            } else {
+                                srlMediaGeneral.setRefreshing(false)
+                            }
                         }
-                        loadExploreMedia(dataExplore, findViewById(R.id.rvExploreMedia))
 
-                    } else {
-                    }
-                }
+                        override fun onError(anError: ANError) {
+                            // Next go to error page (Popup error)
+                        }
+                    })
+        } else {
+            AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore?type=text")
+                .setTag(this)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsObject(
+                    Respons::class.java,
+                    object : ParsedRequestListener<Respons> {
+                        override fun onResponse(respon: Respons) {
+                            val gson = Gson()
+                            val temp = ArrayList<Data>()
+                            if (respon.code.toString() == "200") {
+                                for (res in respon.data) {
+                                    val strRes = gson.toJson(res)
+                                    val dataJson = gson.fromJson(strRes, Data::class.java)
+                                    temp.add(dataJson)
+                                }
+                                dataExploreT = temp
 
-                override fun onError(anError: ANError) {
-                    dataExplore.clear()
-                    srlMediaGeneral.setRefreshing(false)
-                }
-            })
+                                loadExploreText(dataExploreT, findViewById(R.id.rvExploreText))
+
+                            } else {
+                                srlMediaGeneral.setRefreshing(false)
+                            }
+                        }
+
+                        override fun onError(anError: ANError) {
+                            // Next go to error page (Popup error)
+                        }
+                    })
+        }
     }
 
-    private fun getExploreText() {
-        dataExplore.clear()
-        AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore?{username}&type=text")
-            .addQueryParameter("username", "$username")
-            .addHeaders("Authorization", "Bearer $token")
-            .setTag(this)
-            .setPriority(Priority.LOW)
-            .build()
-            .getAsObject(
-                Respons::class.java,
-                object : ParsedRequestListener<Respons> {
+    private fun getExploreMedia(v: PullRefreshLayout?) {
+        if (SharedPrefManager.getInstance(this).isLoggedIn) {
+            v?.setRefreshing(true)
+            AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore?{username}&type=media")
+                .addQueryParameter("username", username)
+                .setTag(this)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsObject(Respons::class.java, object : ParsedRequestListener<Respons> {
                     override fun onResponse(respon: Respons) {
-                        dataExplore.clear()
+                        srlMediaGeneral.setRefreshing(false)
                         val gson = Gson()
+                        val temp = ArrayList<Data>()
                         if (respon.code.toString() == "200") {
-                            Log.d("token", token.toString())
-                            Log.d("username", username.toString())
-                            dataExplore.clear()
                             for (res in respon.data) {
                                 val strRes = gson.toJson(res)
                                 val dataJson = gson.fromJson(strRes, Data::class.java)
-                                dataExplore.add(dataJson)
+                            temp.add(dataJson)
                             }
-                            loadExploreText(dataExplore, findViewById(R.id.rvExploreText))
+                            dataExploreM = temp
+
+                            loadExploreMedia(dataExploreM, findViewById(R.id.rvExploreMedia))
 
                         } else {
-                            dataExplore.clear()
                         }
                     }
 
                     override fun onError(anError: ANError) {
-                        dataExplore.clear()
-                        Log.d("asuu nya text explore :", anError.toString())
-                        // Next go to error page (Popup error)
+                        srlMediaGeneral.setRefreshing(false)
                     }
                 })
+        } else {
+            srlMediaGeneral.setRefreshing(true)
+            AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore?type=media")
+                .setTag(this)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsObject(Respons::class.java, object : ParsedRequestListener<Respons> {
+                    override fun onResponse(respon: Respons) {
+                        srlMediaGeneral.setRefreshing(false)
+                        val gson = Gson()
+                        val temp = ArrayList<Data>()
+
+                        if (respon.code.toString() == "200") {
+                            for (res in respon.data) {
+                                val strRes = gson.toJson(res)
+                                val dataJson = gson.fromJson(strRes, Data::class.java)
+                            temp.add(dataJson)
+                            }
+                            dataExploreM = temp
+                            loadExploreMedia(dataExploreM, findViewById(R.id.rvExploreMedia))
+
+                        } else {
+                        }
+                    }
+
+                    override fun onError(anError: ANError) {
+                        srlMediaGeneral.setRefreshing(false)
+                    }
+                })
+        }
     }
+
 
     fun loadExploreMedia(data: ArrayList<Data>, explore: RecyclerView) {
         explore.setHasFixedSize(true)
@@ -237,7 +293,7 @@ class GeneralActivity : AppCompatActivity() {
             ?.commit()
     }
 
-    fun setAppBarVisible(){
+    fun setAppBarVisible() {
         appBarLayout.visibility = View.VISIBLE
     }
 

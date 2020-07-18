@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,18 +14,20 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.lotus.R
+import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.detailpost.DetailPost
 import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.explore.general.model.Data
 import com.example.lotus.ui.explore.general.model.Post
 import com.example.lotus.ui.explore.hashtag.HashtagActivity
+import com.example.lotus.ui.login.LoginActivity
 import com.example.lotus.utils.DynamicSquareLayout
 import com.squareup.picasso.Picasso
 
 
 class GeneralMediaAdapter(
-    private val listExploreMedia: MutableList<Data>, var context: Context)
-    : RecyclerView.Adapter<GeneralMediaAdapter.Holder>() {
+    private val listExploreMedia: MutableList<Data>, var context: Context
+) : RecyclerView.Adapter<GeneralMediaAdapter.Holder>() {
 
     var data: Post? = null
     private var mContext: Context? = null
@@ -36,13 +39,14 @@ class GeneralMediaAdapter(
                 parent.context
             ).inflate(R.layout.layout_explore_mediaitem, parent, false)
         )
-    }
 
+    }
 
     override fun getItemCount(): Int = listExploreMedia.size
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.bindFeed(listExploreMedia[position], context) }
+        holder.bindFeed(listExploreMedia[position], context)
+    }
 
     class Holder(val view: View) : RecyclerView.ViewHolder(view) {
         var mContext: Context? = null
@@ -60,12 +64,20 @@ class GeneralMediaAdapter(
                 data.posts?.let { setMediaPost(view, it) }
                 listenSendhashtag(view, data)
                 listenSendId(view, data)
+                Log.d("hashtagnya", data.hashtag.toString())
+            }
+        }
+
+        fun checkLogin() {
+            if (!(this.mContext?.let { SharedPrefManager.getInstance(it).isLoggedIn })!!){
+                mContext!!.startActivity(Intent(mContext, LoginActivity::class.java))
             }
         }
 
         fun listenSendhashtag(view: View, data: Data) {
             val more: TextView = view.findViewById(R.id.moreMedia)
             more.setOnClickListener {
+                checkLogin()
                 val more = Intent(mContext, HashtagActivity::class.java)
                 val ani = data.hashtag
                 val bundle = Bundle()
@@ -88,6 +100,7 @@ class GeneralMediaAdapter(
                 val dataPost = DetailPost()
                 dataPost.arguments = bundle
                 if (mContext is GeneralActivity) {
+                    checkLogin()
                     (mContext as GeneralActivity).detailPost(ani.toString())
                 }
             }
@@ -98,6 +111,7 @@ class GeneralMediaAdapter(
                 val dataPost = DetailPost()
                 dataPost.arguments = bundle
                 if (mContext is GeneralActivity) {
+                    checkLogin()
                     (mContext as GeneralActivity).detailPost(ani.toString())
                 }
             }
@@ -108,6 +122,7 @@ class GeneralMediaAdapter(
                 val dataPost = DetailPost()
                 dataPost.arguments = bundle
                 if (mContext is GeneralActivity) {
+                    checkLogin()
                     (mContext as GeneralActivity).detailPost(ani.toString())
                 }
             }
@@ -118,8 +133,7 @@ class GeneralMediaAdapter(
             imageView2 = view.findViewById(R.id.imageMediaExplore2) as ImageView
             imageView3 = view.findViewById(R.id.imageMediaExplore3) as ImageView
 
-            try {
-
+//            try {
                 when (post.size) {
                     3 -> {
                         for ((i, post) in post.withIndex()) {
@@ -212,8 +226,8 @@ class GeneralMediaAdapter(
 
                     }
                 }
-            } catch (ex: IndexOutOfBoundsException) {
-            }
+//            } catch (ex: IndexOutOfBoundsException) {
+//            }
         }
 
 
@@ -226,3 +240,4 @@ class GeneralMediaAdapter(
 
 
 }
+
