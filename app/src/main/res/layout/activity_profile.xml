@@ -164,29 +164,29 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnfollow"
+                    android:id="@+id/btnFollowProfile"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:text="follow"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:backgroundTint="@color/white"
+                    android:text="Follow"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/colorPrimary"
                     android:layout_marginRight="10dp"
                     android:elevation="2dp"
-                    app:strokeColor="@color/colorPrimary"
+                    app:strokeColor="@color/colorPrimaryDark"
                     app:strokeWidth="0.0000001dp"
-                    android:textSize="12sp"/>
+                    android:textAllCaps="false"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnDm"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
+                    android:textAllCaps="false"
                     android:text="Message"
                     android:textColor="@color/colorPrimaryDark"
                     android:backgroundTint="@color/white"
                     android:elevation="2dp"
-                    app:strokeWidth="0.0000001dp"
-                    android:textSize="12sp"/>
+                    app:strokeWidth="0.0000001dp"/>
 
             </LinearLayout>
         </LinearLayout>

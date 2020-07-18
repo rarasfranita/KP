@@ -34,8 +34,9 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var button: Button
     private var myProfile: Boolean = true
     private val myUserID = SharedPrefManager.getInstance(this).user._id
+    private val myUsername = SharedPrefManager.getInstance(this).user.username
     private val token = SharedPrefManager.getInstance(this).token.token
-    private var userID: String? = null
+    private var isFollowing: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +49,6 @@ class ProfileActivity : AppCompatActivity() {
             getProfileData(extra)
         }else{
             getProfileData(myUserID.toString())
-//            setProfile(SharedPrefManager.getInstance(this).user)
             showMyProfile()
         }
         //viewpager
@@ -111,6 +111,78 @@ class ProfileActivity : AppCompatActivity() {
             totalPost.text = "0"
         }else{
             totalPost.text = data.posts?.size.toString()
+        }
+
+        if (data.isFollowing!!.equals(1)){
+            isFollowing = true
+        }
+
+        updateButtonFollow(isFollowing)
+
+        btnFollowProfile.setOnClickListener {
+            follow(data.username.toString())
+        }
+    }
+
+    fun follow(username: String){
+        if (isFollowing){
+            AndroidNetworking.get(EnvService.ENV_API + "/users/$myUsername/unfollow/${username}")
+                .addHeaders("Authorization", "Bearer " + token)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsObject(
+                    Respon::class.java,
+                    object : ParsedRequestListener<Respon> {
+                        override fun onResponse(respon: Respon) {
+                            if (respon.code.toString() == "200") {
+                                Log.d("Respon Data Follow", respon.data.toString())
+                                isFollowing = false
+                                updateButtonFollow(isFollowing)
+                            }else {
+                                Log.e("ERROR!!!", "Following ${respon.code}")
+                            }
+                        }
+
+                        override fun onError(anError: ANError) {
+                            Log.e("ERROR!!!", "While following ${anError.errorCode}")
+
+                        }
+                    })
+        }else{
+            AndroidNetworking.get(EnvService.ENV_API + "/users/$myUsername/follow/${username}")
+                .addHeaders("Authorization", "Bearer " + token)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsObject(
+                    Respon::class.java,
+                    object : ParsedRequestListener<Respon> {
+                        override fun onResponse(respon: Respon) {
+                            if (respon.code.toString() == "200") {
+                                Log.d("Respon Data Follow", respon.data.toString())
+                                isFollowing = true
+                                updateButtonFollow(isFollowing)
+                            }else {
+                                Log.e("ERROR!!!", "Following ${respon.code}")
+                            }
+                        }
+
+                        override fun onError(anError: ANError) {
+                            Log.e("ERROR!!!", "While following ${anError.errorCode}")
+
+                        }
+                    })
+        }
+    }
+
+    fun updateButtonFollow(following: Boolean){
+        if (following){
+            btnFollowProfile.setText("Following")
+            btnFollowProfile.setTextColor(getColor(R.color.colorPrimary))
+            btnFollowProfile.setBackgroundColor(getColor(R.color.white))
+        }else{
+            btnFollowProfile.setText("Follow")
+            btnFollowProfile.setTextColor(getColor(R.color.white))
+            btnFollowProfile.setBackgroundColor(getColor(R.color.colorPrimary))
         }
     }
 
