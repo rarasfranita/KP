@@ -10,6 +10,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -58,6 +59,8 @@ class HomeFragment : Fragment() {
             ViewModelProviders.of(this).get(HomeViewModel::class.java)
         val v = inflater.inflate(R.layout.fragment_home, container, false)
         val reloadFeed: PullRefreshLayout = v.findViewById(R.id.reloadFeed)
+        val nullData = v.findViewById<LinearLayout>(R.id.feedNoData)
+        nullData.visibility = View.VISIBLE
 
         username = SharedPrefManager.getInstance(requireContext()).user.username
         token = SharedPrefManager.getInstance(requireActivity()).token.token
@@ -70,6 +73,7 @@ class HomeFragment : Fragment() {
             true
         }
         getFeedsData(null)
+
 //        setRVScrollListener(v) TODO
 
         reloadFeed.setOnRefreshListener {
@@ -111,7 +115,12 @@ class HomeFragment : Fragment() {
                                  */
                             }
                             dataFeed = tempDataFeed
-                            loadFeed(dataFeed, rvHomeFeed)
+
+                            if (dataFeed.size < 1){
+                                feedNoData.visibility = View.VISIBLE
+                            }else{
+                                loadFeed(dataFeed, rvHomeFeed)
+                            }
 
                         }else {
                             Toast.makeText(context, "Error ${respon.code}", Toast.LENGTH_SHORT).show()
