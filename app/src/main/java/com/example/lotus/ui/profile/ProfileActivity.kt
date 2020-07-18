@@ -1,6 +1,5 @@
 package com.example.lotus.ui.profile
 
-import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -11,7 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import coil.api.load
 import coil.transform.CircleCropTransformation
@@ -20,6 +20,7 @@ import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.ParsedRequestListener
 import com.example.lotus.R
+import com.example.lotus.models.Post
 import com.example.lotus.models.Respon
 import com.example.lotus.models.UserProfile
 import com.example.lotus.service.EnvService
@@ -37,6 +38,11 @@ class ProfileActivity : AppCompatActivity() {
     private val myUsername = SharedPrefManager.getInstance(this).user.username
     private val token = SharedPrefManager.getInstance(this).token.token
     private var isFollowing: Boolean = false
+
+    private  var mediaData = ArrayList<Post>()
+    private  var textData = ArrayList<Post>()
+
+    private var totalFollower = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,10 +107,14 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
 
+        totalFollower = data.follower!!
+
+        separatePostData(data.posts!!)
+
         usernameProfile.text = "${data.username}'s profile"
         nameprofile.text = data.name
         tvBiografi.text = data.bio
-        totalFollowers.text = data.follower.toString()
+        totalFollowers.text = totalFollower.toString()
         totalFollowing.text = data.following.toString()
         Log.d("TOTAL POST", data.posts.toString())
         if (data.posts!!.size < 1){
@@ -122,6 +132,33 @@ class ProfileActivity : AppCompatActivity() {
         btnFollowProfile.setOnClickListener {
             follow(data.username.toString())
         }
+
+        loadExploreMedia(mediaData, rvprofilemedia)
+    }
+
+    fun loadExploreMedia(data: ArrayList<Post>, postProfile: RecyclerView) {
+        if (data.size < 1){
+            postProfile.visibility = View.GONE
+        }else {
+            dataEmpty.visibility = View.GONE
+            postProfile.setHasFixedSize(true)
+            postProfile.layoutManager = GridLayoutManager(this, 3)
+            val adapter =
+                ProfileMediaAdapter(data, this)
+            adapter.notifyDataSetChanged()
+
+            postProfile.adapter = adapter
+        }
+    }
+
+    fun separatePostData(posts: ArrayList<Post>){
+        for (post in posts){
+            if (post.media!!.size < 1){
+                textData.add(post)
+            }else{
+                mediaData.add(post)
+            }
+        }
     }
 
     fun follow(username: String){
@@ -136,6 +173,7 @@ class ProfileActivity : AppCompatActivity() {
                         override fun onResponse(respon: Respon) {
                             if (respon.code.toString() == "200") {
                                 Log.d("Respon Data Follow", respon.data.toString())
+                                totalFollower--
                                 isFollowing = false
                                 updateButtonFollow(isFollowing)
                             }else {
@@ -160,6 +198,7 @@ class ProfileActivity : AppCompatActivity() {
                             if (respon.code.toString() == "200") {
                                 Log.d("Respon Data Follow", respon.data.toString())
                                 isFollowing = true
+                                totalFollower++
                                 updateButtonFollow(isFollowing)
                             }else {
                                 Log.e("ERROR!!!", "Following ${respon.code}")
@@ -176,10 +215,12 @@ class ProfileActivity : AppCompatActivity() {
 
     fun updateButtonFollow(following: Boolean){
         if (following){
+            totalFollowers.text =  totalFollower.toString()
             btnFollowProfile.setText("Following")
             btnFollowProfile.setTextColor(getColor(R.color.colorPrimary))
             btnFollowProfile.setBackgroundColor(getColor(R.color.white))
         }else{
+            totalFollowers.text =  totalFollower.toString()
             btnFollowProfile.setText("Follow")
             btnFollowProfile.setTextColor(getColor(R.color.white))
             btnFollowProfile.setBackgroundColor(getColor(R.color.colorPrimary))
@@ -195,11 +236,6 @@ class ProfileActivity : AppCompatActivity() {
     private fun showUserProfile(){
         follow.visibility=View.VISIBLE
         btnEditProfile.visibility=View.GONE
-    }
-
-    private fun showImages (images: List<Image>){
-        rvprofilemedia.layoutManager = LinearLayoutManager(this)
-        rvprofilemedia.adapter=ImageAdapter(images)
     }
 
     internal class ViewPagerAdapter(fragmentManager: FragmentManager) :

@@ -1,23 +1,18 @@
 package com.example.lotus.ui.profile
 
 import android.media.Image
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.provider.MediaStore
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lotus.R
+import com.example.lotus.models.Post
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.listmedia.*
-import kotlinx.android.synthetic.main.media_profile_fragment.*
 
 class MediaProfile : Fragment() {
+    private var postData: ArrayList<Post>? = null
 
     companion object {
         fun newInstance() = MediaProfile().apply{

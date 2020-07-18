@@ -179,10 +179,7 @@
                 android:background="@android:color/white"
                 android:paddingRight="20dp"
                 android:paddingLeft="20dp">
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+
                 <TextView
                     android:id="@+id/image_comments_link"
                     android:layout_width="wrap_content"
@@ -198,7 +195,6 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/image_comments_link"
                     android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="20dp"
                     android:textSize="10dp"
                     android:text="3 Days ago"
                     android:textColor="@android:color/darker_gray" />

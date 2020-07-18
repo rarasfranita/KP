@@ -202,7 +202,7 @@ class HomeActivity : AppCompatActivity() {
             val shareIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_STREAM, media.link)
-                type = "*"
+                type = "text/*"
             }
             startActivity(Intent.createChooser(shareIntent, "Share To"))
         }
