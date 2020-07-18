@@ -11,12 +11,12 @@ data class Data(
     val liked: Int?,
     val like:Boolean?,
     val likesCount: Int?,
-    val media: ArrayList<MediaData>,
+    val media: ArrayList<MediaData>?,
     val name: String?,
     val postDate: String?,
     val postsCount: Int?,
     val profilePicture: String?,
-    val tag: ArrayList<String>,
+    val tag: ArrayList<String>?,
     val text: String?,
     val userId: String?,
     val username: String?,
@@ -29,12 +29,12 @@ data class Data(
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readValue(Boolean::class.java.classLoader) as? Boolean,
         parcel.readValue(Int::class.java.classLoader) as? Int,
-        TODO("media"),
+        parcel.createTypedArrayList(MediaData),
         parcel.readString(),
         parcel.readString(),
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readString(),
-        TODO("tag"),
+        parcel.createStringArrayList(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -47,7 +47,7 @@ data class Data(
     }
 
     override fun describeContents(): Int {
-        TODO("Not yet implemented")
+        return 0
     }
 
     companion object CREATOR : Parcelable.Creator<Data> {

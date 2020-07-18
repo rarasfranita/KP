@@ -18,9 +18,14 @@ import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.ParsedRequestListener
 import com.baoyz.widget.PullRefreshLayout
 import com.example.lotus.R
+import com.example.lotus.models.Post
 import com.example.lotus.service.EnvService
+import com.example.lotus.storage.SharedPrefManager
+import com.example.lotus.ui.detailpost.DetailPost
 //import com.example.lotus.ui.explore.detailpost.DetailPostHashtag
 import com.example.lotus.ui.explore.general.GeneralActivity
+import com.example.lotus.ui.explore.general.adapter.GeneralMediaAdapter
+import com.example.lotus.ui.explore.general.adapter.GeneralTextAdapter
 import com.example.lotus.ui.explore.hashtag.adapter.HashtagMediaAdapter
 import com.example.lotus.ui.explore.hashtag.adapter.HashtagTextAdapter
 import com.example.lotus.ui.explore.hashtag.fragment.ListMediaHashtag
@@ -29,15 +34,19 @@ import com.example.lotus.ui.explore.hashtag.model.Data
 import com.example.lotus.ui.explore.hashtag.model.Hashtag
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
+import kotlinx.android.synthetic.main.activity_explore_general.*
 import kotlinx.android.synthetic.main.activity_hashtag.*
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class HashtagActivity : AppCompatActivity() {
     private var manager: FragmentManager? = null
-    private val token = "5f09a143ff07b60aaafd008d"
-    var dataHashtag = ArrayList<Data>()
+    var dataHashtagM = ArrayList<Data>()
+    var dataHashtagT = ArrayList<Data>()
 
-    var anu = dataHashtag
+    var username = SharedPrefManager.getInstance(this).user.username
+    var token = SharedPrefManager.getInstance(this).token.token
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,10 +59,11 @@ class HashtagActivity : AppCompatActivity() {
         manager = supportFragmentManager
         val srlHashtag: PullRefreshLayout = findViewById(R.id.srlHashtag)
 
+        getHashtagMedia(null)
+        getHashtagText(null)
         srlHashtag.setOnRefreshListener {
-            dataHashtag.clear()
-            getHashtagMedia()
-            getHashtagText()
+            getHashtagText(srlHashtag)
+            getHashtagMedia(srlHashtag)
 
         }
         val tabLayout: TabLayout = findViewById(R.id.tabsHashtag)
@@ -67,20 +77,17 @@ class HashtagActivity : AppCompatActivity() {
         tabLayout.setupWithViewPager(viewPager)
 
         AndroidNetworking.initialize(applicationContext)
-        dataHashtag.clear()
-        getHashtagMedia()
-        getHashtagText()
 
     }
 
-    private fun getHashtagMedia() {
+    private fun getHashtagMedia(v: PullRefreshLayout?) {
+        v?.setRefreshing(true)
         val bundle = getIntent().getExtras()
         var hashtag = bundle?.getString("hashtag")
         hashtagDiHashtag.text = "#$hashtag"
-        dataHashtag.clear()
-        srlHashtag.setRefreshing(true)
-        AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore/$hashtag?username=testaccount&index=0&type=media")
-            .addHeaders("Authorization", "Bearer $token")
+        AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore/$hashtag?{username}&index=0&type=media")
+            .addQueryParameter("username", username)
+            .addHeaders("Authorization", "Bearer "+token)
             .setTag(this)
             .setPriority(Priority.LOW)
             .build()
@@ -88,41 +95,39 @@ class HashtagActivity : AppCompatActivity() {
                 Hashtag::class.java,
                 object : ParsedRequestListener<Hashtag> {
                     override fun onResponse(respon: Hashtag) {
-                        dataHashtag.clear()
                         srlHashtag.setRefreshing(false)
                         val gson = Gson()
+                        val temp = ArrayList<Data>()
                         if (respon.code.toString() == "200") {
-                            dataHashtag.clear()
                             srlHashtag.setRefreshing(false)
                             for (res in respon.data) {
                                 val strRes = gson.toJson(res)
                                 val dataJson = gson.fromJson(strRes, Data::class.java)
-                                dataHashtag.add(dataJson)
+                                temp.add(dataJson)
                             }
-                            loadExploreHashtagMedia(dataHashtag, findViewById(R.id.rvHashtagMedia))
+                            dataHashtagM = temp
+                            loadExploreHashtagMedia(dataHashtagM, findViewById(R.id.rvHashtagMedia))
 
                         } else {
-                            dataHashtag.clear()
                             srlHashtag.setRefreshing(false)
                         }
                     }
 
                     override fun onError(anError: ANError) {
-                        dataHashtag.clear()
                         srlHashtag.setRefreshing(false)
                         // Next go to error page (Popup error)
                     }
                 })
     }
 
-    private fun getHashtagText() {
+    private fun getHashtagText(v: PullRefreshLayout?) {
+        v?.setRefreshing(true)
         val bundle = getIntent().getExtras()
         var hashtag = bundle?.getString("hashtag")
         hashtagDiHashtag.text = "#$hashtag"
-        dataHashtag.clear()
-        srlHashtag.setRefreshing(true)
-        AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore/$hashtag?username=testaccount&index=0&type=text")
-            .addHeaders("Authorization", "Bearer $token")
+        AndroidNetworking.get(EnvService.ENV_API + "/feeds/explore/$hashtag?{username}&index=0&type=text")
+            .addQueryParameter("username", username)
+            .addHeaders("Authorization", "Bearer "+token)
             .setTag(this)
             .setPriority(Priority.LOW)
             .build()
@@ -130,27 +135,25 @@ class HashtagActivity : AppCompatActivity() {
                 Hashtag::class.java,
                 object : ParsedRequestListener<Hashtag> {
                     override fun onResponse(respon: Hashtag) {
-                        dataHashtag.clear()
                         srlHashtag.setRefreshing(false)
                         val gson = Gson()
+                        val temp = ArrayList<Data>()
                         if (respon.code.toString() == "200") {
-                            dataHashtag.clear()
                             srlHashtag.setRefreshing(false)
                             for (res in respon.data) {
                                 val strRes = gson.toJson(res)
                                 val dataJson = gson.fromJson(strRes, Data::class.java)
-                                dataHashtag.add(dataJson)
+                                temp.add(dataJson)
                             }
-                            loadExploreHashtagText(dataHashtag, findViewById(R.id.rvHashtagText))
+                            dataHashtagT = temp
+                            loadExploreHashtagText(dataHashtagT, findViewById(R.id.rvHashtagText))
 
                         } else {
-                            dataHashtag.clear()
                             srlHashtag.setRefreshing(false)
                         }
                     }
 
                     override fun onError(anError: ANError) {
-                        dataHashtag.clear()
                         srlHashtag.setRefreshing(false)
                         Log.d("asuu nya media hashtag:", anError.toString())
                         // Next go to error page (Popup error)
@@ -159,42 +162,27 @@ class HashtagActivity : AppCompatActivity() {
     }
 
     fun loadExploreHashtagMedia(data: ArrayList<Data>, hashtag: RecyclerView) {
-        val adapter =
-            HashtagMediaAdapter(
-                data,
-                this
-            )
-        adapter.notifyDataSetChanged()
-        hashtag.adapter = adapter
         hashtag.setHasFixedSize(true)
         hashtag.layoutManager = LinearLayoutManager(this)
+        val adapter =
+            HashtagMediaAdapter(data, this)
+        adapter.notifyDataSetChanged()
+
+        hashtag.adapter = adapter
     }
 
     fun loadExploreHashtagText(data: ArrayList<Data>, hashtag: RecyclerView) {
+        hashtag.setHasFixedSize(true)
+        hashtag.layoutManager = LinearLayoutManager(this)
         val adapter =
             HashtagTextAdapter(
                 data,
                 this
             )
         adapter.notifyDataSetChanged()
-        hashtag.adapter = adapter
-        hashtag.setHasFixedSize(true)
-        hashtag.layoutManager = LinearLayoutManager(this)
-    }
 
-//    fun detailPost(data: Data) {
-//        LinLayout1.visibility = View.GONE
-//        tabsHashtag.visibility = View.GONE
-//        val bundle = Bundle()
-//        bundle.putParcelable("data", data)
-//        val dataPost = DetailPostHashtag()
-//        dataPost.arguments = bundle
-//        manager?.beginTransaction()
-//            ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-//            ?.replace(R.id.fragment_list_media_hashtag, dataPost)
-//            ?.commit()
-//
-//    }
+        hashtag.adapter = adapter
+    }
 
     fun backToHome(view: View) {
         LinLayout1?.visibility = View.VISIBLE
@@ -239,4 +227,30 @@ class HashtagActivity : AppCompatActivity() {
         }
     }
 
+    fun detailPost(postId: String) {
+        val bundle = Bundle().apply {
+            putString("postId", postId)
+        }
+        appBarLayout.visibility = View.INVISIBLE
+        val dataPost = DetailPost()
+        dataPost.arguments = bundle
+        manager?.beginTransaction()
+            ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            ?.replace(R.id.fragmentExplore, dataPost)
+            ?.addToBackStack("Explore")
+            ?.commit()
+    }
+
+    fun mvDetailPost(item: Data) {
+        val bundle = Bundle()
+        bundle.putParcelable("data", item)
+        val dataPost = DetailPost()
+        dataPost.arguments = bundle
+        fab_post?.setVisibility(View.INVISIBLE)
+        manager?.beginTransaction()
+            ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            ?.replace(R.id.fragmentHome, dataPost)
+            ?.addToBackStack("Explore")
+            ?.commit()
+    }
 }

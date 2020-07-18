@@ -2,7 +2,9 @@ package com.example.lotus.ui.explore.hashtag.adapter
 
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
@@ -12,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -23,12 +26,18 @@ import com.asura.library.posters.RemoteVideo
 import com.asura.library.views.PosterSlider
 import com.example.lotus.R
 import com.example.lotus.models.MediaData
+import com.example.lotus.storage.SharedPrefManager
+import com.example.lotus.ui.detailpost.DetailPost
+import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.explore.hashtag.HashtagActivity
 import com.example.lotus.ui.explore.hashtag.model.Data
+import com.example.lotus.ui.home.HomeActivity
+import com.example.lotus.ui.login.LoginActivity
 import com.example.lotus.utils.DynamicSquareLayout
 import com.example.lotus.utils.dateToFormatTime
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.layout_hashtag_media_item.view.*
+import kotlinx.android.synthetic.main.layout_mainfeed_listitem.view.*
 import kotlin.collections.ArrayList
 
 class HashtagMediaAdapter(private val listHashtagMedia: ArrayList<Data>, val context: Context) :
@@ -48,23 +57,29 @@ class HashtagMediaAdapter(private val listHashtagMedia: ArrayList<Data>, val con
     override fun getItemCount(): Int = listHashtagMedia.size
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
+
         holder.bindFeed(listHashtagMedia[position], context)
-//        holder.viewAllCommentHashtag.setOnClickListener {
+        holder.rlCommentHash.setOnClickListener {
 //            if (mContext is HashtagActivity) {
-//                (mContext as HashtagActivity).detailPost(listHashtagMedia[position])
-//
+//                (mContext as HashtagActivity).mvDetailPost(listHashtagMedia[position])
 //            }
-//        }
+        }
     }
 
     class Holder(val view: View) : RecyclerView.ViewHolder(view) {
-        val viewAllCommentHashtag = view.findViewById<TextView>(R.id.viewAllCommentHashtag)
+        val rlCommentHash : RelativeLayout = view.findViewById(R.id.rlCommentHash)
         var mContext: Context? = null
         private var mediaHashtag: PosterSlider? = null
         private var postData: Data? = null
         var likeStatus: Boolean? = false
         var likeCount: Int = 0
         var commentCount: Int = 0
+
+        fun checkLogin() {
+            if (!(this.mContext?.let { SharedPrefManager.getInstance(it).isLoggedIn })!!) {
+                mContext!!.startActivity(Intent(mContext, LoginActivity::class.java))
+            }
+        }
 
         fun bindFeed(post: Data, context: Context) {
             itemView.apply {
@@ -73,21 +88,19 @@ class HashtagMediaAdapter(private val listHashtagMedia: ArrayList<Data>, val con
 
                 listenLikeIcon(view)
                 listenCommentIcon(view)
-
                 val textUsernameHashtag: TextView =
                     view.findViewById<View>(R.id.textUsernameHashtag) as TextView
                 val imageAvatarHashtag: ImageView = view.findViewById<View>(R.id.imageAvatarHashtag) as ImageView
-                val textIcCommentHashtag: TextView =
-                    view.findViewById<View>(R.id.textIcCommentHashtag) as TextView
                 val time: TextView = view.findViewById<View>(R.id.textTimeHashtag) as TextView
+                val comment: TextView = view.findViewById<View>(R.id.textIcCommentHashtag) as TextView
 
-                textUsernameHashtag.text = post.name
 
-                if (commentCount > 0) {
-                    textIcCommentHashtag.text = commentCount.toString()
-                } else {
+                if (commentCount > 0){
+                    comment.text = commentCount.toString()
+                }else{
                     viewAllCommentHashtag.visibility = View.GONE
                 }
+                textUsernameHashtag.text = post.name
 
                 setMediaPost(view, post.media, post.text)
                 setProfilePicture(imageAvatarHashtag, post.profilePicture.toString())
@@ -104,7 +117,6 @@ class HashtagMediaAdapter(private val listHashtagMedia: ArrayList<Data>, val con
             val cardHashtagMedia = view.findViewById<MaterialCardView>(R.id.cardHashtagMedia)
             val mediaHashtag = view.findViewById<PosterSlider>(R.id.mediaHashtag)
 
-            try {
                 val posters: MutableList<Poster> = ArrayList()
 
                 if (medias!!.size > 0) {
@@ -122,52 +134,21 @@ class HashtagMediaAdapter(private val listHashtagMedia: ArrayList<Data>, val con
                             val videoURI = Uri.parse(media.link)
                             posters.add(RemoteVideo(videoURI))
                         }
-                        postData!!.media[0].link?.let { Log.d("link gambar nya ", it) }
+                        postData!!.media?.get(0)?.link?.let { Log.d("link gambar nya ", it) }
                         Log.d("nama nya ", postData!!.name.toString())
 
                     }
                     mediaHashtag!!.setPosters(posters)
                 }
-//                else {
-//                    setHashTag(textHashtag, postData?.tag)
-//                    val postTextView = view.findViewById<TextView>(R.id.textStatusDetail)
-//                    postTextView.text = text
-//                }
-            } catch (ex: java.lang.IllegalStateException) {
-
-            }
-
         }
 
         fun setCaption(view: View, text: String?) {
-            val tagView = view.findViewById<TextView>(R.id.textHashtagHashtag)
             val captionView = view.findViewById<TextView>(R.id.textCaption)
-            if (text?.length!! > 99) {
-                val cutCaption = text.removeRange(99, text.length)
-                val caption = "$cutCaption... more"
-                val spannableString = SpannableString(caption)
-                val clickableSpan = object : ClickableSpan() {
-                    override fun onClick(p0: View) {
-//                        if (mContext is HashtagActivity) {
-//                            postData?.let { (mContext as HashtagActivity).detailPost(it) }
-//                        }
-                    }
-                }
-
-                captionView.setMovementMethod(LinkMovementMethod.getInstance());
-                spannableString.setSpan(
-                    clickableSpan,
-                    caption.length - 4,
-                    caption.length,
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-                captionView.text = spannableString
-//                tagView.visibility = View.GONE
-            } else {
                 val textHashtag = view.findViewById<TextView>(R.id.textHashtag)
                 setHashTag(textHashtag, postData?.tag)
-                captionView.text = text
-            }
+            Log.d("HASHdsdTAG", postData?.tag.toString())
+
+            captionView.text = text
         }
 
         fun setHashTag(view: TextView, tags: ArrayList<String>?) {
@@ -183,9 +164,6 @@ class HashtagMediaAdapter(private val listHashtagMedia: ArrayList<Data>, val con
                         val spannableString = SpannableString(tagMore)
                         val clickableSpan = object : ClickableSpan() {
                             override fun onClick(p0: View) {
-//                                if (mContext is HashtagActivity) {
-//                                    postData?.let { (mContext as HashtagActivity).detailPost(it) }
-//                                }
                             }
                         }
 

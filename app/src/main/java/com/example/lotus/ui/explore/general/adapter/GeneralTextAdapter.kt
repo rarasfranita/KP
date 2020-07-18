@@ -142,14 +142,14 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
             val comment2: TextView =
                 view.findViewById<View>(R.id.textIcComment2GeneralText) as TextView
 
-            Log.d("isinya", post.toString())
             if (post != null) {
                 when (post.size) {
-                    // TODO: 18/07/20 change when with for
+                        // TODO: 18/07/20 change when with for
                     2,3,4,5,6,7,8,9,10 -> {
                         for ((i, post) in post.withIndex()) {
                             when (i) {
                                 0 -> {
+                                    Log.d("hashtaggg", post.tag.toString())
                                     if (post.text?.length!! > 249) {
                                         val cutCaption =
                                             post.text.removeRange(249, post.text.length)
