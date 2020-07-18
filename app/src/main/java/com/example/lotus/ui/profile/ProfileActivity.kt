@@ -21,7 +21,7 @@ import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.ParsedRequestListener
 import com.example.lotus.R
 import com.example.lotus.models.Respon
-import com.example.lotus.models.User
+import com.example.lotus.models.UserProfile
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
 import com.google.android.material.tabs.TabLayout
@@ -33,20 +33,22 @@ import kotlinx.android.synthetic.main.snippet_myprofile.*
 class ProfileActivity : AppCompatActivity() {
     private lateinit var button: Button
     private var myProfile: Boolean = true
-    private val username = SharedPrefManager.getInstance(this).user.username
+    private val myUserID = SharedPrefManager.getInstance(this).user._id
     private val token = SharedPrefManager.getInstance(this).token.token
+    private var userID: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_profile)
 
-        val extra = intent.getStringExtra("username")
-        if (extra != null && extra != username){
+        val extra = intent.getStringExtra("userID")
+        if (extra != null && extra != myUserID){
             showUserProfile()
             getProfileData(extra)
         }else{
-            setProfile(SharedPrefManager.getInstance(this).user)
+            getProfileData(myUserID.toString())
+//            setProfile(SharedPrefManager.getInstance(this).user)
             showMyProfile()
         }
         //viewpager
@@ -61,10 +63,11 @@ class ProfileActivity : AppCompatActivity() {
         tableLayout.setupWithViewPager(viewPager)
     }
 
-    fun getProfileData(username: String){
-        AndroidNetworking.get(EnvService.ENV_API + "/users/{username}")
+    fun getProfileData(UID: String){
+        Log.d("USERID $UID", "MYUID $myUserID")
+        AndroidNetworking.get(EnvService.ENV_API + "/users/{userID}/profile?viewer=$myUserID")
             .addHeaders("Authorization", "Bearer " + token)
-            .addPathParameter("username", username)
+            .addPathParameter("userID", UID)
             .setPriority(Priority.MEDIUM)
             .build()
             .getAsObject(
@@ -75,7 +78,7 @@ class ProfileActivity : AppCompatActivity() {
                         if (respon.code.toString() == "200") {
                             Log.d("Get Profile Data", "Success")
                             val jsonRes = gson.toJson(respon.data)
-                            val data = gson.fromJson(jsonRes, User::class.java)
+                            val data = gson.fromJson(jsonRes, UserProfile::class.java)
                             setProfile(data)
                         }else {
                             Toast.makeText(this@ProfileActivity, "Error while getting data profile, code: ${respon.code} \n${respon.data}", Toast.LENGTH_SHORT).show()
@@ -91,9 +94,9 @@ class ProfileActivity : AppCompatActivity() {
                 })
     }
 
-    fun setProfile(data: User){
-        if (data.avatar != null){
-            profilePicture.load(data.avatar){
+    fun setProfile(data: UserProfile){
+        if (data.profilePicture != null){
+            profilePicture.load(data.profilePicture){
                 transformations(CircleCropTransformation())
             }
         }
@@ -101,7 +104,14 @@ class ProfileActivity : AppCompatActivity() {
         usernameProfile.text = "${data.username}'s profile"
         nameprofile.text = data.name
         tvBiografi.text = data.bio
-        totalPost.text = data.postsCount.toString()
+        totalFollowers.text = data.follower.toString()
+        totalFollowing.text = data.following.toString()
+        Log.d("TOTAL POST", data.posts.toString())
+        if (data.posts!!.size < 1){
+            totalPost.text = "0"
+        }else{
+            totalPost.text = data.posts?.size.toString()
+        }
     }
 
     private fun showMyProfile(){

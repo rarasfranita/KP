@@ -88,10 +88,10 @@ class NotificationActivity : AppCompatActivity() {
                         reloadNotification.setRefreshing(false)
                         val gson = Gson()
                         if (respon.code.toString() == "200") {
+                            notificationsData.clear()
                             for ((i, res) in respon.data.withIndex()) {
                                 val strRes = gson.toJson(res)
                                 val dataJson = gson.fromJson(strRes, Notification::class.java)
-                                notificationsData.clear()
                                 notificationsData.add(dataJson)
                             }
 
@@ -113,9 +113,9 @@ class NotificationActivity : AppCompatActivity() {
                 })
     }
 
-    fun gotoProfilePicture(username: String){
+    fun gotoProfilePicture(UID: String){
         val intent = Intent(this, ProfileActivity::class.java)
-        intent.putExtra("username", username)
+        intent.putExtra("userID", UID)
         startActivity(intent)
     }
 

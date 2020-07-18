@@ -339,13 +339,13 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
 
             holder.itemView.imageAvatarFeed.setOnClickListener {
                 if (context is HomeActivity){
-                    context.gotoProfilePicture(listPost[position].username.toString())
+                    context.gotoProfilePicture(listPost[position].belongsTo.toString())
                 }
             }
 
             holder.itemView.textUsernameFeed.setOnClickListener {
                 if (context is HomeActivity){
-                    context.gotoProfilePicture(listPost[position].username.toString())
+                    context.gotoProfilePicture(listPost[position].belongsTo.toString())
                 }
             }
         }

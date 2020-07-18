@@ -46,7 +46,7 @@ class NotificationAdapter(private var notificationsDatas: ArrayList<Notification
         item.cardNotification.setOnClickListener {
             if (notificationsDatas[position].type == "FOLLOW"){
                 if (context is NotificationActivity) {
-                    context.gotoProfilePicture(notificationsDatas[position].follower?.username.toString())
+                    context.gotoProfilePicture(notificationsDatas[position].follower?.id.toString())
                 }
             }else {
                 val i: Intent = Intent(context, DetailPost::class.java)

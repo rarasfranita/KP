@@ -162,9 +162,9 @@ class HomeActivity : AppCompatActivity() {
             ?.commit()
     }
 
-    fun gotoProfilePicture(username: String){
+    fun gotoProfilePicture(UID: String){
         val intent = Intent(this@HomeActivity, ProfileActivity::class.java)
-        intent.putExtra("username", username)
+        intent.putExtra("userID", UID)
         startActivity(intent)
     }
 

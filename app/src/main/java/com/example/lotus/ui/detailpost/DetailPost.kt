@@ -110,13 +110,13 @@ class DetailPost : Fragment() {
 
         avatar.setOnClickListener {
             val intent = Intent(this.activity, ProfileActivity::class.java)
-            intent.putExtra("username", username.text.toString())
+            intent.putExtra("userID", postData?.belongsTo.toString())
             startActivity(intent)
         }
 
         username.setOnClickListener {
             val intent = Intent(this.activity, ProfileActivity::class.java)
-            intent.putExtra("username", username.text.toString())
+            intent.putExtra("userID", postData?.belongsTo.toString())
             startActivity(intent)
         }
     }
