@@ -11,8 +11,12 @@ import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.home.HomeActivity
 import com.example.lotus.ui.login.LoginActivity
+import com.github.nkzawa.socketio.client.IO
+import com.github.nkzawa.socketio.client.Socket
+
 
 class SplashActivity : AppCompatActivity() {
+    private val mSocket: Socket = IO.socket("http://34.101.109.136:3000")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,16 +34,13 @@ class SplashActivity : AppCompatActivity() {
         super.onStart()
 
         if (SharedPrefManager.getInstance(this).isLoggedIn) {
-            val intent = Intent(applicationContext, HomeActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-
-            startActivity(intent)
-        } else {
-            //4second splash time
             Handler().postDelayed({
-                //start main activity
+                startActivity(Intent(this@SplashActivity, HomeActivity::class.java))
+                finish()
+            },4000)
+        } else {
+            Handler().postDelayed({
                 startActivity(Intent(this@SplashActivity, GeneralActivity::class.java))
-                //finish this activity
                 finish()
             },4000)
         }

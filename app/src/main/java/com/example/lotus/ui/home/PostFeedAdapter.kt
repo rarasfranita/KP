@@ -13,6 +13,7 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +31,7 @@ import com.asura.library.views.PosterSlider
 import com.example.lotus.R
 import com.example.lotus.models.MediaData
 import com.example.lotus.models.Post
+import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.CreatePostActivity
 import com.example.lotus.utils.dateToFormatTime
 import com.example.lotus.utils.dislikePost
@@ -39,16 +41,15 @@ import kotlinx.android.synthetic.main.progress_loading.view.*
 
 
 class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    var mContext: Context? = null
+    val token = SharedPrefManager.getInstance(context).token.token
+    val userID = SharedPrefManager.getInstance(context).user._id
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        this.mContext = context;
-
         return if (viewType == Constant.VIEW_TYPE_ITEM) {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_mainfeed_listitem, parent, false)
             ItemViewHolder(view)
         } else {
-            val view = LayoutInflater.from(mContext).inflate(R.layout.progress_loading, parent, false)
+            val view = LayoutInflater.from(context).inflate(R.layout.progress_loading, parent, false)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 view.progressbar.indeterminateDrawable.colorFilter = BlendModeColorFilter(Color.WHITE, BlendMode.SRC_ATOP)
             } else {
@@ -63,10 +64,6 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
     fun addData(dataViews: ArrayList<Post>) {
         this.listPost.addAll(dataViews)
         notifyDataSetChanged()
-    }
-
-    fun getItemAtPosition(position: Int): Post? {
-        return listPost[position]
     }
 
     fun addLoadingView() {
@@ -91,10 +88,21 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
         var mContext: Context? = null
         private var posterSlider: PosterSlider? = null
         private var postData: Post? = null
+        private var token: String = null.toString()
+        private var userID: String = null.toString()
 
         var likeStatus: Int? = 0
         var likeCount: Int = 0
         var commentCount: Int = 0
+
+        fun setToken(token: String){
+            this.token = token
+        }
+
+        fun setUserID(userID: String){
+            Log.d("Userid di setuserid", userID)
+            this.userID = userID
+        }
 
         fun bindFeed(post: Post, context: Context){
             itemView.apply {
@@ -271,12 +279,12 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
             val likeIcon = view.findViewById<RelativeLayout>(R.id.likeLayoutFeed)
             likeIcon.setOnClickListener {
                 if(likeStatus.toString() == "1"){
-                    dislikePost(postData?.postId.toString(), postData?.belongsTo.toString())
+                    dislikePost(postData?.postId.toString(), userID.toString(), token)
                     likeStatus = 0
                     likeCount--
                     setLike(view, likeStatus, likeCount)
                 }else {
-                    likePost(postData?.postId.toString(), postData?.belongsTo.toString())
+                    likePost(postData?.postId.toString(), userID.toString(), token)
                     likeStatus = 1
                     likeCount++
                     setLike(view, likeStatus, likeCount)
@@ -289,41 +297,43 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder.itemViewType == Constant.VIEW_TYPE_ITEM) {
-
             val item = ItemViewHolder(holder.itemView)
+
+            item.setToken(token.toString())
+            item.setUserID(userID.toString())
             item.bindFeed(listPost[position], context)
 
 
             holder.itemView.viewAllComment.setOnClickListener {
-                if (mContext is HomeActivity) {
-                    (mContext as HomeActivity).gotoDetailPost(listPost[position])
+                if (context is HomeActivity) {
+                    (context as HomeActivity).gotoDetailPost(listPost[position])
                 }
             }
 
             holder.itemView.rlCommentFeed.setOnClickListener {
-                if (mContext is HomeActivity) {
-                    (mContext as HomeActivity).gotoDetailPost(listPost[position])
+                if (context is HomeActivity) {
+                    (context as HomeActivity).gotoDetailPost(listPost[position])
                 }
             }
 
             holder.itemView.icSharePost.setOnClickListener {
-                val intent = Intent(mContext, CreatePostActivity::class.java)
+                val intent = Intent(context, CreatePostActivity::class.java)
 
                 intent.putExtra("Extra", "DetailPost")
                 intent.putExtra("Media", listPost[position].media)
                 intent.putExtra("Text", listPost[position].text)
-                intent.putExtra("postID", listPost[position].postId)
+                intent.putExtra("PostID", listPost[position].postId)
                 intent.putExtra("Username", listPost[position].username)
                 intent.putExtra("Tags", listPost[position].tag)
 
-                if (mContext is HomeActivity) {
-                    (mContext as HomeActivity).startActivity(intent)
+                if (context is HomeActivity) {
+                    (context as HomeActivity).startActivity(intent)
                 }
             }
 
             holder.itemView.menuFeed.setOnClickListener {
-                if (mContext is HomeActivity){
-                    (mContext as HomeActivity).showDialog(listPost[position].media!!)
+                if (context is HomeActivity){
+                    (context as HomeActivity).showDialog(listPost[position].media!!)
                 }
             }
 

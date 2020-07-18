@@ -33,6 +33,7 @@ import com.example.lotus.models.MediaData
 import com.example.lotus.models.MediaPost
 import com.example.lotus.models.Respon
 import com.example.lotus.service.EnvService
+import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.createpost.AddHashtag
 import com.example.lotus.ui.createpost.CallbackListener
 import com.example.lotus.ui.home.HomeActivity
@@ -48,8 +49,9 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
     val TAG = "CreatePost Activity"
     val REQUEST_VIDEO_CAPTURE = 1
     lateinit var alertDialog: AlertDialog
-    private val username = "testaccount4"
-    private val token = "5f02b3ac10032c371426b525"
+    private val userID = SharedPrefManager.getInstance(this).user._id
+    private val username = SharedPrefManager.getInstance(this).user.username
+    private val token = SharedPrefManager.getInstance(this).token.token
 
     private val mediaPostDatas: ArrayList<MediaPost> = ArrayList()
     private var mediaRepostDatas: ArrayList<MediaData> = ArrayList()
@@ -69,6 +71,7 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
         // Hide hashtag because data is NULL
         textHashtag.visibility = View.GONE
         llProgres.visibility = View.GONE
+        llProgres.visibility = View.GONE
 
         toolBarListener()
         initRecyclerView()
@@ -85,7 +88,7 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
         val username = intent.getStringExtra("Username")
         val media = intent.getParcelableArrayListExtra<MediaData>("Media")
         val hashtag = intent.getStringArrayListExtra("Tags")
-        postId = intent.getStringExtra("PostId").toString()
+        postId = intent.getStringExtra("PostID").toString()
 
         if (hashtag != null) {
             tags = hashtag
@@ -97,7 +100,7 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
             createPostBottom.visibility = View.GONE
 
             postingTitle.text = getString(R.string.repost)
-            textCaptionRepost.text = "Repost from @$username \n $text"
+            textCaptionRepost.text = "Repost from @$username \n$text"
             if (media?.size!! > 0){
                 setRepostContent(media)
             }else{
@@ -339,19 +342,25 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
         val caption = findViewById<TextView>(R.id.textCaption)
         postButton.setOnClickListener{
             val progressDialog = ProgressDialog(this)
+            val captionFinal = if (caption.text.length > 0){
+                "${caption.text}\n\n${textCaptionRepost.text}"
+            }else{
+                textCaptionRepost.text.toString()
+            }
             progressDialog.setMessage("Loading...")
             progressDialog.show()
             if (mediaPostDatas.size <= 0 && caption.text.length < 1){
                 Toast.makeText(this, R.string.alertNoDataPost, Toast.LENGTH_SHORT).show()
             }else{
                 if (repost){
-                    val uploadRepost = AndroidNetworking.post(EnvService.ENV_API + "/posts/{username}")
+                    val uploadRepost = AndroidNetworking.post(EnvService.ENV_API + "/posts/{postID}/repost")
                     if (tagsStringSend != ""){
                         uploadRepost.addBodyParameter("tag", tagsStringSend)
                     }
                     uploadRepost
-                        .addPathParameter("username", username)
-                        .addBodyParameter("text", caption.text.toString())
+                        .addPathParameter("postID", postId)
+                        .addBodyParameter("userId", userID)
+                        .addBodyParameter("caption", captionFinal)
                         .addHeaders("Authorization", "Bearer " + token)
                         .setTag(this)
                         .setPriority(Priority.HIGH)
@@ -366,7 +375,8 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
                                         val intent = Intent(this@CreatePostActivity, HomeActivity::class.java)
                                         startActivity(intent)
                                     }else {
-                                        Toast.makeText(applicationContext, "Error ${res.code}", Toast.LENGTH_SHORT)
+                                        Log.d("ERRORNYA YA", "${res.code}, ${res.data}")
+                                        Toast.makeText(applicationContext, "Error ${res.code}, ${res.data}", Toast.LENGTH_SHORT).show()
                                     }
                                 }
 
@@ -376,7 +386,7 @@ class CreatePostActivity : AppCompatActivity(), CallbackListener {
                                         applicationContext,
                                         "Error ${anError.errorDetail}",
                                         Toast.LENGTH_SHORT
-                                    )
+                                    ).show()
                                 }
                             })
                 }else{
