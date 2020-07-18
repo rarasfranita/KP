@@ -119,7 +119,7 @@ class NotificationActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun detailPost(postId: String) {
+    fun gotoDetailPost(postId: String) {
         val bundle = Bundle().apply {
             putString("postId", postId)
         }
@@ -129,6 +129,7 @@ class NotificationActivity : AppCompatActivity() {
         manager?.beginTransaction()
             ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             ?.replace(R.id.containerNotification, dataPost)
+            ?.addToBackStack("Notification")
             ?.commit()
     }
 
@@ -146,6 +147,10 @@ class NotificationActivity : AppCompatActivity() {
             this.onBackPressed()
         }
 
+    }
+
+    fun setAppBarVisible() {
+        toolbarNotification.visibility = View.VISIBLE
     }
 
 }

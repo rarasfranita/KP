@@ -35,6 +35,7 @@ import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.CreatePostActivity
 import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.home.HomeActivity
+import com.example.lotus.ui.notification.NotificationActivity
 import com.example.lotus.ui.profile.ProfileActivity
 import com.example.lotus.utils.dateToFormatTime
 import com.example.lotus.utils.dislikePost
@@ -482,9 +483,12 @@ class DetailPost : Fragment() {
 
             if (context is HomeActivity){
                 (context as HomeActivity).setfabPostVisible()
-            }
-            else if (context is GeneralActivity){
+            }else if (context is GeneralActivity){
                 (context as GeneralActivity).setAppBarVisible()
+            }else if(context is ProfileActivity){
+                (context as ProfileActivity).setAppBarVisible()
+            }else if (context is NotificationActivity){
+                (context as NotificationActivity).setAppBarVisible()
             }
             getActivity()?.onBackPressed()
         }

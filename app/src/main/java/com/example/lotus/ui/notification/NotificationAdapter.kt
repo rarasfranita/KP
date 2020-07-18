@@ -54,7 +54,7 @@ class NotificationAdapter(private var notificationsDatas: ArrayList<Notification
                 i.putExtra("postID", notificationsDatas[position].postId)
 
                 if (context is NotificationActivity) {
-                   context.detailPost(notificationsDatas[position].postId.toString())
+                   context.gotoDetailPost(notificationsDatas[position].postId.toString())
                 }
             }
         }

@@ -13,10 +13,8 @@ import com.example.lotus.R
 import com.example.lotus.models.Post
 
 class ProfileMediaAdapter(val post: ArrayList<Post>, val context: Context) : RecyclerView.Adapter<ProfileMediaAdapter.Holder>() {
-    var data: ArrayList<Post> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        data = post
         return Holder(
             LayoutInflater.from(parent.context).inflate(R.layout.listmedia,parent,false)
         )
@@ -25,8 +23,13 @@ class ProfileMediaAdapter(val post: ArrayList<Post>, val context: Context) : Rec
     override fun getItemCount(): Int = post.size
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.bindFeed(data[position], context)
+        holder.bindFeed(post[position], context)
 
+        holder.image1.setOnClickListener {
+            if (context is ProfileActivity){
+                (context as ProfileActivity).gotoDetailPost(post[position].id.toString())
+            }
+        }
     }
 
     class Holder(val view: View) : RecyclerView.ViewHolder(view) {

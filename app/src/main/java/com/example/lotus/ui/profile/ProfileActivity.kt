@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
@@ -25,11 +26,11 @@ import com.example.lotus.models.Respon
 import com.example.lotus.models.UserProfile
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
+import com.example.lotus.ui.detailpost.DetailPost
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.media_profile_fragment.*
-import kotlinx.android.synthetic.main.snippet_myprofile.*
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var button: Button
@@ -41,7 +42,7 @@ class ProfileActivity : AppCompatActivity() {
 
     private  var mediaData = ArrayList<Post>()
     private  var textData = ArrayList<Post>()
-
+    private var manager: FragmentManager? = null
     private var totalFollower = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,6 +68,8 @@ class ProfileActivity : AppCompatActivity() {
 
         viewPager.adapter = viewPagerAdapter
         tableLayout.setupWithViewPager(viewPager)
+        manager = getSupportFragmentManager()
+        listenToolbar()
     }
 
     fun getProfileData(UID: String){
@@ -111,7 +114,7 @@ class ProfileActivity : AppCompatActivity() {
 
         separatePostData(data.posts!!)
 
-        usernameProfile.text = "${data.username}'s profile"
+        profileTitle.text = "${data.username}'s profile"
         nameprofile.text = data.name
         tvBiografi.text = data.bio
         totalFollowers.text = totalFollower.toString()
@@ -230,7 +233,6 @@ class ProfileActivity : AppCompatActivity() {
     private fun showMyProfile(){
         btnEditProfile.visibility= View.VISIBLE
         follow.visibility = View.GONE
-        ivcollection.visibility=View.GONE
     }
 
     private fun showUserProfile(){
@@ -276,22 +278,28 @@ class ProfileActivity : AppCompatActivity() {
         this.onBackPressed()
     }
 
-    /** override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.navSecurity -> {
-                Toast.makeText(this,"goChangePassoword",Toast.LENGTH_SHORT)
-            }
-            R.id.navRate-> {
-                Toast.makeText(this,"goChangePassoword",Toast.LENGTH_SHORT)
-            }
-            R.id.navRate -> {
-                Toast.makeText(this,"goChangePassoword",Toast.LENGTH_SHORT)
-            }
-            R.id.navLogout -> {
-                Toast.makeText(this,"goChangePassoword",Toast.LENGTH_SHORT)
-            }
+    fun gotoDetailPost(postId: String) {
+        val bundle = Bundle().apply {
+            putString("postId", postId)
         }
-        return super.onOptionsItemSelected(item)
+
+        val dataPost = DetailPost()
+        toolbarProfile.visibility = View.GONE
+        dataPost.arguments = bundle
+        manager?.beginTransaction()
+            ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            ?.replace(R.id.containerProfile, dataPost)
+            ?.addToBackStack("Profile")
+            ?.commit()
     }
-*/
+
+    fun listenToolbar(){
+        toolbarProfile.setNavigationOnClickListener{
+            this.onBackPressed()
+        }
+    }
+
+    fun setAppBarVisible(){
+        toolbarProfile.visibility = View.VISIBLE
+    }
 }
