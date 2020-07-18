@@ -150,7 +150,7 @@ class NotificationActivity : AppCompatActivity() {
     }
 
     fun setAppBarVisible() {
-        toolbarNotification.visibility = View.VISIBLE
+        appbarNotification.visibility = View.VISIBLE
     }
 
 }

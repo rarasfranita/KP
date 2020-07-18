@@ -112,7 +112,7 @@ class ProfileActivity : AppCompatActivity() {
 
         totalFollower = data.follower!!
 
-        separatePostData(data.posts!!)
+        separatePostData(data.posts)
 
         profileTitle.text = "${data.username}'s profile"
         nameprofile.text = data.name
@@ -120,10 +120,10 @@ class ProfileActivity : AppCompatActivity() {
         totalFollowers.text = totalFollower.toString()
         totalFollowing.text = data.following.toString()
         Log.d("TOTAL POST", data.posts.toString())
-        if (data.posts!!.size < 1){
+        if (data.posts == null){
             totalPost.text = "0"
         }else{
-            totalPost.text = data.posts?.size.toString()
+            totalPost.text = data.posts.size.toString()
         }
 
         if (data.isFollowing!!.equals(1)){
@@ -154,12 +154,14 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    fun separatePostData(posts: ArrayList<Post>){
-        for (post in posts){
-            if (post.media!!.size < 1){
-                textData.add(post)
-            }else{
-                mediaData.add(post)
+    fun separatePostData(posts: ArrayList<Post>?){
+        if (posts != null){
+            for (post in posts){
+                if (post.media!!.size < 1){
+                    textData.add(post)
+                }else{
+                    mediaData.add(post)
+                }
             }
         }
     }
