@@ -109,16 +109,18 @@ class DetailPost : Fragment() {
         val username = v.textUsernamePost
 
         avatar.setOnClickListener {
-            val intent = Intent(this.activity, ProfileActivity::class.java)
-            intent.putExtra("userID", postData?.belongsTo.toString())
-            startActivity(intent)
+            gotoProfile(postData?.belongsTo.toString())
         }
 
         username.setOnClickListener {
-            val intent = Intent(this.activity, ProfileActivity::class.java)
-            intent.putExtra("userID", postData?.belongsTo.toString())
-            startActivity(intent)
+            gotoProfile(postData?.belongsTo.toString())
         }
+    }
+
+    fun gotoProfile(userID: String){
+        val intent = Intent(this.activity, ProfileActivity::class.java)
+        intent.putExtra("userID", userID)
+        startActivity(intent)
     }
 
     private fun setImageProfileAndListen(v: View) {

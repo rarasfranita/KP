@@ -105,6 +105,10 @@ class RowAdapter (val context: Context, var commentRowModels: MutableList<Commen
                     mDetailPost.setCommentID(row.parent.id!!)
                     mDetailPost.openEditTextComment(mDetailPost.requireView())
                 }
+
+                p0.itemView.imageAvatarCommentParent.setOnClickListener {
+                    mDetailPost.gotoProfile(row.parent.userId.toString())
+                }
             }
             CommentRowModel.CHILD -> {
                 (p0 as CommentChildViewHolder).textComment.setText(Html.fromHtml("<b>" + row.child.username +"</b> " + row.child.text))
@@ -114,6 +118,10 @@ class RowAdapter (val context: Context, var commentRowModels: MutableList<Commen
                 p0.itemView.replyCommentChild.setOnClickListener {
                     mDetailPost.setCommentID(row.child.parentId!!)
                     mDetailPost.openEditTextComment(mDetailPost.requireView())
+                }
+
+                p0.itemView.imageAvatarCommentChild.setOnClickListener {
+                    mDetailPost.gotoProfile(row.child.userId.toString())
                 }
             }
         }
