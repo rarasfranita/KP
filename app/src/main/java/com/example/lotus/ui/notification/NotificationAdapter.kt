@@ -21,6 +21,7 @@ import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.ParsedRequestListener
 import com.bumptech.glide.Glide
 import com.example.lotus.R
+import com.example.lotus.R.color.white
 import com.example.lotus.models.Notification
 import com.example.lotus.models.Respon
 import com.example.lotus.service.EnvService
@@ -83,6 +84,8 @@ class NotificationAdapter(private var notificationsDatas: ArrayList<Notification
                         })
             }
         }
+
+        item.setContext(context)
     }
 
     class ItemViewHolder(val view: View) : RecyclerView.ViewHolder(view){
@@ -94,11 +97,17 @@ class NotificationAdapter(private var notificationsDatas: ArrayList<Notification
         val media: ImageView = view.findViewById(R.id.mediaNotification)
         val profilePicture: ImageView = view.findViewById(R.id.profileUserNotification)
         val cardNotification: MaterialCardView = view.findViewById(R.id.cardNotification)
+        lateinit private var context: Context
+
+        fun setContext(ctx: Context){
+            this.context = ctx
+        }
 
         fun bindNotification(notif: Notification, context: Context){
             if (notif.type == "FOLLOW"){
                 wrapMedia.visibility = View.GONE
-                if (notif.isFollowing == 1){
+                Log.d("NOTIFICATION", notif.isFollowing.toString())
+                if (notif.isFollowing!!.equals(1)){
                     setFollowing()
                 }
                 textNotification.text = "Start following you."
@@ -140,7 +149,7 @@ class NotificationAdapter(private var notificationsDatas: ArrayList<Notification
         @SuppressLint("ResourceAsColor")
         fun setFollowing(){
             follow.setText("Following")
-            follow.setBackgroundColor(R.color.black)
+            follow.setBackgroundColor(white)
             follow.setTextColor(R.color.colorPrimary)
         }
 
