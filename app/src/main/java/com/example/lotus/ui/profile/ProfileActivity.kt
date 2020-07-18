@@ -119,7 +119,6 @@ class ProfileActivity : AppCompatActivity() {
         tvBiografi.text = data.bio
         totalFollowers.text = totalFollower.toString()
         totalFollowing.text = data.following.toString()
-        Log.d("TOTAL POST", data.posts.toString())
         if (data.posts == null){
             totalPost.text = "0"
         }else{
@@ -286,7 +285,7 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         val dataPost = DetailPost()
-        toolbarProfile.visibility = View.GONE
+        appbarProfile.visibility = View.INVISIBLE
         dataPost.arguments = bundle
         manager?.beginTransaction()
             ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
@@ -302,6 +301,6 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     fun setAppBarVisible(){
-        toolbarProfile.visibility = View.VISIBLE
+        appbarProfile.visibility = View.VISIBLE
     }
 }
