@@ -523,8 +523,8 @@ class DetailPost : Fragment() {
             val uri: Uri = Uri.parse(media.link)
             val shareIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_STREAM, media.link)
-                type = "*"
+                putExtra(Intent.EXTRA_TEXT, media.link)
+                type = "text/plain"
             }
             startActivity(Intent.createChooser(shareIntent, "Share To"))
         }
