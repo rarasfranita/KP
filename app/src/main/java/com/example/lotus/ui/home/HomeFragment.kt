@@ -60,7 +60,8 @@ class HomeFragment : Fragment() {
         val v = inflater.inflate(R.layout.fragment_home, container, false)
         val reloadFeed: PullRefreshLayout = v.findViewById(R.id.reloadFeed)
         val nullData = v.findViewById<LinearLayout>(R.id.feedNoData)
-        nullData.visibility = View.VISIBLE
+
+        nullData.visibility = View.INVISIBLE
 
         username = SharedPrefManager.getInstance(requireContext()).user.username
         token = SharedPrefManager.getInstance(requireActivity()).token.token
