@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragmentExplore"
+    android:name="androidx.navigation.fragment.NavHostFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.explore.general.GeneralActivity">
@@ -25,28 +26,9 @@
                     app:elevation="10dp"
                     app:navigationIcon="@drawable/ic_arrow_back_black"
                     app:title="Explore"
-                    app:menu="@menu/post"
+                    app:menu="@menu/search"
                     app:titleTextColor="#6B6B6B" />
         </com.google.android.material.appbar.AppBarLayout>
-
-<!--        Todo : unhide-->
-        <EditText
-            android:id="@+id/edSearchbar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_marginStart="9dp"
-            android:layout_marginEnd="9dp"
-            android:background="@drawable/search_bar_drawable"
-            android:drawableStart="@drawable/ic_baseline_search_24"
-            android:drawableLeft="@drawable/ic_baseline_search_24"
-            android:fontFamily="@font/lato"
-            android:hint="Search profile, hastag"
-            android:textSize="12sp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayout">></EditText>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
@@ -54,7 +36,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edSearchbar"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
             app:tabBackground="@color/white"
             app:tabIconTint="#F79543"
             app:tabIndicatorColor="#F79543"
