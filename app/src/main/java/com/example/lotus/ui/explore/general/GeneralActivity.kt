@@ -1,14 +1,23 @@
 package com.example.lotus.ui.explore.general
 
+import android.app.Dialog
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.Window
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.fragment.app.FragmentTransaction
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
@@ -18,18 +27,23 @@ import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.ParsedRequestListener
 import com.baoyz.widget.PullRefreshLayout
 import com.example.lotus.R
-import com.example.lotus.models.Respons
+import com.example.lotus.models.*
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.detailpost.DetailPost
+import com.example.lotus.ui.explore.SearchActivity
 import com.example.lotus.ui.explore.general.adapter.GeneralMediaAdapter
 import com.example.lotus.ui.explore.general.adapter.GeneralTextAdapter
 import com.example.lotus.ui.explore.general.fragment.ListMediaGeneral
 import com.example.lotus.ui.explore.general.fragment.ListTextGeneral
 import com.example.lotus.ui.explore.general.model.Data
+import com.example.lotus.ui.home.HomeActivity
+import com.example.lotus.ui.login.LoginActivity
+import com.example.lotus.utils.downloadMedia
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_explore_general.*
+import kotlinx.android.synthetic.main.activity_hashtag.*
 
 
 class GeneralActivity : AppCompatActivity() {
@@ -37,6 +51,9 @@ class GeneralActivity : AppCompatActivity() {
     var dataExploreM = ArrayList<Data>()
     var dataExploreT = ArrayList<Data>()
     var username = SharedPrefManager.getInstance(this).user.username
+    var token = SharedPrefManager.getInstance(this).token.token
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         try {
@@ -59,7 +76,7 @@ class GeneralActivity : AppCompatActivity() {
         val tabLayout: TabLayout = findViewById(R.id.tabs)
         val viewPager: ViewPager = findViewById(R.id.view_pager)
         val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
-
+        val search = findViewById<EditText>(R.id.edSearchbar)
         viewPagerAdapter.addFragment(ListMediaGeneral(), "Media")
         viewPagerAdapter.addFragment(ListTextGeneral(), "Text")
 
@@ -67,23 +84,27 @@ class GeneralActivity : AppCompatActivity() {
         tabLayout.setupWithViewPager(viewPager)
 
         AndroidNetworking.initialize(applicationContext)
-
     }
 
     private fun listenAppToolbar() {
-        val toolbar: Toolbar = findViewById<Toolbar>(R.id.tbExplore)
+        if (!SharedPrefManager.getInstance(this).isLoggedIn) {
+            tbExplore.navigationIcon?.isVisible
+        } else {
+            val toolbar: Toolbar = findViewById<Toolbar>(R.id.tbExplore)
 
-        toolbar.setNavigationOnClickListener {
-            this.onBackPressed()
-        }
-        toolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.explore ->
-                    SharedPrefManager.getInstance(this).clear()
+            toolbar.setNavigationOnClickListener {
+                val intent = Intent(this, HomeActivity::class.java)
+                startActivity(intent)
             }
-            true
+            toolbar.setOnMenuItemClickListener {
+                val intent = Intent(this, SearchActivity::class.java)
+                    when (it.itemId) {
+                    R.id.search ->
+                        startActivity(intent)
+                    }
+                true
+            }
         }
-
     }
 
     private fun getExploreText(v: PullRefreshLayout?) {
@@ -170,7 +191,7 @@ class GeneralActivity : AppCompatActivity() {
                             for (res in respon.data) {
                                 val strRes = gson.toJson(res)
                                 val dataJson = gson.fromJson(strRes, Data::class.java)
-                            temp.add(dataJson)
+                                temp.add(dataJson)
                             }
                             dataExploreM = temp
 
@@ -200,7 +221,7 @@ class GeneralActivity : AppCompatActivity() {
                             for (res in respon.data) {
                                 val strRes = gson.toJson(res)
                                 val dataJson = gson.fromJson(strRes, Data::class.java)
-                            temp.add(dataJson)
+                                temp.add(dataJson)
                             }
                             dataExploreM = temp
                             loadExploreMedia(dataExploreM, findViewById(R.id.rvExploreMedia))
@@ -243,7 +264,6 @@ class GeneralActivity : AppCompatActivity() {
     fun backToHome(view: View) {
         appBarLayout?.visibility = View.VISIBLE
         tabs.visibility = View.VISIBLE
-        edSearchbar.visibility = View.VISIBLE
         manager?.beginTransaction()
             ?.replace(R.id.fragmentExplore, ListMediaGeneral())?.commit()
     }
@@ -297,4 +317,43 @@ class GeneralActivity : AppCompatActivity() {
         appBarLayout.visibility = View.VISIBLE
     }
 
+    fun showDialog(medias: ArrayList<MediaData>) {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.layout_menu_post)
+        val download = dialog.findViewById<LinearLayout>(R.id.downloadMedia)
+        val share = dialog.findViewById<LinearLayout>(R.id.sharePost)
+        download.setOnClickListener {
+            downloadMedia(medias, this)
+            dialog.dismiss()
+        }
+
+        share.setOnClickListener {
+            if (medias.size < 1) {
+                Toast.makeText(
+                    this@GeneralActivity,
+                    "No media to be downloaded",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                shareMediaToOtherApp(medias)
+                dialog.dismiss()
+            }
+        }
+
+        dialog.show()
+
+    }
+
+    fun shareMediaToOtherApp(medias: ArrayList<MediaData>) {
+        for (media in medias) {
+            val uri: Uri = Uri.parse(media.link)
+            val shareIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_STREAM, media.link)
+                type = "*"
+            }
+            startActivity(Intent.createChooser(shareIntent, "Share To"))
+        }
+    }
 }

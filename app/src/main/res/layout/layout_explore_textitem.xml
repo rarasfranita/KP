@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
@@ -54,13 +55,44 @@
                     android:layout_toRightOf="@+id/imageAvatar1GeneralText"
                     android:text="Lotus Check" />
 
+                <Button
+                    android:id="@+id/btnFollow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="130dp"
+                    android:layout_marginRight="75dp"
+                    android:layout_toRightOf="@+id/textUsernameHashtag"
+                    android:minWidth="0dp"
+                    android:text="Follow"
+                    android:textSize="10sp" />
+
+                <Button
+                    android:id="@+id/btnUnfollow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:layout_alignParentRight="true"
+                    android:minWidth="0dp"
+                    android:text="Unfollow"
+                    android:layout_marginLeft="130dp"
+                    android:layout_marginRight="75dp"
+                    android:layout_toRightOf="@+id/textUsernameHashtag"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="10sp"
+                    app:strokeColor="@color/colorPrimary"
+                    app:strokeWidth="2dp"
+                    tools:ignore="MissingPrefix"
+                    android:visibility="gone"/>
+
+
                 <ImageView
                     android:id="@+id/ivEllipses1GeneralText"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginRight="34dp"
                     android:src="@drawable/ic_ellipses" />
 
             </RelativeLayout>
@@ -214,6 +246,36 @@
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@+id/imageAvatar2GeneralText"
                     android:text="Lotus Check" />
+
+                <Button
+                    android:id="@+id/btnFollow2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="130dp"
+                    android:layout_marginRight="75dp"
+                    android:layout_toRightOf="@+id/textUsernameHashtag"
+                    android:minWidth="0dp"
+                    android:text="Follow"
+                    android:textSize="10sp" />
+
+                <Button
+                    android:id="@+id/btnUnfollow2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:layout_alignParentRight="true"
+                    android:minWidth="0dp"
+                    android:text="Unfollow"
+                    android:layout_marginLeft="130dp"
+                    android:layout_marginRight="75dp"
+                    android:layout_toRightOf="@+id/textUsernameHashtag"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="10sp"
+                    app:strokeColor="@color/colorPrimary"
+                    app:strokeWidth="2dp"
+                    tools:ignore="MissingPrefix"
+                    android:visibility="gone"/>
 
                 <ImageView
                     android:id="@+id/ivEllipses2GeneralText"
