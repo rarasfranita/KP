@@ -38,7 +38,7 @@ class ProfileActivity : AppCompatActivity() {
         viewPager.adapter = viewPagerAdapter
         tableLayout.setupWithViewPager(viewPager)
 
-        ShowMyProfile()
+        ShowUserProfile()
     }
 
     private fun ShowMyProfile(){

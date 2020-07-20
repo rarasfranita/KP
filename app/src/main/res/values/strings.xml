@@ -85,7 +85,18 @@
     <string name="hint_add_tag">Hashtag separated by comma (ex: Hashtag1, Hashtag2)</string>
     <string name="load_more_reply">Load more reply</string>
     <string name="lorem_ipsum">Lorem Ipsum Dolor Sit Amet</string>
-
+    <string name="register">Create Your Account</string>
+    <string name="next">Next</string>
+    <string name="withWhatsapp">Use your Whatsapp number instead</string>
+    <string name="withNumber">Use your email instead</string>
+    <string name="VerifCode">Verification Code</string>
+    <string name="verificationcode">We\'ve sent you code to confirm your email     </string>
+    <string name="googleaccount">    abcdefghij@gmail.com</string>
+    <string name="sendcode"> .Send Code Again</string>
+    <string name="ChoseYN">Chose Your Username</string>
+    <string name="ChangePP">Change Profile Picture</string>
+    <string name="Password">Password</string>
+    <string name="SetYN">Set your password</string>
     <!-- Text Home-->
 
     <!-- -->

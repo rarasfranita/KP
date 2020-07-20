@@ -35,7 +35,7 @@ class SplashActivity : AppCompatActivity() {
 
         if (SharedPrefManager.getInstance(this).isLoggedIn) {
             Handler().postDelayed({
-                startActivity(Intent(this@SplashActivity, HomeActivity::class.java))
+                startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
                 finish()
             },4000)
         } else {

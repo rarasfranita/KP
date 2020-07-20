@@ -29,17 +29,21 @@ import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.home.HomeActivity
+import com.example.lotus.ui.register.RegisterActivity
 import com.google.gson.Gson
+import kotlinx.android.synthetic.main.activity_login.*
 
 
 class LoginActivity : AppCompatActivity() {
-
 
     private lateinit var loginViewModel: LoginViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        Register.setOnClickListener {
+            startActivity(Intent(this,RegisterActivity::class.java))
+        }
         val username = findViewById<EditText>(R.id.username)
         val password = findViewById<EditText>(R.id.password)
         val login = findViewById<Button>(R.id.login)
@@ -153,6 +157,7 @@ class LoginActivity : AppCompatActivity() {
                     })
             }
         }
+
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {
