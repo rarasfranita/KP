@@ -22,11 +22,12 @@ import com.example.lotus.models.Respon
 import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
+import com.github.nkzawa.emitter.Emitter
+import com.github.nkzawa.socketio.client.IO
+import com.github.nkzawa.socketio.client.Socket
 import com.google.gson.Gson
-import io.socket.client.IO
-import io.socket.client.Socket
-import io.socket.emitter.Emitter
 import kotlinx.android.synthetic.main.layout_chatting.*
+import org.json.JSONObject
 
 class GetMessage : AppCompatActivity(), View.OnClickListener {
 
@@ -61,31 +62,20 @@ class GetMessage : AppCompatActivity(), View.OnClickListener {
 
         mSocket.connect()
         mSocket.on(Socket.EVENT_CONNECT, onConnect)
-//        mSocket.on("updateChat", onUpdateChat)
 
     }
 
     var onConnect = Emitter.Listener {
-        val data = getChannel
-        val jsonData = gson.toJson(data)
-        mSocket.emit("subscribe", jsonData)
+
+//        val data = args[0] as JSONObject
+//        val gson = Gson()
+//        val dataJson = gson.fromJson(data.toString(), Chat::class.java)
+//        Log.d("Data", dataJson.toString())
+//        Log.d("DATA CHANNEL di getmessage", dataJson.channelId.toString())
+//        Log.d("Socket on", mSocket.connected().toString())
 
     }
 
-//    var onUpdateChat = Emitter.Listener {
-//        val chat: Get = gson.fromJson(it[0].toString(), Get::class.java)
-//        chat.mine = MessageType.CHAT_PARTNER.index
-//        addItemToRecyclerView(chat)
-//    }
-
-//    private fun addItemToRecyclerView(chat: Get) {
-//        runOnUiThread {
-//            chatList.add(chat)
-//            adapter.notifyItemInserted(chatList.size)
-//            edMessage.setText("")
-//            rv_listMessage.scrollToPosition(chatList.size - 1) //move focus on last message
-//        }
-//    }
 
     private fun sendMessage() {
         val message = edMessage.text
