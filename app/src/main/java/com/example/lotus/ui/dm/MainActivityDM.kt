@@ -1,11 +1,11 @@
 package com.example.lotus.ui.dm
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.androidnetworking.AndroidNetworking
@@ -18,11 +18,7 @@ import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
 import com.google.gson.Gson
-import com.r0adkll.slidr.Slidr
-import com.r0adkll.slidr.model.SlidrConfig
-import com.r0adkll.slidr.model.SlidrPosition
 import kotlinx.android.synthetic.main.activity_notification.*
-import kotlinx.android.synthetic.main.activity_notification.dataNull
 import kotlinx.android.synthetic.main.fragment_homedm.*
 
 
@@ -63,7 +59,6 @@ class MainActivityDM : AppCompatActivity() {
                                 val dataJson = gson.fromJson(strRes, Dm::class.java)
                                 dmData.clear()
                                 dmData.add(dataJson)
-                                Log.d("dmData", dataJson.toString())
                             }
 
 

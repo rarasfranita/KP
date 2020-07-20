@@ -111,16 +111,12 @@ class HashtagMediaAdapter(private val listHashtagMedia: ArrayList<Post>, val con
                         object : ParsedRequestListener<Respon> {
                             override fun onResponse(respon: Respon) {
                                 if (respon.code.toString() == "200") {
-                                    Log.d("RESPON FOLLOWW", respon.data.toString())
                                     item.setFollowing()
                                 } else {
-                                    Log.e("ERROR!!!", "Following ${respon.code}")
                                 }
                             }
 
                             override fun onError(anError: ANError) {
-                                Log.e("ERROR!!!", "While following ${anError.errorCode}")
-
                             }
                         })
             }
@@ -172,7 +168,6 @@ class HashtagMediaAdapter(private val listHashtagMedia: ArrayList<Post>, val con
         }
 
         fun setUserID(userID: String) {
-            Log.d("Userid di setuserid", userID)
             this.userID = userID
         }
 

@@ -17,6 +17,7 @@ import com.androidnetworking.interfaces.ParsedRequestListener
 import com.example.lotus.R
 import com.example.lotus.models.DM.Channel.Dm
 import com.example.lotus.models.DM.Get.Get
+import com.example.lotus.models.DM.MessageType
 import com.example.lotus.models.DM.Send.Chat
 import com.example.lotus.models.Respon
 import com.example.lotus.models.Respons
@@ -32,7 +33,6 @@ import org.json.JSONObject
 class GetMessage : AppCompatActivity(), View.OnClickListener {
 
     var dmList = ArrayList<Get>()
-    var getChannel = ArrayList<Dm>()
     var chatlist = ArrayList<Chat>()
     var username = SharedPrefManager.getInstance(this).user.username
     var userId = SharedPrefManager.getInstance(this).user._id
@@ -60,28 +60,55 @@ class GetMessage : AppCompatActivity(), View.OnClickListener {
             Log.d("fail", "Failed to connect")
         }
 
+        adapter = GetMessageAdapter(chatList, this);
+        rv_listMessage.adapter = adapter
+
+        val layoutManager = LinearLayoutManager(this)
+        rv_listMessage.layoutManager = layoutManager
+
         mSocket.connect()
-        mSocket.on(Socket.EVENT_CONNECT, onConnect)
+        mSocket.on(userId, onConnect)
+        mSocket.on("updateChat", onUpdateChat)
+
+        Log.d("Socket Connect", mSocket.connected().toString())
+//        mSocket.on("updateChat", onUpdateChat)
 
     }
 
-    var onConnect = Emitter.Listener {
+    var onConnect = Emitter.Listener { args ->
+        this.runOnUiThread(Runnable {
+            val data = args[0] as JSONObject
 
-//        val data = args[0] as JSONObject
-//        val gson = Gson()
-//        val dataJson = gson.fromJson(data.toString(), Chat::class.java)
-//        Log.d("Data", dataJson.toString())
-//        Log.d("DATA CHANNEL di getmessage", dataJson.channelId.toString())
-//        Log.d("Socket on", mSocket.connected().toString())
+            val gson = Gson()
+            val dataJson = gson.fromJson(data.toString(), Get::class.java)
 
+            Log.d("Data", dataJson.toString())
+            Log.d("DATA CHANNEL di getmessage", dataJson.channelId.toString())
+
+
+            Log.d("Socket on", mSocket.connected().toString())
+
+        })
+    }
+    var onUpdateChat = Emitter.Listener {
+        val chat: Get = gson.fromJson(it[0].toString(), Get::class.java)
+        chat.mine = MessageType.CHAT_MINE.index
+        addItemToRecyclerView(chat)
     }
 
+    private fun addItemToRecyclerView(get: Get) {
+        runOnUiThread {
+            chatList.add(get)
+            adapter.notifyItemInserted(chatList.size)
+            edMessage.setText("")
+            rv_listMessage.scrollToPosition(chatList.size - 1) //move focus on last message
+        }
+    }
 
     private fun sendMessage() {
         val message = edMessage.text
         val bundle = getIntent().getExtras()
         val userid = bundle?.getString("userId")
-        Log.d("userId", userid.toString())
 
         AndroidNetworking.post(EnvService.ENV_API + "/users/{senderId}/dm")
             .addPathParameter("senderId", userId.toString())
@@ -100,9 +127,7 @@ class GetMessage : AppCompatActivity(), View.OnClickListener {
                             val strRes = gson.toJson(respon.data)
                             val dataJson = gson.fromJson(strRes, Chat::class.java)
                             temp.add(dataJson)
-                            Log.e("Responchatlist", temp.toString())
                             chatlist = temp
-//                            loadDm(chatlist, rv_listMessage)
                         } else {
                             Log.d("Error Code", respon.code.toString())
                         }
@@ -119,8 +144,6 @@ class GetMessage : AppCompatActivity(), View.OnClickListener {
         val channelId = bundle?.getString("channelId")
         val username = bundle?.getString("username")
         val name = bundle?.getString("name")
-        Log.d("channelId", channelId.toString())
-        Log.d("userId", userId.toString())
         nama.text = name
         usernama.text = username
 
@@ -141,7 +164,6 @@ class GetMessage : AppCompatActivity(), View.OnClickListener {
                                 val strRes = gson.toJson(res)
                                 val dataJson = gson.fromJson(strRes, Get::class.java)
                                 temp.add(dataJson)
-                                Log.d("dmList", temp.toString())
                             }
                             dmList = temp
                             loadDm(dmList, rv_listMessage)
@@ -156,13 +178,13 @@ class GetMessage : AppCompatActivity(), View.OnClickListener {
                 })
     }
 
-    fun loadDm(data: ArrayList<Get>, notification: RecyclerView) {
+    fun loadDm(data: ArrayList<Get>, dm: RecyclerView) {
         adapter = GetMessageAdapter(data, this)
         adapter.notifyDataSetChanged()
 
-        notification.adapter = adapter
-        notification.setHasFixedSize(true)
-        notification.layoutManager = LinearLayoutManager(this)
+        dm.adapter = adapter
+        dm.setHasFixedSize(true)
+        dm.layoutManager = LinearLayoutManager(this)
     }
 
     override fun onClick(p0: View?) {
@@ -179,19 +201,16 @@ class GetMessageAdapter(val chatList: ArrayList<Get>, val context: Context) :
     var userId = SharedPrefManager.getInstance(context).user._id
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        Log.d("chatlist size", chatList.size.toString())
         var view: View? = null
         when (viewType) {
             0 -> {
                 view =
                     LayoutInflater.from(context).inflate(R.layout.row_chat_partner, parent, false)
-                Log.d("user inflating", "viewType : ${viewType}")
             }
 
             1 -> {
                 view =
                     LayoutInflater.from(context).inflate(R.layout.row_chat_user, parent, false)
-                Log.d("partner inflating", "viewType : ${viewType}")
             }
         }
         return ViewHolder(view!!)
@@ -208,9 +227,7 @@ class GetMessageAdapter(val chatList: ArrayList<Get>, val context: Context) :
 //        chat.bindChat(chatList[position])
         val messageData = chatList[position]
         val content = messageData.text.toString()
-        Log.d("textnya ", content)
         val mine = messageData.mine;
-        Log.d("mine ", mine.toString())
 
         when (mine) {
             CHAT_PARTNER -> {

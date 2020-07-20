@@ -47,7 +47,6 @@ class SearchAdapter(private val listSearchUser: ArrayList<DataSearch>, val conte
     override fun getItemCount(): Int = listSearchUser.size
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        Log.d("APAAN",a.toString())
         val usernameSrc = SharedPrefManager.getInstance(context).user.username
 
         holder.bindFeed(listSearchUser[position], context)
@@ -130,7 +129,6 @@ class SearchAdapter(private val listSearchUser: ArrayList<DataSearch>, val conte
         }
 
         fun setUserID(userID: String) {
-            Log.d("Userid di setuserid", userID)
             this.userID = userID
         }
 
