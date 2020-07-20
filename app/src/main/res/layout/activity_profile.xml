@@ -4,230 +4,244 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/containerProfile"
     tools:context=".ui.profile.ProfileActivity">
 
-    <include layout="@layout/snippet_myprofile"></include>
-
-
-    <RelativeLayout
-        android:id="@+id/myprofile"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbarProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin">
+        tools:ignore="MissingConstraints">
 
-
-        <ImageView
-            android:layout_width="150dp"
-            android:layout_height="100dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="100dp"
-            android:layout_marginLeft="160dp"
-            android:layout_marginTop="47dp"
-            android:layout_marginRight="160dp"
-            android:contentDescription="@string/profile"
-            android:src="@drawable/ic_profile" />
-
-        <TextView
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbarProfile"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="150dp"
-            android:gravity="center_horizontal"
-            android:text="@string/profile_s_name"></TextView>
-
-        <TextView
-            android:id="@+id/tvBiografi"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="170dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="5dp"
-            android:gravity="center_horizontal"
-            android:text="@string/bio"
-            android:textAlignment="center"></TextView>
-
-
-        <LinearLayout
-            android:id="@+id/tvPost"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvBiografi"
-            android:layout_marginStart="33dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginEnd="30dp"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/totalPost"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/white"
+            app:elevation="10dp"
+            app:navigationIcon="@drawable/ic_arrow_back_black"
+            >
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="11"
-                android:textColor="@android:color/black"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/postingan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Posts"
-                android:textSize="12sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/tvFollowers"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvBiografi"
-            android:layout_marginStart="147dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginEnd="120dp"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/totalFollowers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="20"
-                android:textColor="@android:color/black"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/Followers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Followers"
-                android:textSize="12sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/tvFollowing"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvBiografi"
-            android:layout_marginStart="278dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginEnd="120dp"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/totalFollowing"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="20"
-                android:textColor="@android:color/black"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/Following"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Following"
-                android:textSize="12sp" />
-        </LinearLayout>
-        <Button
-            android:id="@+id/btnEditProfile"
-            android:layout_below="@+id/tvPost"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="-1dp"
-            android:text="Edit Profile"
-            android:textColor="@color/white"
-            android:textSize="12sp"></Button>
-        <LinearLayout
-            android:id="@+id/follow"
-            android:layout_width="385dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvFollowers"
-            android:layout_marginTop="0dp"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnfollow"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="20dp"
-                android:text="follow"
-                android:textColor="@color/white"
-                android:textSize="12sp"></Button>
-
-            <Button
-                android:id="@+id/btnDm"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="-1dp"
-                android:text="Message"
-                android:textColor="@color/white"
-                android:textSize="12sp"></Button>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/following"
-            android:layout_width="385dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvFollowers"
-            android:layout_marginTop="0dp"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnfollowing"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="20dp"
-                android:text="following"
-                android:textColor="@color/white"
-                android:textSize="12sp"></Button>
-
-            <Button
-                android:id="@+id/btnDm2"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="-1dp"
-                android:text="Message"
-                android:textColor="@color/white"
-                android:textSize="12sp"></Button>
-
-        </LinearLayout>
-
-    </RelativeLayout>
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Profile"
+                    android:textSize="20dp"
+                    android:id="@+id/profileTitle"/>
+            </RelativeLayout>
+        </com.google.android.material.appbar.MaterialToolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
 
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_Layout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="41dp"
-        android:layout_below="@+id/myprofile"
-        ></com.google.android.material.tabs.TabLayout>
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView"
+        android:fillViewport="true"
+        android:paddingTop="10dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rl1">
+            <RelativeLayout
+                android:id="@+id/myprofile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin">
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/view_Pager"
-        android:layout_below="@+id/tab_Layout"
-        android:layout_width="411dp"
-        android:layout_height="255dp"
-        android:layout_gravity="bottom"
-        >
-    </androidx.viewpager.widget.ViewPager>
+                <LinearLayout
+                    android:id="@+id/ll1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="?attr/actionBarSize"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:src="@drawable/ic_profile"
+                        android:id="@+id/profilePicture"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:gravity="center_horizontal"
+                        android:text="@string/profile_s_name"
+                        android:id="@+id/nameprofile"
+                        android:textStyle="bold"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp"/>
+
+                    <TextView
+                        android:id="@+id/tvBiografi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:gravity="center_horizontal"
+                        android:text="@string/bio"
+                        android:textAlignment="center"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="10dp"
+                        android:layout_below="@+id/ll1">
+
+                        <RelativeLayout
+                            android:id="@+id/tvPost"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/totalPost"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="11"
+                                android:textColor="@android:color/black"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/postingan"
+                                android:layout_below="@+id/totalPost"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="Posts"
+                                android:textSize="12sp" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/tvFollowers"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/totalFollowers"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="20"
+                                android:gravity="center"
+                                android:textColor="@android:color/black"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/Followers"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="Followers"
+                                android:layout_below="@+id/totalFollowers"
+                                android:textSize="12sp" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/tvFollowing"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/totalFollowing"
+                                android:layout_width="match_parent"
+                                android:gravity="center"
+                                android:layout_height="wrap_content"
+                                android:text="20"
+                                android:textColor="@android:color/black"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/Following"
+                                android:layout_below="@+id/totalFollowing"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Following"
+                                android:gravity="center"
+                                android:textSize="12sp" />
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnEditProfile"
+                        android:layout_below="@+id/ll2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Edit Profile"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:backgroundTint="@color/white"
+                        android:elevation="2dp"
+                        app:strokeWidth="0.0000001dp"
+                        android:textAllCaps="false"/>
+
+                    <LinearLayout
+                        android:id="@+id/follow"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnFollowProfile"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:text="Follow"
+                            android:textColor="@color/white"
+                            android:backgroundTint="@color/colorPrimary"
+                            android:layout_marginRight="10dp"
+                            android:elevation="2dp"
+                            app:strokeColor="@color/colorPrimaryDark"
+                            app:strokeWidth="0.0000001dp"
+                            android:textAllCaps="false"/>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnDm"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:textAllCaps="false"
+                            android:text="Message"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:backgroundTint="@color/white"
+                            android:elevation="2dp"
+                            app:strokeWidth="0.0000001dp"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_Layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/myprofile"/>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/view_Pager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_below="@+id/tab_Layout">
+            </androidx.viewpager.widget.ViewPager>
+        </RelativeLayout>
+    </ScrollView>
 
 </RelativeLayout>

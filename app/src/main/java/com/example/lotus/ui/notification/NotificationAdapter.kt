@@ -8,7 +8,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import coil.transform.CircleCropTransformation
@@ -18,6 +21,7 @@ import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.ParsedRequestListener
 import com.bumptech.glide.Glide
 import com.example.lotus.R
+import com.example.lotus.R.color.white
 import com.example.lotus.models.Notification
 import com.example.lotus.models.Respon
 import com.example.lotus.service.EnvService
@@ -42,13 +46,15 @@ class NotificationAdapter(private var notificationsDatas: ArrayList<Notification
         item.bindNotification(notificationsDatas[position], context)
         item.cardNotification.setOnClickListener {
             if (notificationsDatas[position].type == "FOLLOW"){
-                Toast.makeText(context, "TO PROFILE ${notificationsDatas[position].follower?.name}", Toast.LENGTH_SHORT).show()
+                if (context is NotificationActivity) {
+                    context.gotoProfilePicture(notificationsDatas[position].follower?.id.toString())
+                }
             }else {
                 val i: Intent = Intent(context, DetailPost::class.java)
                 i.putExtra("postID", notificationsDatas[position].postId)
 
                 if (context is NotificationActivity) {
-                   context.detailPost(notificationsDatas[position].postId.toString())
+                   context.gotoDetailPost(notificationsDatas[position].postId.toString())
                 }
             }
         }
@@ -78,6 +84,8 @@ class NotificationAdapter(private var notificationsDatas: ArrayList<Notification
                         })
             }
         }
+
+        item.setContext(context)
     }
 
     class ItemViewHolder(val view: View) : RecyclerView.ViewHolder(view){
@@ -89,11 +97,17 @@ class NotificationAdapter(private var notificationsDatas: ArrayList<Notification
         val media: ImageView = view.findViewById(R.id.mediaNotification)
         val profilePicture: ImageView = view.findViewById(R.id.profileUserNotification)
         val cardNotification: MaterialCardView = view.findViewById(R.id.cardNotification)
+        lateinit private var context: Context
+
+        fun setContext(ctx: Context){
+            this.context = ctx
+        }
 
         fun bindNotification(notif: Notification, context: Context){
             if (notif.type == "FOLLOW"){
                 wrapMedia.visibility = View.GONE
-                if (notif.isFollowing == 1){
+                Log.d("NOTIFICATION", notif.isFollowing.toString())
+                if (notif.isFollowing!!.equals(1)){
                     setFollowing()
                 }
                 textNotification.text = "Start following you."
@@ -135,7 +149,7 @@ class NotificationAdapter(private var notificationsDatas: ArrayList<Notification
         @SuppressLint("ResourceAsColor")
         fun setFollowing(){
             follow.setText("Following")
-            follow.setBackgroundColor(R.color.black)
+            follow.setBackgroundColor(white)
             follow.setTextColor(R.color.colorPrimary)
         }
 

@@ -1,5 +1,6 @@
 package com.example.lotus.ui.notification
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -23,6 +24,7 @@ import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.detailpost.DetailPost
 import com.example.lotus.ui.home.RecyclerViewLoadMoreScroll
+import com.example.lotus.ui.profile.ProfileActivity
 import com.google.gson.Gson
 import com.r0adkll.slidr.Slidr
 import com.r0adkll.slidr.model.SlidrConfig
@@ -46,7 +48,7 @@ class NotificationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notification)
         val reloadNotification: PullRefreshLayout = findViewById(R.id.reloadNotification)
-        val datanull = findViewById<LinearLayout>(R.id.dataNull)
+        val datanull = findViewById<LinearLayout>(R.id.noData)
         datanull.visibility = View.GONE
 
         getNotifications(null)
@@ -73,8 +75,6 @@ class NotificationActivity : AppCompatActivity() {
             v.setRefreshing(true)
         }
 
-        Log.d("ID USER DI NOTIFICATION", userID.toString())
-
         AndroidNetworking.get(EnvService.ENV_API + "/users/{userid}/notifications")
             .addPathParameter("userid", userID.toString())
             .addHeaders("Authorization", "Bearer " + token)
@@ -88,15 +88,15 @@ class NotificationActivity : AppCompatActivity() {
                         reloadNotification.setRefreshing(false)
                         val gson = Gson()
                         if (respon.code.toString() == "200") {
+                            notificationsData.clear()
                             for ((i, res) in respon.data.withIndex()) {
                                 val strRes = gson.toJson(res)
                                 val dataJson = gson.fromJson(strRes, Notification::class.java)
-                                notificationsData.clear()
                                 notificationsData.add(dataJson)
                             }
 
                             if (notificationsData.size < 1){
-                                dataNull.visibility = View.VISIBLE
+                                noData.visibility = View.VISIBLE
                             }else{
                                 loadNotification(notificationsData, rvNotification)
                             }
@@ -113,7 +113,13 @@ class NotificationActivity : AppCompatActivity() {
                 })
     }
 
-    fun detailPost(postId: String) {
+    fun gotoProfilePicture(UID: String){
+        val intent = Intent(this, ProfileActivity::class.java)
+        intent.putExtra("userID", UID)
+        startActivity(intent)
+    }
+
+    fun gotoDetailPost(postId: String) {
         val bundle = Bundle().apply {
             putString("postId", postId)
         }
@@ -123,6 +129,7 @@ class NotificationActivity : AppCompatActivity() {
         manager?.beginTransaction()
             ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             ?.replace(R.id.containerNotification, dataPost)
+            ?.addToBackStack("Notification")
             ?.commit()
     }
 
@@ -140,6 +147,10 @@ class NotificationActivity : AppCompatActivity() {
             this.onBackPressed()
         }
 
+    }
+
+    fun setAppBarVisible() {
+        appbarNotification.visibility = View.VISIBLE
     }
 
 }
