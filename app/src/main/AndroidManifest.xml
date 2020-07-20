@@ -13,11 +13,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.explore.SearchActivity"></activity>
+        <activity android:name=".ui.dm.GetMessage"></activity>
+        <activity android:name=".ui.explore.SearchActivity" />
         <activity android:name=".ui.explore.general.GeneralActivity" />
         <activity
             android:name=".ui.explore.hashtag.HashtagActivity"
-            android:label="@string/title_activity_explore"></activity>
+            android:label="@string/title_activity_explore" />
 
         <meta-data
             android:name="android.app.searchable"
