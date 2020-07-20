@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragmentSearch"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tbSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            app:elevation="10dp"
+            app:navigationIcon="@drawable/ic_arrow_back_black"
+            app:title="Search"
+            app:titleTextColor="#6B6B6B" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/user_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="#EAEAEA"
+        android:fontFamily="@font/lato"
+        app:iconifiedByDefault="false"
+        app:queryHint="Search People or Hashtag (#)"
+        app:queryBackground="@null" />
+
+    <com.baoyz.widget.PullRefreshLayout
+        android:id="@+id/srlSearch"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:refreshColor="@color/colorPrimary">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSearch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+    </com.baoyz.widget.PullRefreshLayout>
+</LinearLayout>

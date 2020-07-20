@@ -3,12 +3,12 @@ package com.example.lotus.models
 import android.os.Parcel
 import android.os.Parcelable
 
-data class User(
+data class DataSearch(
     val __v: Int?,
     val _id: String?,
     val avatar: String?,
     val bio: String?,
-    val createdAt: Boolean?,
+    val createdAt: String?,
     val deleted: Boolean?,
     val email: String?,
     val emailVerified: Boolean?,
@@ -24,7 +24,7 @@ data class User(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readValue(Boolean::class.java.classLoader) as? Boolean,
+        parcel.readString(),
         parcel.readValue(Boolean::class.java.classLoader) as? Boolean,
         parcel.readString(),
         parcel.readValue(Boolean::class.java.classLoader) as? Boolean,
@@ -42,7 +42,7 @@ data class User(
         parcel.writeString(_id)
         parcel.writeString(avatar)
         parcel.writeString(bio)
-        parcel.writeValue(createdAt)
+        parcel.writeString(createdAt)
         parcel.writeValue(deleted)
         parcel.writeString(email)
         parcel.writeValue(emailVerified)
@@ -58,12 +58,12 @@ data class User(
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<User> {
-        override fun createFromParcel(parcel: Parcel): User {
-            return User(parcel)
+    companion object CREATOR : Parcelable.Creator<DataSearch> {
+        override fun createFromParcel(parcel: Parcel): DataSearch {
+            return DataSearch(parcel)
         }
 
-        override fun newArray(size: Int): Array<User?> {
+        override fun newArray(size: Int): Array<DataSearch?> {
             return arrayOfNulls(size)
         }
     }

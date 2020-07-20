@@ -32,7 +32,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:background="@drawable/search_bar_drawable"
-        android:drawableStart="@drawable/ic_baseline_search_24"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/ic_search"
         android:hint="Search"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
