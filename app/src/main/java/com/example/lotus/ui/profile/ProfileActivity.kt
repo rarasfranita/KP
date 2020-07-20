@@ -1,10 +1,15 @@
 package com.example.lotus.ui.profile
 
+import android.app.Dialog
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.View
+import android.view.Window
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -12,6 +17,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import coil.api.load
@@ -21,16 +27,19 @@ import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.ParsedRequestListener
 import com.example.lotus.R
+import com.example.lotus.models.MediaData
 import com.example.lotus.models.Post
 import com.example.lotus.models.Respon
 import com.example.lotus.models.UserProfile
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.detailpost.DetailPost
+import com.example.lotus.utils.downloadMedia
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_profile.*
-import kotlinx.android.synthetic.main.media_profile_fragment.*
+import kotlinx.android.synthetic.main.fragment_media_profile.*
+import kotlinx.android.synthetic.main.fragment_text_profile.*
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var button: Button
@@ -63,7 +72,7 @@ class ProfileActivity : AppCompatActivity() {
         val viewPager: ViewPager = findViewById(R.id.view_Pager)
         val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
 
-        viewPagerAdapter.addFragment(MediaProfile(), title = "media")
+        viewPagerAdapter.addFragment(MediaProfileFragment(), title = "media")
         viewPagerAdapter.addFragment(TextFragment(), title = "text")
 
         viewPager.adapter = viewPagerAdapter
@@ -135,10 +144,11 @@ class ProfileActivity : AppCompatActivity() {
             follow(data.username.toString())
         }
 
-        loadExploreMedia(mediaData, rvprofilemedia)
+        loadProfileMedia(mediaData, rvprofilemedia)
+        loadProfileText(textData, rvTextProfile)
     }
 
-    fun loadExploreMedia(data: ArrayList<Post>, postProfile: RecyclerView) {
+    fun loadProfileMedia(data: ArrayList<Post>, postProfile: RecyclerView) {
         if (data.size < 1){
             postProfile.visibility = View.GONE
         }else {
@@ -146,7 +156,23 @@ class ProfileActivity : AppCompatActivity() {
             postProfile.setHasFixedSize(true)
             postProfile.layoutManager = GridLayoutManager(this, 3)
             val adapter =
-                ProfileMediaAdapter(data, this)
+                MediaProfileAdapter(data, this)
+            adapter.notifyDataSetChanged()
+
+            postProfile.adapter = adapter
+        }
+    }
+
+    fun loadProfileText(data: ArrayList<Post>, postProfile: RecyclerView) {
+        Log.d("DATAZISE", data.size.toString())
+        if (data.size < 1){
+            postProfile.visibility = View.GONE
+        }else {
+            textProfileEmpty.visibility = View.GONE
+            postProfile.layoutManager = LinearLayoutManager(this)
+            postProfile.setHasFixedSize(true)
+            val adapter =
+                TextProfileAdapter(data, this)
             adapter.notifyDataSetChanged()
 
             postProfile.adapter = adapter
@@ -302,5 +328,41 @@ class ProfileActivity : AppCompatActivity() {
 
     fun setAppBarVisible(){
         appbarProfile.visibility = View.VISIBLE
+    }
+
+    fun showDialog(medias: ArrayList<MediaData>) {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.layout_menu_post)
+        val download = dialog.findViewById<LinearLayout>(R.id.downloadMedia)
+        val share = dialog.findViewById<LinearLayout>(R.id.sharePost)
+        download.setOnClickListener {
+            downloadMedia(medias, this)
+            dialog.dismiss()
+        }
+
+        share.setOnClickListener {
+            if (medias.size < 1){
+                Toast.makeText(this, "No media to be Share", Toast.LENGTH_SHORT).show()
+            }else {
+                shareMediaToOtherApp(medias)
+                dialog.dismiss()
+            }
+        }
+
+        dialog.show()
+
+    }
+
+    fun shareMediaToOtherApp(medias: ArrayList<MediaData>){
+        for (media in medias){
+            val uri: Uri = Uri.parse(media.link)
+            val shareIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, media.link)
+                type = "text/plain"
+            }
+            startActivity(Intent.createChooser(shareIntent, "Share To"))
+        }
     }
 }

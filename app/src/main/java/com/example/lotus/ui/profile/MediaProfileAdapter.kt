@@ -12,11 +12,11 @@ import com.bumptech.glide.Glide
 import com.example.lotus.R
 import com.example.lotus.models.Post
 
-class ProfileMediaAdapter(val post: ArrayList<Post>, val context: Context) : RecyclerView.Adapter<ProfileMediaAdapter.Holder>() {
+class MediaProfileAdapter(val post: ArrayList<Post>, val context: Context) : RecyclerView.Adapter<MediaProfileAdapter.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(
-            LayoutInflater.from(parent.context).inflate(R.layout.listmedia,parent,false)
+            LayoutInflater.from(parent.context).inflate(R.layout.layout_list_media_profile,parent,false)
         )
     }
 
