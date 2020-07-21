@@ -66,6 +66,7 @@ class HomeFragment : Fragment() {
             }
             true
         }
+
         getFeedsData(null)
 //        setRVScrollListener(v) TODO
 
@@ -94,12 +95,17 @@ class HomeFragment : Fragment() {
                     override fun onResponse(respon: Respons) {
                         reloadFeed.setRefreshing(false)
                         val gson = Gson()
+                        val i = 0
                         var tempDataFeed = ArrayList<Post>()
                         if (respon.code.toString() == "200") {
                             for ((i, res) in respon.data.withIndex()) {
                                 val strRes = gson.toJson(res)
                                 val dataJson = gson.fromJson(strRes, Post::class.java)
-                                tempDataFeed.add(dataJson)
+                                dataFeed.add(dataJson)
+
+                                if (i < 10){
+                                    tempDataFeed.add(dataJson)
+                                }
 
                                 /* TODO: For load data scrolling
                                 if (i.equals(respon.data.size-1)){
@@ -107,9 +113,9 @@ class HomeFragment : Fragment() {
                                 }
                                  */
                             }
-                            dataFeed = tempDataFeed
-                            loadFeed(dataFeed, rvHomeFeed)
 
+                            SharedPrefManager.getInstance(requireContext()).setCachePost(tempDataFeed)
+                            loadFeed(dataFeed, rvHomeFeed)
                         }else {
                             Toast.makeText(context, "Error ${respon.code}", Toast.LENGTH_SHORT).show()
                         }
