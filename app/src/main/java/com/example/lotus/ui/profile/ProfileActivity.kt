@@ -34,6 +34,7 @@ import com.example.lotus.models.UserProfile
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.detailpost.DetailPost
+import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.utils.downloadMedia
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
@@ -79,6 +80,7 @@ class ProfileActivity : AppCompatActivity() {
         tableLayout.setupWithViewPager(viewPager)
         manager = getSupportFragmentManager()
         listenToolbar()
+        listenMenuBurger()
     }
 
     fun getProfileData(UID: String){
@@ -322,6 +324,54 @@ class ProfileActivity : AppCompatActivity() {
         toolbarProfile.setNavigationOnClickListener{
             this.onBackPressed()
         }
+    }
+
+    fun listenMenuBurger(){
+        icBurgerProfile.setOnClickListener {
+            showDialog()
+        }
+    }
+
+    fun showDialog() {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.layout_burger_myprofile)
+        val logout = dialog.findViewById<LinearLayout>(R.id.logout)
+
+        logout.setOnClickListener {
+            logout()
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    fun logout(){
+        AndroidNetworking.get(EnvService.ENV_API + "/users/logout")
+            .addHeaders("Authorization", "Bearer " + token)
+            .setPriority(Priority.LOW)
+            .build()
+            .getAsObject(
+                Respon::class.java,
+                object : ParsedRequestListener<Respon> {
+                    override fun onResponse(respon: Respon) {
+                        if (respon.code.toString() == "200") {
+                            Log.d("Logout", "Success")
+                            SharedPrefManager.getInstance(this@ProfileActivity).clear()
+
+                            startActivity(Intent(this@ProfileActivity, GeneralActivity::class.java))
+                            finish()
+                        }else {
+                            Log.e("ERROR!!!", "Logout ${respon.code}, ${respon.data}")
+                        }
+                    }
+
+                    override fun onError(anError: ANError) {
+                        Log.e("ERROR!!!", "Logout ${anError.errorCode}\n" +
+                                "${anError.errorDetail}")
+
+                    }
+                })
     }
 
     fun setAppBarVisible(){
