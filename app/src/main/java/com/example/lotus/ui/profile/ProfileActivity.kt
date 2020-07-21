@@ -263,8 +263,9 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun showUserProfile(){
-        follow.visibility=View.VISIBLE
-        btnEditProfile.visibility=View.GONE
+        icBurgerProfile.visibility = View.GONE
+        follow.visibility = View.VISIBLE
+        btnEditProfile.visibility = View.GONE
     }
 
     internal class ViewPagerAdapter(fragmentManager: FragmentManager) :
