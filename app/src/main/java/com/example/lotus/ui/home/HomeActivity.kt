@@ -25,6 +25,7 @@ import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.CreatePostActivity
 import com.example.lotus.ui.detailpost.DetailPost
 import com.example.lotus.ui.notification.NotificationActivity
+import com.example.lotus.ui.profile.ProfileActivity
 import com.example.lotus.utils.downloadMedia
 import com.github.nkzawa.emitter.Emitter
 import com.github.nkzawa.socketio.client.IO
@@ -161,6 +162,12 @@ class HomeActivity : AppCompatActivity() {
             ?.commit()
     }
 
+    fun gotoProfilePicture(UID: String){
+        val intent = Intent(this@HomeActivity, ProfileActivity::class.java)
+        intent.putExtra("userID", UID)
+        startActivity(intent)
+    }
+
     fun setfabPostVisible(){
         fab_post?.visibility = View.VISIBLE
     }
@@ -194,8 +201,8 @@ class HomeActivity : AppCompatActivity() {
             val uri: Uri = Uri.parse(media.link)
             val shareIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_STREAM, media.link)
-                type = "*"
+                putExtra(Intent.EXTRA_TEXT, media.link)
+                type = "text/plain"
             }
             startActivity(Intent.createChooser(shareIntent, "Share To"))
         }

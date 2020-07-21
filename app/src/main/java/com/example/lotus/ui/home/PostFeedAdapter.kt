@@ -13,7 +13,6 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -100,7 +99,6 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
         }
 
         fun setUserID(userID: String){
-            Log.d("Userid di setuserid", userID)
             this.userID = userID
         }
 
@@ -337,6 +335,17 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
                 }
             }
 
+            holder.itemView.imageAvatarFeed.setOnClickListener {
+                if (context is HomeActivity){
+                    context.gotoProfilePicture(listPost[position].belongsTo.toString())
+                }
+            }
+
+            holder.itemView.textUsernameFeed.setOnClickListener {
+                if (context is HomeActivity){
+                    context.gotoProfilePicture(listPost[position].belongsTo.toString())
+                }
+            }
         }
     }
 }

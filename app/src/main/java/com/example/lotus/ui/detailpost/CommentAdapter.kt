@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import coil.api.load
+import coil.transform.CircleCropTransformation
 import com.example.lotus.R
 import com.example.lotus.models.CommentRowModel
 import com.example.lotus.ui.detailpost.DetailPost
@@ -71,6 +73,12 @@ class RowAdapter (val context: Context, var commentRowModels: MutableList<Commen
             CommentRowModel.PARENT -> {
                 (p0 as CommentParentViewHolder).textComment.setText(Html.fromHtml("<b>" + row.parent.username +"</b> " + row.parent.text))
                 p0.like.visibility = View.GONE
+                if (row.parent.profilePicture != null){
+                    p0.avatar.load(row.parent.profilePicture){
+                        transformations(CircleCropTransformation())
+                    }
+                }
+
                 dateToFormatTime(p0.time, row.parent.createdAt)
 //                p0.like.setText(row.parent.name)
                 if(row.parent.replies == null || row.parent.replies!!.size == 0) {
@@ -105,15 +113,30 @@ class RowAdapter (val context: Context, var commentRowModels: MutableList<Commen
                     mDetailPost.setCommentID(row.parent.id!!)
                     mDetailPost.openEditTextComment(mDetailPost.requireView())
                 }
+
+                p0.itemView.imageAvatarCommentParent.setOnClickListener {
+                    mDetailPost.gotoProfile(row.parent.userId.toString())
+                }
             }
             CommentRowModel.CHILD -> {
                 (p0 as CommentChildViewHolder).textComment.setText(Html.fromHtml("<b>" + row.child.username +"</b> " + row.child.text))
 //                p0.like.setText(row.child.name)
                 p0.like.visibility = View.GONE
+
+                if (row.child.profilePicture != null){
+                    p0.avatar.load(row.child.profilePicture){
+                        transformations(CircleCropTransformation())
+                    }
+                }
+
                 dateToFormatTime(p0.time, row.child.createdAt)
                 p0.itemView.replyCommentChild.setOnClickListener {
                     mDetailPost.setCommentID(row.child.parentId!!)
                     mDetailPost.openEditTextComment(mDetailPost.requireView())
+                }
+
+                p0.itemView.imageAvatarCommentChild.setOnClickListener {
+                    mDetailPost.gotoProfile(row.child.userId.toString())
                 }
             }
         }
