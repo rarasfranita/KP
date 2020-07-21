@@ -112,7 +112,6 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     fun setProfile(data: UserProfile){
-        Log.d("PROFILE PICTURE", data.profilePicture.toString())
         if (data.profilePicture != null){
             profilePicture.load(data.profilePicture.toString()){
                 transformations(CircleCropTransformation())
