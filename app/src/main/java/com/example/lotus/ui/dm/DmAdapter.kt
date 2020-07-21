@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.media.Image
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -21,20 +22,30 @@ import com.example.lotus.ui.home.PostFeedAdapter
 
 
 // TODO: 20/07/20 add read not read 
-class DmAdapter(private var channelDm: ArrayList<Dm>, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class DmAdapter(private var channelDm: ArrayList<Dm>, var context: Context) :
+    RecyclerView.Adapter<DmAdapter.Holder>() {
     val token = SharedPrefManager.getInstance(context).token.token
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return PostFeedAdapter.ItemViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_list_messages, parent, false))
+    private var mContext: Context? = null
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
+        this.mContext = context
+        return Holder(
+            LayoutInflater.from(
+                parent.context
+            ).inflate(R.layout.layout_list_messages, parent, false)
+        )
+
     }
 
     override fun getItemCount(): Int = channelDm.size
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: Holder, position: Int) {
+        val item = Holder(holder.itemView)
+        item.bindMessage(channelDm[position], context)
         val extras = Bundle()
-        val message = ItemViewHolder(holder.itemView)
-        message.bindMessage(channelDm[position])
-        message.ll2.setOnClickListener{
+        val message = Holder(holder.itemView)
+
+        message.ll2.setOnClickListener {
             val intent = Intent(context, GetMessage::class.java)
             extras.putString("name", channelDm[position].receiver!!.name)
             extras.putString("username", channelDm[position].receiver!!.username)
@@ -49,26 +60,40 @@ class DmAdapter(private var channelDm: ArrayList<Dm>, val context: Context) : Re
 
     }
 
-}
+    class Holder(val view: View) : RecyclerView.ViewHolder(view) {
+        var mContext: Context? = null
+        val lastMessage: TextView = view.findViewById(R.id.lastMessage)
+        val username: TextView = view.findViewById(R.id.username)
+        val ll2: LinearLayout = view.findViewById(R.id.ll2)
+        val read = view.findViewById<ImageView>(R.id.read)
 
-class ItemViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-    val lastMessage: TextView = view.findViewById(R.id.lastMessage)
-    val username: TextView = view.findViewById(R.id.username)
-    val profileMessage: ImageView = view.findViewById(R.id.profileMessage)
-    val ll2: LinearLayout = view.findViewById(R.id.ll2)
-//    val read = view.findViewById<ImageView>(R.id.read)
 
-    fun bindMessage(dm: Dm) {
-        lastMessage.text = dm.lastMessage!!.message
-        username.text = dm.name.toString()
-        setProfilePicture(dm.receiver!!.profilePicture)
-    }
+        fun bindMessage(dm: Dm, context: Context) {
+            itemView.apply {
+                mContext = context
+                val profileMessage: ImageView = view.findViewById(R.id.profileMessage)
+                lastMessage.text = dm.lastMessage!!.message
+                username.text = dm.name.toString()
+                Log.d("nukanya", dm.receiver!!.profilePicture)
+                setProfilePicture(profileMessage, dm.receiver.profilePicture)
 
-    fun setProfilePicture(url: String){
-        profileMessage.load(url){
-            transformations(CircleCropTransformation())
+                if (dm.isRead == 1) {
+                    read.visibility = View.GONE
+                } else {
+                    read.visibility = View.VISIBLE
+                }
+            }
+
         }
+
+        fun setProfilePicture(profpic: ImageView, url: String) {
+            profpic.load(url) {
+                transformations(CircleCropTransformation())
+            }
+        }
+
+
     }
 
-
 }
+

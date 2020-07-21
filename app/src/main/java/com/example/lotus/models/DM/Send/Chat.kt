@@ -4,14 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.example.lotus.models.DM.Channel.ReceiverX
 
-data class Chat(
-    val channelId: String?,
-    val createdAt: String?,
-    val isRead: Boolean?,
-    val `receiver`: ReceiverX?,
-    val sender: Sender?,
-    val text: String?,
-    val type: String?
+data class Chat(val channelId: String?, val createdAt: String?, val isRead: Boolean?, val `receiver`: ReceiverX?, val sender: Sender?, val text: String?, val type: String?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),

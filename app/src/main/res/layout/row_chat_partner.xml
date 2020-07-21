@@ -17,7 +17,7 @@
 
     <TextView
         android:id="@+id/message"
-        android:background="@drawable/customborder"
+        android:background="@drawable/customborder2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/lato"
