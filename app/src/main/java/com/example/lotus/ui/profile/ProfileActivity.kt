@@ -82,7 +82,6 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     fun getProfileData(UID: String){
-        Log.d("USERID $UID", "MYUID $myUserID")
         AndroidNetworking.get(EnvService.ENV_API + "/users/{userID}/profile?viewer=$myUserID")
             .addHeaders("Authorization", "Bearer " + token)
             .addPathParameter("userID", UID)
@@ -113,8 +112,9 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     fun setProfile(data: UserProfile){
+        Log.d("PROFILE PICTURE", data.profilePicture.toString())
         if (data.profilePicture != null){
-            profilePicture.load(data.profilePicture){
+            profilePicture.load(data.profilePicture.toString()){
                 transformations(CircleCropTransformation())
             }
         }
@@ -164,7 +164,6 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     fun loadProfileText(data: ArrayList<Post>, postProfile: RecyclerView) {
-        Log.d("DATAZISE", data.size.toString())
         if (data.size < 1){
             postProfile.visibility = View.GONE
         }else {

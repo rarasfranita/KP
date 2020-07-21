@@ -6,7 +6,6 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +29,6 @@ class TextProfileAdapter (val post: ArrayList<Post>, val context: Context) : Rec
     val userID = SharedPrefManager.getInstance(context).user._id
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        Log.d("postdiadapter", post.toString())
         return Holder(
             LayoutInflater.from(parent.context).inflate(R.layout.layout_list_text_profile,parent,false)
         )
@@ -202,8 +200,6 @@ class TextProfileAdapter (val post: ArrayList<Post>, val context: Context) : Rec
         }
 
         fun listenLikeIcon(view: View){
-            Log.d("CEK USERID TOKEN ", "$userID, $token")
-            Log.d("Postid", postData?.id.toString())
             val likeIcon = view.findViewById<RelativeLayout>(R.id.likeLayoutProfileText)
             likeIcon.setOnClickListener {
                 if(likeStatus.toString() == "1"){
