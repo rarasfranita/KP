@@ -5,9 +5,15 @@
     android:layout_height="match_parent"
     tools:context=".ui.profile.TextFragment">
 
-    <include layout="@layout/emptypostprofile"></include>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/textProfileEmpty">
+        <include layout="@layout/emptypostprofile"></include>
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/list_text"/>
+        android:id="@+id/rvTextProfile"/>
 </FrameLayout>

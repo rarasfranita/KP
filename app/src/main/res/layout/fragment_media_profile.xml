@@ -4,13 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/rv_mediaprofile"
-    tools:context=".ui.profile.MediaProfile">
+    tools:context=".ui.profile.MediaProfileFragment"
+    android:paddingRight="10dp">
 
-    <include layout="@layout/emptypostprofile"></include>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/dataEmpty">
+        <include layout="@layout/emptypostprofile"></include>
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvprofilemedia"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/listmedia"/>
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

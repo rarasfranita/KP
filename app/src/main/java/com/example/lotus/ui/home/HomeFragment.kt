@@ -9,12 +9,16 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import coil.api.load
+import coil.transform.CircleCropTransformation
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
@@ -55,6 +59,9 @@ class HomeFragment : Fragment() {
             ViewModelProviders.of(this).get(HomeViewModel::class.java)
         val v = inflater.inflate(R.layout.fragment_home, container, false)
         val reloadFeed: PullRefreshLayout = v.findViewById(R.id.reloadFeed)
+        val nullData = v.findViewById<LinearLayout>(R.id.feedNoData)
+
+        nullData.visibility = View.INVISIBLE
 
         username = SharedPrefManager.getInstance(requireContext()).user.username
         token = SharedPrefManager.getInstance(requireActivity()).token.token
@@ -67,7 +74,14 @@ class HomeFragment : Fragment() {
             true
         }
 
+        val cacheFeedData = SharedPrefManager.getInstance(requireContext()).cachePost
+        if (cacheFeedData != null){
+            Log.d("DISINI", cacheFeedData.toString())
+            loadFeed(cacheFeedData, v.findViewById(R.id.rvHomeFeed))
+        }
+
         getFeedsData(null)
+
 //        setRVScrollListener(v) TODO
 
         reloadFeed.setOnRefreshListener {
@@ -114,20 +128,27 @@ class HomeFragment : Fragment() {
                                  */
                             }
 
-                            SharedPrefManager.getInstance(requireContext()).setCachePost(tempDataFeed)
-                            loadFeed(dataFeed, rvHomeFeed)
+                            if (dataFeed.size < 1){
+                                feedNoData.visibility = View.VISIBLE
+                            }else{
+                                SharedPrefManager.getInstance(requireContext()).setCachePost(tempDataFeed)
+                                loadFeed(dataFeed, rvHomeFeed)
+                            }
+
                         }else {
-                            Toast.makeText(context, "Error ${respon.code}", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Error ${respon.code} \n${respon.data}", Toast.LENGTH_SHORT).show()
                         }
                     }
 
                     override fun onError(anError: ANError) {
                         reloadFeed.setRefreshing(false)
-                        Toast.makeText(context, "Error ${anError.errorCode}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "${anError.errorDetail}", Toast.LENGTH_SHORT).show()
                         Log.d("Errornya disini kah?", anError.toString())
                     }
                 })
     }
+
+
 
     fun loadFeed(data: ArrayList<Post>, homeFeed: RecyclerView){
         adapter = PostFeedAdapter(data, requireContext())
@@ -136,6 +157,16 @@ class HomeFragment : Fragment() {
         homeFeed.adapter = adapter
         homeFeed.setHasFixedSize(true)
         homeFeed.layoutManager = LinearLayoutManager(context)
+    }
+
+    fun setProfilePictureToolbar(v: ImageView){
+        val profilePicture = SharedPrefManager.getInstance(requireContext()).user.avatar
+
+        if (profilePicture != null){
+            v.load(profilePicture){
+                transformations(CircleCropTransformation())
+            }
+        }
     }
 
     private fun listenAppToolbar(v: View){
