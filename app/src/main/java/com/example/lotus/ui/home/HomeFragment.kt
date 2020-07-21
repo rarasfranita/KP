@@ -156,6 +156,7 @@ class HomeFragment : Fragment() {
 
         homeFeed.adapter = adapter
         homeFeed.setHasFixedSize(true)
+        homeFeed.getRecycledViewPool().setMaxRecycledViews(0, 0)
         homeFeed.layoutManager = LinearLayoutManager(context)
     }
 
