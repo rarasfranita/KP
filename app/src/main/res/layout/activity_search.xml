@@ -28,7 +28,10 @@
             app:titleTextColor="#6B6B6B" />
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!--    todo : unhide search -->
+
     <androidx.appcompat.widget.SearchView
+        android:visibility="gone"
         android:id="@+id/user_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

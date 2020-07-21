@@ -33,7 +33,7 @@
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@drawable/ic_profile"
+                    android:background="@drawable/ic_profile"
                     android:id="@+id/profileSearch"/>
             </LinearLayout>
 

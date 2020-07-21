@@ -32,6 +32,7 @@ import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.dm.GetNewMsgAdapter.Holder
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_new_message.*
+import kotlinx.android.synthetic.main.layout_list_messages.view.*
 import kotlinx.android.synthetic.main.layout_search_user.view.*
 
 class NewMessageFragment : Fragment() {
@@ -168,7 +169,7 @@ class GetNewMsgAdapter (private var nwMsg : ArrayList<User>, val context: Contex
         return Holder(
             LayoutInflater.from(
                 parent.context
-            ).inflate(R.layout.layout_search_user,parent,false)
+            ).inflate(R.layout.layout_list_messages,parent,false)
         )
     }
 
@@ -197,8 +198,8 @@ class GetNewMsgAdapter (private var nwMsg : ArrayList<User>, val context: Contex
 
 
     class Holder (val view: View) : RecyclerView.ViewHolder(view){
-        val uname : TextView = view.findViewById(R.id.usernameSearch)
-        val search_user_container : RelativeLayout = view.findViewById(R.id.search_user_container)
+        val uname : TextView = view.findViewById(R.id.username)
+        val search_user_container : RelativeLayout = view.findViewById(R.id.rlMessage)
         var mContext: Context? = null
         private var userData: User? = null
 
@@ -207,14 +208,13 @@ class GetNewMsgAdapter (private var nwMsg : ArrayList<User>, val context: Contex
                 userData = search
                 mContext = context
 
-                btnFollowSearch.visibility = View.GONE
-                btnUnfollowSearch.visibility = View.GONE
+                read.visibility = View.GONE
 
                 val usernameSearch: TextView =
-                    view.findViewById<View>(R.id.usernameSearch) as TextView
+                    view.findViewById<View>(R.id.username) as TextView
                 val profileSearch: ImageView =
-                    view.findViewById<View>(R.id.profileSearch) as ImageView
-                val bioSearch: TextView = view.findViewById<View>(R.id.bioSearch) as TextView
+                    view.findViewById<View>(R.id.profileMessage) as ImageView
+                val bioSearch: TextView = view.findViewById<View>(R.id.lastMessage) as TextView
 
                 usernameSearch.text = search.username
                 setProfilePicture(profileSearch, search.avatar.toString())

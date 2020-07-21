@@ -1,4 +1,5 @@
 package com.example.lotus.ui.dm
+
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -7,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +19,6 @@ import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.ParsedRequestListener
 import com.example.lotus.R
-import com.example.lotus.models.DM.Channel.Dm
 import com.example.lotus.models.DM.Get.Get
 import com.example.lotus.models.DM.MessageType
 import com.example.lotus.models.DM.Send.Chat
@@ -27,19 +26,17 @@ import com.example.lotus.models.Respon
 import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
-import com.example.lotus.ui.explore.general.GeneralActivity
 import com.github.nkzawa.emitter.Emitter
 import com.github.nkzawa.socketio.client.IO
 import com.github.nkzawa.socketio.client.Socket
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.layout_chatting.*
 import org.json.JSONObject
-import java.util.function.LongFunction
 
 class GetMessage : AppCompatActivity(), View.OnClickListener {
 
-    var dmList = ArrayList<Get>() //message
-    var chatlist = ArrayList<Chat>() //senMessage
+    var dmList = ArrayList<Get>()
+    var chatlist = ArrayList<Chat>()
     var username = SharedPrefManager.getInstance(this).user.username
     var userId = SharedPrefManager.getInstance(this).user._id
     var token = SharedPrefManager.getInstance(this).token.token
@@ -53,6 +50,12 @@ class GetMessage : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_chatting)
+
+        val extra = intent.getStringExtra("profilePicture")
+        if (extra != null) {
+            setProfilePicture(profPictre, extra)
+        }
+
 
         icSend.setOnClickListener(this)
 
@@ -75,7 +78,11 @@ class GetMessage : AppCompatActivity(), View.OnClickListener {
         // TODO: 21/07/20 fix reverse RV not work
         val layoutManager = LinearLayoutManager(this)
         layoutManager.reverseLayout = true
+        layoutManager.stackFromEnd = true
         rv_listMessage.layoutManager = layoutManager
+
+
+
 
         mSocket.connect()
         mSocket.on(userId, onConnect)
@@ -102,64 +109,69 @@ class GetMessage : AppCompatActivity(), View.OnClickListener {
         })
     }
 
+    fun setProfilePicture(profpic: ImageView, url: String) {
+        profpic.load(url) {
+            transformations(CircleCropTransformation())
+        }
+    }
+
     private fun sendMessage() {
-            val content = edMessage.text.toString()
-            val bundle = intent.extras
-            val userid = bundle?.getString("userId")
+        val content = edMessage.text.toString()
+        val bundle = intent.extras
+        val userid = bundle?.getString("userId")
 
-            AndroidNetworking.post(EnvService.ENV_API + "/users/{senderId}/dm")
-                .addPathParameter("senderId", userId.toString())
-                .addBodyParameter("userId", userid.toString())
-                .addBodyParameter("message", content)
-                .addHeaders("Authorization", "Bearer " + token)
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsObject(
-                    Respon::class.java,
-                    object : ParsedRequestListener<Respon> {
-                        override fun onResponse(respon: Respon) {
-                            val gson = Gson()
-                            val temp = ArrayList<Chat>()
-//                            val message = ArrayList<Get>()
-                            if (respon.code.toString() == "200") {
-                                val strRes = gson.toJson(respon.data)
-                                val dataJson = gson.fromJson(strRes, Chat::class.java)
-                                val chat = gson.fromJson(strRes, Get::class.java)
-                                Log.d("Chat", chat.toString())
-                                temp.add(dataJson)
-//                                message.add(chat)
+        AndroidNetworking.post(EnvService.ENV_API + "/users/{senderId}/dm")
+            .addPathParameter("senderId", userId.toString())
+            .addBodyParameter("userId", userid.toString())
+            .addBodyParameter("message", content)
+            .addHeaders("Authorization", "Bearer " + token)
+            .setPriority(Priority.HIGH)
+            .build()
+            .getAsObject(
+                Respon::class.java,
+                object : ParsedRequestListener<Respon> {
+                    override fun onResponse(respon: Respon) {
+//                        rv_listMessage.smoothScrollToPosition(chatlist.size -1)
+                        val gson = Gson()
+                        val temp = ArrayList<Chat>()
+                        if (respon.code.toString() == "200") {
+                            val strRes = gson.toJson(respon.data)
+                            val dataJson = gson.fromJson(strRes, Chat::class.java)
+                            val chat = gson.fromJson(strRes, Get::class.java)
+                            Log.d("Chat", chat.toString())
+                            temp.add(dataJson)
 
-                                chatlist = temp
-                                chatlist.size
-                                val message = Get(
-                                    chat.__v,
-                                    chat._id,
-                                    chat.channelId,
-                                    chat.createdAt,
-                                    chat.deleted,
-                                    chat.isRead,
-                                    chat.receiver,
-                                    chat.sender,
-                                    content,
-                                    chat.updatedAt,
-                                    MessageType.CHAT_MINE.index
-                                )
+                            chatlist = temp
+                            chatlist.size
+                            val message = Get(
+                                chat.__v,
+                                chat._id,
+                                chat.channelId,
+                                chat.createdAt,
+                                chat.deleted,
+                                chat.isRead,
+                                chat.receiver,
+                                chat.sender,
+                                content,
+                                chat.updatedAt,
+                                MessageType.CHAT_MINE.index
+                            )
 
-                                adapter.addItemToRecyclerView(chat)
-                                edMessage.setText("")
-//                                rv_listMessage.scrollToPosition(chatList.size -1) //move focus on last message
-                                Log.d("messagemessage", message.toString())
+                            adapter.addItemToRecyclerView(chat)
+                            edMessage.setText("")
 
-                                mSocket.emit("newMessage", dataJson)
-                            } else {
-                                Log.d("Error Code", respon.code.toString())
-                            }
+                            Log.d("messagemessage", message.toString())
+
+                            mSocket.emit("newMessage", dataJson)
+                        } else {
+                            Log.d("Error Code", respon.code.toString())
                         }
+                    }
 
-                        override fun onError(error: ANError) {
-                            Log.d("onError: Failed ${error.errorCode}", error.toString())
-                        }
-                    })
+                    override fun onError(error: ANError) {
+                        Log.d("onError: Failed ${error.errorCode}", error.toString())
+                    }
+                })
 
     }
 
@@ -187,11 +199,12 @@ class GetMessage : AppCompatActivity(), View.OnClickListener {
                             for ((i, res) in respon.data.withIndex()) {
                                 val strRes = gson.toJson(res)
                                 val dataJson = gson.fromJson(strRes, Get::class.java)
+//                                temp.reverse()
                                 temp.add(dataJson)
-                                Log.d("dataJson",dataJson.toString())
+                                Log.d("dataJson", dataJson.toString())
 
                             }
-//                            rv_listMessage.scrollToPosition(chatList.size -1) //move focus on last message
+                            temp.reverse()
                             dmList = temp
                             loadDm(dmList, rv_listMessage)
 
@@ -215,6 +228,7 @@ class GetMessage : AppCompatActivity(), View.OnClickListener {
         adapter = GetMessageAdapter(data, this)
         adapter.notifyDataSetChanged()
 
+
         dm.adapter = adapter
         dm.setHasFixedSize(true)
         dm.layoutManager = LinearLayoutManager(this)
@@ -235,6 +249,7 @@ class GetMessageAdapter(private val chatList: ArrayList<Get>, val context: Conte
     var userId = SharedPrefManager.getInstance(context).user._id
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+
         Log.d("chatlist size", chatList.size.toString())
         var view: View? = null
         when (viewType) {
@@ -254,9 +269,11 @@ class GetMessageAdapter(private val chatList: ArrayList<Get>, val context: Conte
     }
 
     fun addItemToRecyclerView(get: Get) {
-            chatList.add(get)
-//            adapter.notifyItemInserted(chatList.size)
-            notifyDataSetChanged()
+
+        chatList.add(get)
+//        rv_listMessage.scrollToPosition(chatList.size - 1) //move focus on last message
+        notifyDataSetChanged()
+
     }
 
     override fun getItemCount(): Int = chatList.size
@@ -266,20 +283,20 @@ class GetMessageAdapter(private val chatList: ArrayList<Get>, val context: Conte
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-//        val item = ViewHolder(holder.itemView)
-//        item.bind(chatList[position], context)
-
         val messageData = chatList[position]
         val content = messageData.text.toString()
         val mine = messageData.mine
-        val message = ViewHolder(holder.itemView)
-        val a = messageData.sender?.avatar
-        //        message.bind(chatList[position])
-        Log.d("setProfilePicture", messageData.sender?.avatar.toString())
-        Log.d("name", messageData.sender?.name.toString())
+        val a = messageData.sender.avatar
+        Log.d("messageData", messageData.toString())
+        fun setProfilePicture(profpic: ImageView, url: String) {
+            profpic.load(url) {
+                transformations(CircleCropTransformation())
+            }
+        }
         when (mine) {
             CHAT_PARTNER -> {
                 holder.message.text = content
+                setProfilePicture(holder.ava, a)
             }
             CHAT_MINE -> {
                 holder.message.text = content
@@ -289,22 +306,8 @@ class GetMessageAdapter(private val chatList: ArrayList<Get>, val context: Conte
 
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         var mContext: Context? = null
-        val message : TextView = view.findViewById<TextView>(R.id.message)
-
-        fun bind(get: Get, context: Context){
-            itemView.apply {
-                mContext = context
-                val ava : ImageView = view.findViewById(R.id.profPictre)
-
-                setProfilePicture(ava, get.sender!!.avatar)
-            }
-        }
-
-        fun setProfilePicture(profpic: ImageView, url: String){
-            profpic.load(url){
-                transformations(CircleCropTransformation())
-            }
-        }
+        val message: TextView = view.findViewById(R.id.message)
+        val ava: ImageView = view.findViewById(R.id.avatr)
     }
 
 }
