@@ -37,7 +37,7 @@
             android:id="@+id/action_createEmailFragment_to_verificationCodeFragment"
             app:destination="@id/verificationCodeFragment" />
         <action
-            android:id="@+id/action_createEmailFragment_to_createNumberFragment2"
+            android:id="@+id/action_createEmailFragment_to_createNumberFragment"
             app:destination="@id/createNumberFragment2" />
     </fragment>
     <fragment
