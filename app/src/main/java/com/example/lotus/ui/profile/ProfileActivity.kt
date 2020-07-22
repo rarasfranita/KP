@@ -129,7 +129,7 @@ class ProfileActivity : AppCompatActivity() {
         tvBiografi.text = data.bio
         totalFollowers.text = totalFollower.toString()
         totalFollowing.text = data.following.toString()
-        if (data.posts == null){
+        if (data.posts!!.size < 1){
             totalPost.text = "0"
         }else{
             totalPost.text = data.posts.size.toString()
