@@ -13,6 +13,7 @@ class UserProfile(
     val follower: Int?,
     val following: Int?,
     val isFollowing: Int?,
+    val channelId: String?,
     val posts: ArrayList<Post>?
 ): Parcelable {
     constructor(parcel: Parcel) : this(
@@ -25,7 +26,8 @@ class UserProfile(
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readValue(Int::class.java.classLoader) as? Int,
-        parcel.createTypedArrayList(Post)
+        parcel.readString(),
+        TODO("posts")
     ) {
     }
 
@@ -39,6 +41,7 @@ class UserProfile(
         parcel.writeValue(follower)
         parcel.writeValue(following)
         parcel.writeValue(isFollowing)
+        parcel.writeString(channelId)
     }
 
     override fun describeContents(): Int {
@@ -54,4 +57,5 @@ class UserProfile(
             return arrayOfNulls(size)
         }
     }
+
 }
