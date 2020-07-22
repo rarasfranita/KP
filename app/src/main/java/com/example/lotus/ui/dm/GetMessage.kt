@@ -81,15 +81,8 @@ class GetMessage : AppCompatActivity(), View.OnClickListener {
         layoutManager.stackFromEnd = true
         rv_listMessage.layoutManager = layoutManager
 
-
-
-
         mSocket.connect()
         mSocket.on(userId, onConnect)
-
-        Log.d("Socket Connect", mSocket.connected().toString())
-//        mSocket.on("updateChat", onUpdateChat)
-
     }
 
     var onConnect = Emitter.Listener { args ->
@@ -99,13 +92,7 @@ class GetMessage : AppCompatActivity(), View.OnClickListener {
             val gson = Gson()
             val dataJson = gson.fromJson(data.toString(), Get::class.java)
             mSocket.emit("subscribe", dataJson)
-            Log.d("Data", dataJson.toString())
-            Log.d("DATA CHANNEL di getmessage", dataJson.channelId.toString())
             adapter.addItemToRecyclerView(dataJson)
-
-
-            Log.d("Socket on", mSocket.connected().toString())
-
         })
     }
 
@@ -138,7 +125,6 @@ class GetMessage : AppCompatActivity(), View.OnClickListener {
                             val strRes = gson.toJson(respon.data)
                             val dataJson = gson.fromJson(strRes, Chat::class.java)
                             val chat = gson.fromJson(strRes, Get::class.java)
-                            Log.d("Chat", chat.toString())
                             temp.add(dataJson)
 
                             chatlist = temp
@@ -159,8 +145,6 @@ class GetMessage : AppCompatActivity(), View.OnClickListener {
 
                             adapter.addItemToRecyclerView(chat)
                             edMessage.setText("")
-
-                            Log.d("messagemessage", message.toString())
 
                             mSocket.emit("newMessage", dataJson)
                         } else {
@@ -199,10 +183,7 @@ class GetMessage : AppCompatActivity(), View.OnClickListener {
                             for ((i, res) in respon.data.withIndex()) {
                                 val strRes = gson.toJson(res)
                                 val dataJson = gson.fromJson(strRes, Get::class.java)
-//                                temp.reverse()
                                 temp.add(dataJson)
-                                Log.d("dataJson", dataJson.toString())
-
                             }
                             temp.reverse()
                             dmList = temp
@@ -250,7 +231,6 @@ class GetMessageAdapter(private val chatList: ArrayList<Get>, val context: Conte
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
-        Log.d("chatlist size", chatList.size.toString())
         var view: View? = null
         when (viewType) {
             0 -> {
@@ -287,7 +267,6 @@ class GetMessageAdapter(private val chatList: ArrayList<Get>, val context: Conte
         val content = messageData.text.toString()
         val mine = messageData.mine
         val a = messageData.sender.avatar
-        Log.d("messageData", messageData.toString())
         fun setProfilePicture(profpic: ImageView, url: String) {
             profpic.load(url) {
                 transformations(CircleCropTransformation())
