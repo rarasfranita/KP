@@ -29,6 +29,7 @@ import com.example.lotus.models.Post
 import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
+import com.example.lotus.ui.CreatePostActivity
 import com.example.lotus.ui.dm.MainActivityDM
 import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.notification.NotificationActivity
@@ -73,6 +74,13 @@ class HomeFragment : Fragment() {
             }
             true
         }
+
+        val cacheFeedData = SharedPrefManager.getInstance(requireContext()).cachePost
+        if (cacheFeedData != null){
+            Log.d("DISINI", cacheFeedData.toString())
+            loadFeed(cacheFeedData, v.findViewById(R.id.rvHomeFeed))
+        }
+
         getFeedsData(null)
 
 //        setRVScrollListener(v) TODO
@@ -80,6 +88,8 @@ class HomeFragment : Fragment() {
         reloadFeed.setOnRefreshListener {
             getFeedsData(reloadFeed)
         }
+
+        fabPostOnClick(v)
 
         return v
     }
@@ -107,7 +117,11 @@ class HomeFragment : Fragment() {
                             for ((i, res) in respon.data.withIndex()) {
                                 val strRes = gson.toJson(res)
                                 val dataJson = gson.fromJson(strRes, Post::class.java)
-                                tempDataFeed.add(dataJson)
+                                dataFeed.add(dataJson)
+
+                                if (i < 10){
+                                    tempDataFeed.add(dataJson)
+                                }
 
                                 /* TODO: For load data scrolling
                                 if (i.equals(respon.data.size-1)){
@@ -115,22 +129,22 @@ class HomeFragment : Fragment() {
                                 }
                                  */
                             }
-                            dataFeed = tempDataFeed
 
                             if (dataFeed.size < 1){
                                 feedNoData.visibility = View.VISIBLE
                             }else{
+                                SharedPrefManager.getInstance(requireContext()).setCachePost(tempDataFeed)
                                 loadFeed(dataFeed, rvHomeFeed)
                             }
 
                         }else {
-                            Toast.makeText(context, "Error ${respon.code}", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Error ${respon.code} \n${respon.data}", Toast.LENGTH_SHORT).show()
                         }
                     }
 
                     override fun onError(anError: ANError) {
                         reloadFeed.setRefreshing(false)
-                        Toast.makeText(context, "Error ${anError.errorCode}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "${anError.errorDetail}", Toast.LENGTH_SHORT).show()
                         Log.d("Errornya disini kah?", anError.toString())
                     }
                 })
@@ -142,6 +156,7 @@ class HomeFragment : Fragment() {
 
         homeFeed.adapter = adapter
         homeFeed.setHasFixedSize(true)
+        homeFeed.getRecycledViewPool().setMaxRecycledViews(0, 0)
         homeFeed.layoutManager = LinearLayoutManager(context)
     }
 
@@ -153,6 +168,17 @@ class HomeFragment : Fragment() {
                 transformations(CircleCropTransformation())
             }
         }
+    }
+
+
+    private fun fabPostOnClick(v: View) {
+        val fabPost = v.findViewById<View>(R.id.fabCreatePost)
+
+        fabPost.setOnClickListener{
+            val intent = Intent(this.activity, CreatePostActivity::class.java)
+            (context as HomeActivity).startActivity(intent)
+        }
+
     }
 
     private fun listenAppToolbar(v: View){

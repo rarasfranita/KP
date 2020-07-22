@@ -40,7 +40,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_explore_general.*
 import kotlinx.android.synthetic.main.activity_hashtag.*
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 class HashtagActivity : AppCompatActivity() {
@@ -371,7 +370,6 @@ class HashtagActivity : AppCompatActivity() {
         bundle.putParcelable("data", item)
         val dataPost = DetailPost()
         dataPost.arguments = bundle
-        fab_post?.setVisibility(View.INVISIBLE)
         manager?.beginTransaction()
             ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             ?.replace(R.id.fragmentHashtag, dataPost)
