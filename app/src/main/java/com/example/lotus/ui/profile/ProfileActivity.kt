@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.View
 import android.view.Window
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -34,6 +33,7 @@ import com.example.lotus.models.UserProfile
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.detailpost.DetailPost
+import com.example.lotus.ui.dm.GetMessage
 import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.utils.downloadMedia
 import com.google.android.material.tabs.TabLayout
@@ -43,8 +43,6 @@ import kotlinx.android.synthetic.main.fragment_media_profile.*
 import kotlinx.android.synthetic.main.fragment_text_profile.*
 
 class ProfileActivity : AppCompatActivity() {
-    private lateinit var button: Button
-    private var myProfile: Boolean = true
     private val myUserID = SharedPrefManager.getInstance(this).user._id
     private val myUsername = SharedPrefManager.getInstance(this).user.username
     private val token = SharedPrefManager.getInstance(this).token.token
@@ -54,6 +52,7 @@ class ProfileActivity : AppCompatActivity() {
     private  var textData = ArrayList<Post>()
     private var manager: FragmentManager? = null
     private var totalFollower = 0
+    private var profileData: UserProfile? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,6 +80,7 @@ class ProfileActivity : AppCompatActivity() {
         manager = getSupportFragmentManager()
         listenToolbar()
         listenMenuBurger()
+        listenSendMessage()
     }
 
     fun getProfileData(UID: String){
@@ -98,6 +98,7 @@ class ProfileActivity : AppCompatActivity() {
                             Log.d("Get Profile Data", "Success")
                             val jsonRes = gson.toJson(respon.data)
                             val data = gson.fromJson(jsonRes, UserProfile::class.java)
+                            profileData = data
                             setProfile(data)
                         }else {
                             Toast.makeText(this@ProfileActivity, "Error while getting data profile, code: ${respon.code} \n${respon.data}", Toast.LENGTH_SHORT).show()
@@ -115,7 +116,9 @@ class ProfileActivity : AppCompatActivity() {
 
     fun setProfile(data: UserProfile){
         if (data.profilePicture != null){
-            profilePicture.load(data.profilePicture.toString()){
+            profilePicture.load(data.profilePicture){
+                crossfade(true)
+                crossfade(300)
                 transformations(CircleCropTransformation())
             }
         }
@@ -129,7 +132,7 @@ class ProfileActivity : AppCompatActivity() {
         tvBiografi.text = data.bio
         totalFollowers.text = totalFollower.toString()
         totalFollowing.text = data.following.toString()
-        if (data.posts == null){
+        if (data.posts!!.size < 1){
             totalPost.text = "0"
         }else{
             totalPost.text = data.posts.size.toString()
@@ -330,6 +333,18 @@ class ProfileActivity : AppCompatActivity() {
     fun listenMenuBurger(){
         icBurgerProfile.setOnClickListener {
             showDialog()
+        }
+    }
+
+    fun listenSendMessage(){
+        btnDm.setOnClickListener {
+            val intent = Intent(this, GetMessage::class.java)
+            intent.putExtra("name", profileData!!.name)
+            intent.putExtra("username", profileData!!.username)
+            intent.putExtra("channelId", profileData!!.channelId)
+            intent.putExtra("userId", profileData!!._id)
+            intent.putExtra("profilePicture", profileData!!.profilePicture)
+            startActivity(intent)
         }
     }
 

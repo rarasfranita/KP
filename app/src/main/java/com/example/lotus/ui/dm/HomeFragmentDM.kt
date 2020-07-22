@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -25,22 +24,16 @@ import com.androidnetworking.interfaces.ParsedRequestListener
 import com.baoyz.widget.PullRefreshLayout
 import com.example.lotus.R
 import com.example.lotus.models.DM.Channel.Dm
-import com.example.lotus.models.DM.Get.Get
 import com.example.lotus.models.Respons
-import com.example.lotus.models.User
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
-import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.home.HomeActivity
-import com.github.nkzawa.emitter.Emitter
 import com.github.nkzawa.socketio.client.IO
 import com.github.nkzawa.socketio.client.Socket
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_maindm.*
 import kotlinx.android.synthetic.main.fragment_homedm.*
-import kotlinx.android.synthetic.main.layout_chatting.*
 import kotlinx.android.synthetic.main.layout_list_messages.view.*
-import org.json.JSONObject
 
 // TODO: 21/07/20 socket
 class HomeFragmentDM : Fragment() {
@@ -230,8 +223,7 @@ class DmAdapter(private var channelDm: ArrayList<Dm>, var context: Context) :
                 val profileMessage: ImageView = view.findViewById(R.id.profileMessage)
                 lastMessage.text = dm.lastMessage!!.message
                 username.text = dm.name.toString()
-                Log.d("nukanya", dm.receiver!!.profilePicture)
-                setProfilePicture(profileMessage, dm.receiver.profilePicture)
+                setProfilePicture(profileMessage, dm.receiver!!.profilePicture)
 
                 if (dm.isRead == 1) {
                     read.visibility = View.GONE
