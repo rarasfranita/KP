@@ -6,6 +6,7 @@ import android.os.Parcelable
 class Data(
     val status : String?,
     val token : String?
+
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
@@ -31,5 +32,4 @@ class Data(
             return arrayOfNulls(size)
         }
     }
-
 }

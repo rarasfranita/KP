@@ -46,10 +46,10 @@
         android:label="fragment_create_number"
         tools:layout="@layout/fragment_create_number" >
         <action
-            android:id="@+id/action_createNumberFragment2_to_verificationCodeFragment"
+            android:id="@+id/action_createNumberFragment_to_verificationCodeFragment"
             app:destination="@id/verificationCodeFragment" />
         <action
-            android:id="@+id/action_createNumberFragment2_to_createEmailFragment"
+            android:id="@+id/action_createNumberFragment_to_createEmailFragment"
             app:destination="@id/createEmailFragment" />
     </fragment>
     <fragment
@@ -59,7 +59,13 @@
         tools:layout="@layout/fragment_verification_code" >
 
         <action
-            android:id="@+id/action_verificationCodeFragment_to_choseUsernameFragment2"
+            android:id="@+id/action_verificationCodeFragment_to_choseUsernameFragment"
             app:destination="@id/choseUsernameFragment" />
+        <action
+            android:id="@+id/action_verificationCodeFragment_to_createEmailFragment"
+            app:destination="@id/createEmailFragment" />
+        <action
+            android:id="@+id/action_verificationCodeFragment_to_createNumberFragment"
+            app:destination="@id/createNumberFragment2" />
     </fragment>
 </navigation>

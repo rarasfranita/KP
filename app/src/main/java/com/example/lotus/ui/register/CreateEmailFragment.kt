@@ -13,6 +13,8 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
@@ -20,7 +22,9 @@ import com.androidnetworking.interfaces.ParsedRequestListener
 import com.example.lotus.R
 import com.example.lotus.models.Data
 import com.example.lotus.models.Respon
+import com.example.lotus.models.Token
 import com.example.lotus.service.EnvService
+import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.login.LoginActivity
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_create_email.view.*
@@ -35,18 +39,12 @@ class CreateEmailFragment : Fragment() {
     ): View? {
 
         val view = inflater.inflate(R.layout.fragment_create_email, container, false)
-        listenAppToolbar(view)
 
-
-        view.btnContinueEmail.setOnClickListener { view: View? ->
-            view?.findNavController()
-                ?.navigate(R.id.action_createEmailFragment_to_verificationCodeFragment)
-        }
-
-        view.goWA.setOnClickListener { view: View? ->
-            view?.findNavController()
+        view.tvGoWhatsapp.setOnClickListener {
+            findNavController()
                 ?.navigate(R.id.action_createEmailFragment_to_createNumberFragment)
         }
+        listenAppToolbar(view)
 
         listenBtnCreateEmail(view)
         return view
@@ -63,13 +61,14 @@ class CreateEmailFragment : Fragment() {
 
     }
 
+
     fun listenBtnCreateEmail (v: View){
         val btnNext = v.btnContinueEmail
         val textEmail = v.etEmail
 
         btnNext.setOnClickListener {
             val strEmail = textEmail.text.toString()
-            Log.d("ini string email", strEmail)
+            Log.d("email", strEmail)
             checkEmail(strEmail)
         }
     }
@@ -118,9 +117,9 @@ class CreateEmailFragment : Fragment() {
                         if (respon.code.toString() == "200") {
                             val dataJson =gson.toJson(respon.data)
                             val data = gson.fromJson(dataJson, Data::class.java)
-                            Log.d("Cek Register Email", "Success")
-                            Log.d("Token", data.token.toString())
-
+                            SharedPrefManager.getInstance(requireContext()).saveToken(Token(data.token.toString()))
+                            view?.findNavController()
+                                ?.navigate(R.id.action_createEmailFragment_to_verificationCodeFragment)
                         }else {
                             Log.e("ERROR!!!", "Token ${respon.code}, ${respon.data}")
                         }

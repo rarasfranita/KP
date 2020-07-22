@@ -38,8 +38,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="40dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
             android:layout_gravity="center"
             android:gravity="center_horizontal"
             android:text="@string/register"
@@ -97,7 +97,7 @@
                 app:layout_constraintVertical_bias="0.2" />
 
         <TextView
-            android:id="@+id/goWA"
+            android:id="@+id/tvGoWhatsapp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"

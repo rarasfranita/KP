@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.findNavController
 import com.example.lotus.R
-import com.example.lotus.ui.home.HomeActivity
+import com.example.lotus.ui.login.LoginActivity
 import kotlinx.android.synthetic.main.fragment_create_email.view.*
 import kotlinx.android.synthetic.main.fragment_create_number.view.*
 
@@ -21,29 +21,25 @@ class CreateNumberFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val x = inflater.inflate(R.layout.fragment_create_number, container, false)
-        listenAppToolbar(x)
-        x.btnContinueNumber.setOnClickListener { view: View? ->
+        val view = inflater.inflate(R.layout.fragment_create_number, container, false)
+        listenAppToolbar(view)
+
+        view.btnContinueNumber.setOnClickListener {
             view?.findNavController()
-                ?.navigate(R.id.action_createNumberFragment2_to_verificationCodeFragment)
+                ?.navigate(R.id.action_createNumberFragment_to_verificationCodeFragment)
         }
-        x.goWA.setOnClickListener { view: View? ->
+        view.goEmail.setOnClickListener {
             view?.findNavController()
-                ?.navigate(R.id.action_createNumberFragment2_to_createEmailFragment)
+                ?.navigate(R.id.action_createNumberFragment_to_createEmailFragment)
         }
-        return x
+        return view
     }
 
     private fun listenAppToolbar(v: View?) {
         val toolbar: Toolbar = v?.findViewById(R.id.tbregisterWA) as Toolbar
-
-        toolbar.setOnMenuItemClickListener(){
-            when (it.itemId){
-                R.id.tbregisterWA ->
-                    view?.findNavController()?.navigate(R.id.action_createNumberFragment2_to_createEmailFragment)
-
+            toolbar.setNavigationOnClickListener {
+                val intent = Intent(activity, LoginActivity::class.java)
+                startActivity(intent)
             }
-            true
         }
     }
-}
