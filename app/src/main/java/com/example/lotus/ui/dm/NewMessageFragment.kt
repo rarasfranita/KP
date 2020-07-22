@@ -27,13 +27,16 @@ import com.androidnetworking.interfaces.ParsedRequestListener
 import com.example.lotus.R
 import com.example.lotus.models.Respons
 import com.example.lotus.models.User
+import com.example.lotus.models.userName
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.dm.GetNewMsgAdapter.Holder
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_new_message.*
+import kotlinx.android.synthetic.main.layout_chatting.*
 import kotlinx.android.synthetic.main.layout_list_messages.view.*
-import kotlinx.android.synthetic.main.layout_search_user.view.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class NewMessageFragment : Fragment() {
 
@@ -41,40 +44,43 @@ class NewMessageFragment : Fragment() {
     var token: String? = null
     var username: String? = null
     var newMesge = ArrayList<User>()
+    var untukSearch = ArrayList<userName>()
     lateinit var adapter: GetNewMsgAdapter
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         val v = inflater.inflate(R.layout.fragment_new_message, container, false)
         token = SharedPrefManager.getInstance(requireContext()).token.token
         username = SharedPrefManager.getInstance(requireContext()).user.username
-        val edSearch :EditText = v.findViewById(R.id.edSearchbar)
+        val edSearch: EditText = v.findViewById(R.id.edSearchbar)
+        Log.d("untukSearch", untukSearch.toString())
 
-//        edSearch.addTextChangedListener(object : TextWatcher {
-//            override fun beforeTextChanged(
-//                charSequence: CharSequence,
-//                i: Int,
-//                i1: Int,
-//                i2: Int
-//            ) {
-//            }
-//
-//            override fun onTextChanged(
-//                charSequence: CharSequence,
-//                i: Int,
-//                i1: Int,
-//                i2: Int
-//            ) {
-//            }
-//
-//            override fun afterTextChanged(editable: Editable) {
-//                //after the change calling the method and passing the search input
-//                filter(editable.toString())
-//            }
-//        })
+        edSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(
+                charSequence: CharSequence,
+                i: Int,
+                i1: Int,
+                i2: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                charSequence: CharSequence,
+                i: Int,
+                i1: Int,
+                i2: Int
+            ) {
+            }
+
+            override fun afterTextChanged(editable: Editable) {
+                //after the change calling the method and passing the search input
+                adapter.filter(editable.toString())
+//                rv_newMsg.scrollToPosition(0)
+//                adapter.notifyDataSetChanged()
+            }
+        })
         getRelation()
 
         listenAppToolbar(v)
@@ -94,17 +100,22 @@ class NewMessageFragment : Fragment() {
                     override fun onResponse(respon: Respons) {
                         val gson = Gson()
                         val temp = ArrayList<User>()
+                        val ini = ArrayList<userName>()
                         if (respon.code.toString() == "200") {
                             for ((i, res) in respon.data.withIndex()) {
                                 val strRes = gson.toJson(res)
                                 val dataJson = gson.fromJson(strRes, User::class.java)
+                                val a = gson.fromJson(strRes, userName::class.java)
                                 temp.add(dataJson)
-                                Log.d("dataJson",dataJson.toString())
+                                ini.add(a)
+                                Log.d("dataJson", dataJson.toString())
 
                             }
                             newMesge = temp
-                            Log.d("newMesge",newMesge.toString())
-                            loadNewMsg(newMesge, rv_newMsg)
+                            untukSearch = ini
+                            Log.d("newMesgeUsername", newMesge.toString())
+                            Log.d("untukSearch", untukSearch.toString())
+                            loadNewMsg(newMesge, untukSearch, rv_newMsg)
 
                         } else {
                             Log.d("Error Code", respon.code.toString())
@@ -117,26 +128,9 @@ class NewMessageFragment : Fragment() {
                 })
     }
 
-//    private fun filter(text: String) {
-//        //new array list that will hold the filtered data
-//        val filterdNames: ArrayList<User> = ArrayList()
-//
-//        //looping through existing elements
-//        for (s in names) {
-//            //if the existing elements contains the search input
-//            if (s.toLowerCase().contains(text.toLowerCase())) {
-//                //adding the element to filtered list
-//                filterdNames.add(s)
-//            }
-//        }
-//
-//        //calling a method of the adapter class and passing the filtered list
-//        adapter.filterList(filterdNames)
-//    }
 
-
-    private fun loadNewMsg(newMesge: ArrayList<User>, msg: RecyclerView?) {
-        adapter = GetNewMsgAdapter(newMesge, this.context!!)
+    private fun loadNewMsg(newMesge: ArrayList<User>, search: ArrayList<userName>, msg: RecyclerView?) {
+        adapter = GetNewMsgAdapter(newMesge, search, this.context!!)
         adapter.notifyDataSetChanged()
 
         msg!!.adapter = adapter
@@ -152,14 +146,11 @@ class NewMessageFragment : Fragment() {
             view?.findNavController()?.navigate(R.id.action_newMessageFragment_to_homeFragmentDM)
         }
 
-        toolbar.setOnMenuItemClickListener() {
-            true
-        }
     }
 }
 
-class GetNewMsgAdapter (private var nwMsg : ArrayList<User>, val context: Context) :
-    RecyclerView.Adapter<Holder>(){
+class GetNewMsgAdapter(var nwMsg: ArrayList<User>, var search: ArrayList<userName>, val context: Context) :
+    RecyclerView.Adapter<Holder>() {
 
 
     private var mContext: Context? = null
@@ -169,12 +160,13 @@ class GetNewMsgAdapter (private var nwMsg : ArrayList<User>, val context: Contex
         return Holder(
             LayoutInflater.from(
                 parent.context
-            ).inflate(R.layout.layout_list_messages,parent,false)
+            ).inflate(R.layout.layout_list_messages, parent, false)
         )
     }
 
     override fun getItemCount(): Int {
         return nwMsg.size
+
     }
 
 
@@ -183,23 +175,43 @@ class GetNewMsgAdapter (private var nwMsg : ArrayList<User>, val context: Contex
         val extras = Bundle()
         val message = Holder(holder.itemView)
         message.bindFeed(nwMsg[position], context)
-        message.search_user_container.setOnClickListener{
+        message.search_user_container.setOnClickListener {
             val intent = Intent(context, GetMessage::class.java)
             extras.putString("name", nwMsg[position].name)
             extras.putString("username", nwMsg[position].username)
             extras.putString("userId", nwMsg[position]._id)
             extras.putString("profilePicture", nwMsg[position].avatar)
             intent.putExtras(extras)
-            context.startActivity(intent)
-            Log.d("usernameSSS", nwMsg[position].username.toString())
-        }
+            context.startActivity(intent) }
         holder.bindFeed(nwMsg[position], context)
+
+    }
+
+    fun filter(text: String) {
+        val a = search
+        val filterdNames: ArrayList<String> = ArrayList()
+
+        for (s in a) {
+            if (s.toString().toLowerCase(Locale.ROOT).contains(text.toLowerCase(Locale.ROOT))) {
+                filterdNames.add(s.toString())
+            }
+            Log.d("filterdNames", filterdNames.toString())
+
+        }
+        notifyDataSetChanged()
+    }
+
+    private fun filterList(filterdNames: ArrayList<userName>) {
+        this.search = filterdNames
+        Log.d("dsdsd", filterdNames.toString())
+        notifyDataSetChanged()
     }
 
 
-    class Holder (val view: View) : RecyclerView.ViewHolder(view){
-        val uname : TextView = view.findViewById(R.id.username)
-        val search_user_container : RelativeLayout = view.findViewById(R.id.rlMessage)
+    class Holder(val view: View) : RecyclerView.ViewHolder(view) {
+
+        val uname: TextView = view.findViewById(R.id.username)
+        val search_user_container: RelativeLayout = view.findViewById(R.id.rlMessage)
         var mContext: Context? = null
         private var userData: User? = null
 
@@ -232,8 +244,4 @@ class GetNewMsgAdapter (private var nwMsg : ArrayList<User>, val context: Contex
             }
         }
     }
-//    fun filterList(filterdNames: ArrayList<User>) {
-//        this.nwMsg = filterdNames
-//        notifyDataSetChanged()
-//    }
 }

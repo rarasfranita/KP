@@ -7,10 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -202,7 +199,7 @@ class DmAdapter(private var channelDm: ArrayList<Dm>, var context: Context) :
         val extras = Bundle()
         val message = Holder(holder.itemView)
 
-        message.ll2.setOnClickListener {
+        message.rlMessage.setOnClickListener {
             val intent = Intent(context, GetMessage::class.java)
             extras.putString("name", channelDm[position].receiver!!.name)
             extras.putString("username", channelDm[position].receiver!!.username)
@@ -220,7 +217,7 @@ class DmAdapter(private var channelDm: ArrayList<Dm>, var context: Context) :
     class Holder(val view: View) : RecyclerView.ViewHolder(view) {
         var mContext: Context? = null
         val username: TextView = view.findViewById(R.id.username)
-        val ll2: LinearLayout = view.findViewById(R.id.ll2)
+        val rlMessage: RelativeLayout = view.findViewById(R.id.rlMessage)
 
         fun bindMessage(dm: Dm, context: Context) {
             itemView.apply {

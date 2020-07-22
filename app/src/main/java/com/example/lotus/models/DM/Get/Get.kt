@@ -12,7 +12,7 @@ data class Get(
     val createdAt: String?,
     val deleted: Boolean?,
     val isRead: Boolean?,
-    val receiver: ReceiverX?,
+    val receiver: ReceiverX,
     val sender: Sender,
     val text: String?,
     val updatedAt: String?,
