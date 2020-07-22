@@ -40,6 +40,7 @@ import com.example.lotus.utils.dateToFormatTime
 import com.example.lotus.utils.dislikePost
 import com.example.lotus.utils.downloadMedia
 import com.example.lotus.utils.likePost
+import com.google.android.material.card.MaterialCardView
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.layout_detail_post.*
 import kotlinx.android.synthetic.main.layout_detail_post.view.*
@@ -74,6 +75,9 @@ class DetailPost : Fragment() {
     ): View? {
         super.onCreate(savedInstanceState)
         val v = inflater.inflate(R.layout.fragment_detail_post, container, false)
+
+        val textStatus = v.findViewById<MaterialCardView>(R.id.cardPostText)
+        textStatus.visibility = View.INVISIBLE
 
         token = SharedPrefManager.getInstance(requireContext()).token.token
         userID = SharedPrefManager.getInstance(requireContext()).user._id
