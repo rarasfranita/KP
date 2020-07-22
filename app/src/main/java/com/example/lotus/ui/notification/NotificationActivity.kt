@@ -67,6 +67,7 @@ class NotificationActivity : AppCompatActivity() {
 
         notification.adapter = adapter
         notification.setHasFixedSize(true)
+        notification.getRecycledViewPool().setMaxRecycledViews(0, 0)
         notification.layoutManager = LinearLayoutManager(this)
     }
 

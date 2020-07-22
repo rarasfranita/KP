@@ -1,10 +1,14 @@
 package com.example.lotus.ui.home
 
 import android.app.Dialog
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -19,11 +23,12 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.findNavController
 import com.androidnetworking.AndroidNetworking
 import com.example.lotus.R
+import com.example.lotus.models.DM.Get.Get
 import com.example.lotus.models.MediaData
 import com.example.lotus.models.Post
 import com.example.lotus.storage.SharedPrefManager
-import com.example.lotus.ui.CreatePostActivity
 import com.example.lotus.ui.detailpost.DetailPost
+import com.example.lotus.ui.dm.MainActivityDM
 import com.example.lotus.ui.notification.NotificationActivity
 import com.example.lotus.ui.profile.ProfileActivity
 import com.example.lotus.utils.downloadMedia
@@ -33,7 +38,7 @@ import com.github.nkzawa.socketio.client.Socket
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
-import kotlinx.android.synthetic.main.activity_main.*
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.bottom_sheet.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -55,9 +60,6 @@ class HomeActivity : AppCompatActivity() {
 
         bottom_sheet.visibility = View.GONE // For temporary
         // navigationMenuLogic()
-        val fabPost = findViewById<View>(R.id.fab_post)
-
-        fabPost.setOnClickListener(View.OnClickListener { fabPostOnClick() })
 
         mSocket.on(userID.toString(), onNewMessage)
         mSocket.connect()
@@ -66,11 +68,6 @@ class HomeActivity : AppCompatActivity() {
         manager = getSupportFragmentManager()
 
         AndroidNetworking.initialize(getApplicationContext());
-    }
-
-    private fun fabPostOnClick() {
-        val intent = Intent(this, CreatePostActivity::class.java)
-        startActivity(intent)
     }
 
     private fun navigationMenuLogic() {
@@ -83,9 +80,9 @@ class HomeActivity : AppCompatActivity() {
         bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 if (BottomSheetBehavior.STATE_DRAGGING == newState) {
-                    fab_post.hide()
+//                    fab_post.hide()
                 } else if (BottomSheetBehavior.STATE_COLLAPSED == newState) {
-                    fab_post.show()
+//                    fab_post.show()
                 }
             }
 
@@ -154,7 +151,7 @@ class HomeActivity : AppCompatActivity() {
         bundle.putParcelable("data", item)
         val dataPost = DetailPost()
         dataPost.arguments = bundle
-        fab_post?.setVisibility(View.INVISIBLE)
+//        fab_post?.setVisibility(View.INVISIBLE)
         manager?.beginTransaction()
             ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             ?.replace(R.id.fragmentHome, dataPost)
@@ -166,10 +163,6 @@ class HomeActivity : AppCompatActivity() {
         val intent = Intent(this@HomeActivity, ProfileActivity::class.java)
         intent.putExtra("userID", UID)
         startActivity(intent)
-    }
-
-    fun setfabPostVisible(){
-        fab_post?.visibility = View.VISIBLE
     }
 
     fun showDialog(medias: ArrayList<MediaData>) {
@@ -211,41 +204,77 @@ class HomeActivity : AppCompatActivity() {
     private val onNewMessage = Emitter.Listener { args ->
         this.runOnUiThread(Runnable {
             val data = args[0] as JSONObject
-            val name: String
-            val type: String
+            var name: String = ""
+            var type: String = ""
             var content: String = ""
+            var channelID: String = ""
+            var message: Get? = null
+
             try {
                 name = data.getString("name")
                 type = data.getString("type")
             } catch (e: JSONException) {
-                return@Runnable
+                name = ""
             }
 
             if (type == "LIKE"){
                 content = "Like your post."
+                channelID = "Notif"
             }else if (type == "COMMENT"){
                 content = "Comment your post."
+                channelID = "Notif"
             }else if (type == "FOLLOW"){
                 content = "Following you."
+                channelID = "Notif"
+            }else{
+                val gson = Gson()
+                message = gson.fromJson(data.toString(), Get::class.java)
+                name = message.sender.name.toString()
+                content = "Send you message."
+                channelID = "DM"
             }
 
-            Log.d("Socket on", mSocket.connected().toString())
-            createNotification(name, content)
-
+            createNotification(name, content, channelID)
         })
     }
 
-    private fun createNotification(title: String, content: String) {
-        val id = 1
-        val fullScreenIntent = Intent(this, NotificationActivity::class.java)
+    private fun createNotification(title: String, content: String, channelID: String) {
+        var id = 1
+        lateinit var fullScreenIntent: Any
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = title
+            val descriptionText = content
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(channelID, name, importance).apply {
+                description = descriptionText
+            }
+
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        if (channelID == "DM"){
+            id = 2
+            fullScreenIntent = Intent(this, MainActivityDM::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+        }else{
+            fullScreenIntent = Intent(this, NotificationActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+        }
+
         val fullScreenPendingIntent = PendingIntent.getActivity(this, 0,
             fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        var builder = NotificationCompat.Builder(this, "CHANNEL_ID")
+        var builder = NotificationCompat.Builder(this, channelID)
             .setSmallIcon(R.drawable.logo_lotus)
             .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
             .setContentTitle(title)
             .setContentText(content)
+            .setAutoCancel(true)
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setColor(getResources().getColor(R.color.colorPrimary))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -255,7 +284,5 @@ class HomeActivity : AppCompatActivity() {
         with(NotificationManagerCompat.from(this)) {
             notify(id, builder)
         }
-
     }
-
 }

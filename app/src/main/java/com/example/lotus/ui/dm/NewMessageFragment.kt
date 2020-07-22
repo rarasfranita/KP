@@ -27,10 +27,12 @@ import com.androidnetworking.interfaces.ParsedRequestListener
 import com.example.lotus.R
 import com.example.lotus.models.Respons
 import com.example.lotus.models.User
+import com.example.lotus.models.UserProfile
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.dm.GetNewMsgAdapter.Holder
 import com.google.gson.Gson
+import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.fragment_new_message.*
 import kotlinx.android.synthetic.main.layout_list_messages.view.*
 import java.util.*
@@ -42,6 +44,7 @@ class NewMessageFragment : Fragment() {
     var token: String? = null
     var username: String? = null
     var newMesge = ArrayList<User>()
+    private var profileData: UserProfile? = null
     lateinit var adapter: GetNewMsgAdapter
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,10 +74,7 @@ class NewMessageFragment : Fragment() {
             }
 
             override fun afterTextChanged(editable: Editable) {
-                //after the change calling the method and passing the search input
                 adapter.filter(editable.toString())
-//                rv_newMsg.scrollToPosition(0)
-//                adapter.notifyDataSetChanged()
             }
         })
         getRelation()
@@ -96,17 +96,21 @@ class NewMessageFragment : Fragment() {
                     override fun onResponse(respon: Respons) {
                         val gson = Gson()
                         val temp = ArrayList<User>()
+                        val a = ArrayList<UserProfile>()
                         if (respon.code.toString() == "200") {
                             for ((i, res) in respon.data.withIndex()) {
                                 val strRes = gson.toJson(res)
                                 val dataJson = gson.fromJson(strRes, User::class.java)
+                                val data = gson.fromJson(strRes, UserProfile::class.java)
                                 temp.add(dataJson)
+                                a.add(data)
+                                Log.d("data", data.toString())
                                 Log.d("dataJson", dataJson.toString())
 
                             }
                             newMesge = temp
                             Log.d("newMesgeUsername", newMesge.toString())
-                            loadNewMsg(newMesge,rv_newMsg)
+                            loadNewMsg(newMesge, rv_newMsg)
 
                         } else {
                             Log.d("Error Code", respon.code.toString())
@@ -128,7 +132,6 @@ class NewMessageFragment : Fragment() {
         msg.setHasFixedSize(true)
         msg.layoutManager = LinearLayoutManager(this.context)
     }
-
 
     private fun listenAppToolbar(v: View?) {
         val toolbar: Toolbar = v?.findViewById(R.id.tbNewMessage) as Toolbar
@@ -172,6 +175,7 @@ class GetNewMsgAdapter(var nwMsg: ArrayList<User>, val context: Context) :
             extras.putString("name", nwMsg[position].name)
             extras.putString("username", nwMsg[position].username)
             extras.putString("userId", nwMsg[position]._id)
+//            intent.putExtra("channelId", profileData!!.channelId)
             extras.putString("profilePicture", nwMsg[position].avatar)
             intent.putExtras(extras)
             context.startActivity(intent) }

@@ -73,7 +73,7 @@ class HomeFragmentDM : Fragment() {
         mSocket.connect()
 //        mSocket.on(userID, onConnect)
         val v = inflater.inflate(R.layout.fragment_homedm, container, false)
-        val reload :PullRefreshLayout = v.findViewById(R.id.realodDM)
+        val reload: PullRefreshLayout = v.findViewById(R.id.realodDM)
         listenAppToolbar(v)
         getListMessage(null)
         reload.setOnRefreshListener {
@@ -104,10 +104,11 @@ class HomeFragmentDM : Fragment() {
             startActivity(intent)
         }
 
-        toolbar.setOnMenuItemClickListener(){
-            when (it.itemId){
+        toolbar.setOnMenuItemClickListener() {
+            when (it.itemId) {
                 R.id.fragmentNewDM ->
-                    view?.findNavController()?.navigate(R.id.action_homeFragmentDM_to_newMessageFragment)
+                    view?.findNavController()
+                        ?.navigate(R.id.action_homeFragmentDM_to_newMessageFragment)
 
             }
             true
@@ -244,8 +245,5 @@ class DmAdapter(private var channelDm: ArrayList<Dm>, var context: Context) :
                 transformations(CircleCropTransformation())
             }
         }
-
-
     }
-
 }
