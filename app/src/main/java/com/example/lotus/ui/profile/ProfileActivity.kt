@@ -116,7 +116,9 @@ class ProfileActivity : AppCompatActivity() {
 
     fun setProfile(data: UserProfile){
         if (data.profilePicture != null){
-            profilePicture.load(data.profilePicture.toString()){
+            profilePicture.load(data.profilePicture){
+                crossfade(true)
+                crossfade(300)
                 transformations(CircleCropTransformation())
             }
         }

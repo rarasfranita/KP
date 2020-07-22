@@ -239,7 +239,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun createNotification(title: String, content: String, channelID: String) {
-        val id = 1
+        var id = 1
         lateinit var fullScreenIntent: Any
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -249,42 +249,40 @@ class HomeActivity : AppCompatActivity() {
             val channel = NotificationChannel(channelID, name, importance).apply {
                 description = descriptionText
             }
-            // Register the channel with the system
+
             val notificationManager: NotificationManager =
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
-        }else{
-            if (channelID == "DM"){
-                fullScreenIntent = Intent(this, MainActivityDM::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                }
-            }else{
-                fullScreenIntent = Intent(this, NotificationActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                }
+        }
+
+        if (channelID == "DM"){
+            id = 2
+            fullScreenIntent = Intent(this, MainActivityDM::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
-
-            val fullScreenPendingIntent = PendingIntent.getActivity(this, 0,
-                fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-
-            var builder = NotificationCompat.Builder(this, channelID)
-                .setSmallIcon(R.drawable.logo_lotus)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
-                .setContentTitle(title)
-                .setContentText(content)
-                .setAutoCancel(true)
-                .setDefaults(NotificationCompat.DEFAULT_ALL)
-                .setColor(getResources().getColor(R.color.colorPrimary))
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setFullScreenIntent(fullScreenPendingIntent, true)
-                .build()
-
-            with(NotificationManagerCompat.from(this)) {
-                notify(id, builder)
+        }else{
+            fullScreenIntent = Intent(this, NotificationActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
         }
 
+        val fullScreenPendingIntent = PendingIntent.getActivity(this, 0,
+            fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
+        var builder = NotificationCompat.Builder(this, channelID)
+            .setSmallIcon(R.drawable.logo_lotus)
+            .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
+            .setContentTitle(title)
+            .setContentText(content)
+            .setAutoCancel(true)
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setColor(getResources().getColor(R.color.colorPrimary))
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setFullScreenIntent(fullScreenPendingIntent, true)
+            .build()
 
+        with(NotificationManagerCompat.from(this)) {
+            notify(id, builder)
+        }
     }
 }
