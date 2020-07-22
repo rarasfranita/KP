@@ -3,6 +3,8 @@ package com.example.lotus.ui.explore
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +22,13 @@ import com.example.lotus.models.DataSearch
 import com.example.lotus.models.Respon
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
+import com.example.lotus.ui.dm.DmAdapter
+import com.example.lotus.ui.dm.GetMessage
 import com.example.lotus.ui.home.Constant
+import com.example.lotus.ui.home.HomeActivity
+import com.example.lotus.ui.profile.ProfileActivity
+import kotlinx.android.synthetic.main.layout_list_messages.view.*
+import kotlinx.android.synthetic.main.layout_mainfeed_listitem.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -31,16 +39,14 @@ class SearchAdapter(private val listSearchUser: ArrayList<DataSearch>, val conte
     var searchUserFilterList = ArrayList<String>()
     var a = listSearchUser[0].username?.toArrayList()
     private var mContext: Context? = null
-    init {
 
-    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         this.mContext = context;
 
         return Holder(
             LayoutInflater.from(
                 parent.context
-            ).inflate(R.layout.layout_search_user, parent, false)
+            ).inflate(R.layout.layout_list_messages, parent, false)
         )
     }
 
@@ -49,6 +55,16 @@ class SearchAdapter(private val listSearchUser: ArrayList<DataSearch>, val conte
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val usernameSrc = SharedPrefManager.getInstance(context).user.username
 
+        val extras = Bundle()
+        val search = Holder(holder.itemView)
+
+        search.rlMessage.setOnClickListener {
+            val intent = Intent(context, ProfileActivity::class.java)
+            extras.putString("userID", listSearchUser[position]._id)
+            intent.putExtras(extras)
+            context.startActivity(intent)
+            listSearchUser[position].username?.let { it1 -> Log.d("username", it1) }
+        }
         holder.bindFeed(listSearchUser[position], context)
         if (holder.itemViewType == Constant.VIEW_TYPE_ITEM) {
             val item = Holder(holder.itemView)
@@ -116,6 +132,7 @@ class SearchAdapter(private val listSearchUser: ArrayList<DataSearch>, val conte
     }
 
     class Holder(val view: View) : RecyclerView.ViewHolder(view) {
+        val rlMessage: RelativeLayout = view.findViewById(R.id.rlMessage)
         val follow: Button = view.findViewById(R.id.btnFollowSearch)
         val unfollow: Button = view.findViewById(R.id.btnUnfollowSearch)
 
@@ -134,14 +151,16 @@ class SearchAdapter(private val listSearchUser: ArrayList<DataSearch>, val conte
 
         fun bindFeed(search: DataSearch, context: Context) {
             itemView.apply {
+                read.visibility = View.GONE
+
                 userData = search
                 mContext = context
 
                 val usernameSearch: TextView =
-                    view.findViewById<View>(R.id.usernameSearch) as TextView
+                    view.findViewById<View>(R.id.username) as TextView
                 val profileSearch: ImageView =
-                    view.findViewById<View>(R.id.profileSearch) as ImageView
-                val bioSearch: TextView = view.findViewById<View>(R.id.bioSearch) as TextView
+                    view.findViewById<View>(R.id.profileMessage) as ImageView
+                val bioSearch: TextView = view.findViewById<View>(R.id.lastMessage) as TextView
 
                 usernameSearch.text = search.username
                 setProfilePicture(profileSearch, search.avatar.toString())

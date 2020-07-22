@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.dm.MainActivityDM">
+    tools:context=".ui.dm.GetMessage">
 
     <LinearLayout
         android:id="@+id/relLayout1"
@@ -18,14 +18,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
+            android:onClick="backToDM"
             android:src="@drawable/ic_arrow_back_black" />
 
         <ImageView
+            android:id="@+id/profPictre"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
-            android:src="@drawable/ic_profile" />
+            android:background="@drawable/ic_profile" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -35,19 +37,19 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/usernameDM"
+                android:id="@+id/nama"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato"
-                android:text="Username"
+                android:text="Name"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/status"
+                android:id="@+id/usernama"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato"
-                android:text="Apa ini" />
+                android:text="Username" />
 
         </LinearLayout>
 
@@ -56,47 +58,53 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#bbb" />
+        android:background="#EAEAEA" />
+
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_listChat"
+        android:id="@+id/rv_listMessage"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="10dp"
         android:layout_weight="1"
+        android:scrollbars="vertical"
+        app:reverseLayout="true"
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#bbb" />
+        android:layout_height="0.5dp"
+        android:background="#EAEAEA" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp">
+
+        <ImageView
+            android:id="@+id/icProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/ic_profile_small" />
 
         <EditText
             android:id="@+id/edMessage"
-            android:layout_width="337dp"
+            android:layout_width="320dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/search_bar_drawable_2"
-            android:drawableStart="@drawable/ic_profile_small"
+            android:layout_toRightOf="@+id/icProfile"
             android:drawablePadding="10dp"
             android:hint="Message" />
 
-        <EditText
-            android:id="@+id/edSearchbar"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_margin="10dp"
-            android:layout_toRightOf="@+id/edMessage"
-            android:background="@drawable/search_bar_drawable_2"
-            android:drawableStart="@drawable/ic_send_black_24dp"
-            android:drawablePadding="10dp"
-            android:hint="Message" />
+        <ImageView
+            android:id="@+id/icSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/edMessage"
+            android:src="@drawable/ic_send" />
+
     </RelativeLayout>
 </LinearLayout>
