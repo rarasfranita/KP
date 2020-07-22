@@ -27,13 +27,11 @@ import com.androidnetworking.interfaces.ParsedRequestListener
 import com.example.lotus.R
 import com.example.lotus.models.Respons
 import com.example.lotus.models.User
-import com.example.lotus.models.userName
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.dm.GetNewMsgAdapter.Holder
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_new_message.*
-import kotlinx.android.synthetic.main.layout_chatting.*
 import kotlinx.android.synthetic.main.layout_list_messages.view.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -44,7 +42,6 @@ class NewMessageFragment : Fragment() {
     var token: String? = null
     var username: String? = null
     var newMesge = ArrayList<User>()
-    var untukSearch = ArrayList<userName>()
     lateinit var adapter: GetNewMsgAdapter
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,7 +52,6 @@ class NewMessageFragment : Fragment() {
         token = SharedPrefManager.getInstance(requireContext()).token.token
         username = SharedPrefManager.getInstance(requireContext()).user.username
         val edSearch: EditText = v.findViewById(R.id.edSearchbar)
-        Log.d("untukSearch", untukSearch.toString())
 
         edSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(
@@ -100,22 +96,17 @@ class NewMessageFragment : Fragment() {
                     override fun onResponse(respon: Respons) {
                         val gson = Gson()
                         val temp = ArrayList<User>()
-                        val ini = ArrayList<userName>()
                         if (respon.code.toString() == "200") {
                             for ((i, res) in respon.data.withIndex()) {
                                 val strRes = gson.toJson(res)
                                 val dataJson = gson.fromJson(strRes, User::class.java)
-                                val a = gson.fromJson(strRes, userName::class.java)
                                 temp.add(dataJson)
-                                ini.add(a)
                                 Log.d("dataJson", dataJson.toString())
 
                             }
                             newMesge = temp
-                            untukSearch = ini
                             Log.d("newMesgeUsername", newMesge.toString())
-                            Log.d("untukSearch", untukSearch.toString())
-                            loadNewMsg(newMesge, untukSearch, rv_newMsg)
+                            loadNewMsg(newMesge,rv_newMsg)
 
                         } else {
                             Log.d("Error Code", respon.code.toString())
@@ -129,8 +120,8 @@ class NewMessageFragment : Fragment() {
     }
 
 
-    private fun loadNewMsg(newMesge: ArrayList<User>, search: ArrayList<userName>, msg: RecyclerView?) {
-        adapter = GetNewMsgAdapter(newMesge, search, this.context!!)
+    private fun loadNewMsg(newMesge: ArrayList<User>, msg: RecyclerView?) {
+        adapter = GetNewMsgAdapter(newMesge,this.context!!)
         adapter.notifyDataSetChanged()
 
         msg!!.adapter = adapter
@@ -149,9 +140,10 @@ class NewMessageFragment : Fragment() {
     }
 }
 
-class GetNewMsgAdapter(var nwMsg: ArrayList<User>, var search: ArrayList<userName>, val context: Context) :
+class GetNewMsgAdapter(var nwMsg: ArrayList<User>, val context: Context) :
     RecyclerView.Adapter<Holder>() {
 
+    val messageDatas = nwMsg
 
     private var mContext: Context? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -188,21 +180,21 @@ class GetNewMsgAdapter(var nwMsg: ArrayList<User>, var search: ArrayList<userNam
     }
 
     fun filter(text: String) {
-        val a = search
-        val filterdNames: ArrayList<String> = ArrayList()
+        val a = messageDatas
+        val filterdNames: ArrayList<User> = ArrayList()
 
         for (s in a) {
-            if (s.toString().toLowerCase(Locale.ROOT).contains(text.toLowerCase(Locale.ROOT))) {
-                filterdNames.add(s.toString())
+            if (s.username.toString().toLowerCase(Locale.ROOT).contains(text.toLowerCase(Locale.ROOT))) {
+                filterdNames.add(s)
             }
             Log.d("filterdNames", filterdNames.toString())
 
         }
-        notifyDataSetChanged()
+        filterList(filterdNames)
     }
 
-    private fun filterList(filterdNames: ArrayList<userName>) {
-        this.search = filterdNames
+    private fun filterList(filterdNames: ArrayList<User>) {
+        this.nwMsg = filterdNames
         Log.d("dsdsd", filterdNames.toString())
         notifyDataSetChanged()
     }

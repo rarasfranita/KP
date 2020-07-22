@@ -68,7 +68,3 @@ data class User(
         }
     }
 }
-
-data class  userName (
-    var username: String?
-)
