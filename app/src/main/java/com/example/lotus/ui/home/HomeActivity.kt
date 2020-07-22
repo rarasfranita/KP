@@ -24,6 +24,7 @@ import com.example.lotus.models.Post
 import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.CreatePostActivity
 import com.example.lotus.ui.detailpost.DetailPost
+import com.example.lotus.ui.detailpost.IOnBackPressed
 import com.example.lotus.ui.notification.NotificationActivity
 import com.example.lotus.ui.profile.ProfileActivity
 import com.example.lotus.utils.downloadMedia
@@ -147,6 +148,14 @@ class HomeActivity : AppCompatActivity() {
         btmNav.getMenu().findItem(R.id.navigation_home).setCheckable(active);
         btmNav.getMenu().findItem(R.id.navigation_tipitaka).setCheckable(active);
         btmNav.getMenu().findItem(R.id.navigation_meditation).setCheckable(active);
+    }
+
+    override fun onBackPressed() {
+        val fragment =
+            this.supportFragmentManager.findFragmentById(R.id.fragmentHome)
+        (fragment as? IOnBackPressed)?.onBackPressed()?.not()?.let {
+            super.onBackPressed()
+        }
     }
 
     fun gotoDetailPost(item: Post) {

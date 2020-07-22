@@ -47,7 +47,7 @@ import kotlinx.android.synthetic.main.layout_detail_post.view.*
 import matrixsystems.nestedexpandablerecyclerview.RowAdapter
 
 
-class DetailPost : Fragment() {
+class DetailPost : Fragment(), IOnBackPressed {
     lateinit var rowAdapter: RowAdapter
     lateinit var rows : MutableList<CommentRowModel>
     lateinit var recyclerView : RecyclerView
@@ -103,6 +103,15 @@ class DetailPost : Fragment() {
         listenMenu(v)
 
         return v
+    }
+
+    override fun onBackPressed(): Boolean {
+        return if (context is HomeActivity) {
+            (context as HomeActivity).setfabPostVisible()
+            true
+        } else {
+            false
+        }
     }
 
     private fun listenAvatarAndUsername(v: View) {
