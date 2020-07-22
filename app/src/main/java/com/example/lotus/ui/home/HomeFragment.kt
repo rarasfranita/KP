@@ -29,6 +29,7 @@ import com.example.lotus.models.Post
 import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
+import com.example.lotus.ui.CreatePostActivity
 import com.example.lotus.ui.dm.MainActivityDM
 import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.notification.NotificationActivity
@@ -88,6 +89,8 @@ class HomeFragment : Fragment() {
             getFeedsData(reloadFeed)
         }
 
+        fabPostOnClick(v)
+
         return v
     }
 
@@ -109,7 +112,6 @@ class HomeFragment : Fragment() {
                     override fun onResponse(respon: Respons) {
                         reloadFeed.setRefreshing(false)
                         val gson = Gson()
-                        val i = 0
                         var tempDataFeed = ArrayList<Post>()
                         if (respon.code.toString() == "200") {
                             for ((i, res) in respon.data.withIndex()) {
@@ -148,8 +150,6 @@ class HomeFragment : Fragment() {
                 })
     }
 
-
-
     fun loadFeed(data: ArrayList<Post>, homeFeed: RecyclerView){
         adapter = PostFeedAdapter(data, requireContext())
         adapter.notifyDataSetChanged()
@@ -168,6 +168,17 @@ class HomeFragment : Fragment() {
                 transformations(CircleCropTransformation())
             }
         }
+    }
+
+
+    private fun fabPostOnClick(v: View) {
+        val fabPost = v.findViewById<View>(R.id.fabCreatePost)
+
+        fabPost.setOnClickListener{
+            val intent = Intent(this.activity, CreatePostActivity::class.java)
+            (context as HomeActivity).startActivity(intent)
+        }
+
     }
 
     private fun listenAppToolbar(v: View){

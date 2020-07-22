@@ -34,7 +34,6 @@ import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.CreatePostActivity
 import com.example.lotus.ui.explore.general.GeneralActivity
-import com.example.lotus.ui.home.HomeActivity
 import com.example.lotus.ui.notification.NotificationActivity
 import com.example.lotus.ui.profile.ProfileActivity
 import com.example.lotus.utils.dateToFormatTime
@@ -47,7 +46,7 @@ import kotlinx.android.synthetic.main.layout_detail_post.view.*
 import matrixsystems.nestedexpandablerecyclerview.RowAdapter
 
 
-class DetailPost : Fragment(), IOnBackPressed {
+class DetailPost : Fragment() {
     lateinit var rowAdapter: RowAdapter
     lateinit var rows : MutableList<CommentRowModel>
     lateinit var recyclerView : RecyclerView
@@ -103,15 +102,6 @@ class DetailPost : Fragment(), IOnBackPressed {
         listenMenu(v)
 
         return v
-    }
-
-    override fun onBackPressed(): Boolean {
-        return if (context is HomeActivity) {
-            (context as HomeActivity).setfabPostVisible()
-            true
-        } else {
-            false
-        }
     }
 
     private fun listenAvatarAndUsername(v: View) {
@@ -490,9 +480,7 @@ class DetailPost : Fragment(), IOnBackPressed {
 
         toolbar.setNavigationOnClickListener {
 
-            if (context is HomeActivity){
-                (context as HomeActivity).setfabPostVisible()
-            }else if (context is GeneralActivity){
+            if (context is GeneralActivity){
                 (context as GeneralActivity).setAppBarVisible()
             }else if(context is ProfileActivity){
                 (context as ProfileActivity).setAppBarVisible()

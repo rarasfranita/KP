@@ -22,9 +22,7 @@ import com.example.lotus.R
 import com.example.lotus.models.MediaData
 import com.example.lotus.models.Post
 import com.example.lotus.storage.SharedPrefManager
-import com.example.lotus.ui.CreatePostActivity
 import com.example.lotus.ui.detailpost.DetailPost
-import com.example.lotus.ui.detailpost.IOnBackPressed
 import com.example.lotus.ui.notification.NotificationActivity
 import com.example.lotus.ui.profile.ProfileActivity
 import com.example.lotus.utils.downloadMedia
@@ -34,7 +32,6 @@ import com.github.nkzawa.socketio.client.Socket
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_sheet.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -56,9 +53,6 @@ class HomeActivity : AppCompatActivity() {
 
         bottom_sheet.visibility = View.GONE // For temporary
         // navigationMenuLogic()
-        val fabPost = findViewById<View>(R.id.fab_post)
-
-        fabPost.setOnClickListener(View.OnClickListener { fabPostOnClick() })
 
         mSocket.on(userID.toString(), onNewMessage)
         mSocket.connect()
@@ -67,11 +61,6 @@ class HomeActivity : AppCompatActivity() {
         manager = getSupportFragmentManager()
 
         AndroidNetworking.initialize(getApplicationContext());
-    }
-
-    private fun fabPostOnClick() {
-        val intent = Intent(this, CreatePostActivity::class.java)
-        startActivity(intent)
     }
 
     private fun navigationMenuLogic() {
@@ -84,9 +73,9 @@ class HomeActivity : AppCompatActivity() {
         bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 if (BottomSheetBehavior.STATE_DRAGGING == newState) {
-                    fab_post.hide()
+//                    fab_post.hide()
                 } else if (BottomSheetBehavior.STATE_COLLAPSED == newState) {
-                    fab_post.show()
+//                    fab_post.show()
                 }
             }
 
@@ -150,20 +139,12 @@ class HomeActivity : AppCompatActivity() {
         btmNav.getMenu().findItem(R.id.navigation_meditation).setCheckable(active);
     }
 
-    override fun onBackPressed() {
-        val fragment =
-            this.supportFragmentManager.findFragmentById(R.id.fragmentHome)
-        (fragment as? IOnBackPressed)?.onBackPressed()?.not()?.let {
-            super.onBackPressed()
-        }
-    }
-
     fun gotoDetailPost(item: Post) {
         val bundle = Bundle()
         bundle.putParcelable("data", item)
         val dataPost = DetailPost()
         dataPost.arguments = bundle
-        fab_post?.setVisibility(View.INVISIBLE)
+//        fab_post?.setVisibility(View.INVISIBLE)
         manager?.beginTransaction()
             ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             ?.replace(R.id.fragmentHome, dataPost)
@@ -175,10 +156,6 @@ class HomeActivity : AppCompatActivity() {
         val intent = Intent(this@HomeActivity, ProfileActivity::class.java)
         intent.putExtra("userID", UID)
         startActivity(intent)
-    }
-
-    fun setfabPostVisible(){
-        fab_post?.visibility = View.VISIBLE
     }
 
     fun showDialog(medias: ArrayList<MediaData>) {

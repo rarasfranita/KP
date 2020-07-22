@@ -18,19 +18,4 @@
         app:navGraph="@navigation/mobile_navigation"/>
 
     <include layout="@layout/bottom_sheet" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_post"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="60dp"
-        android:backgroundTint="@color/colorPrimary"
-        android:scaleType="center"
-        android:src="@drawable/ic_add_white"
-        app:fabSize="auto"
-        app:borderWidth="0dp"
-        app:maxImageSize="50dp"
-        app:tint="@android:color/white"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
