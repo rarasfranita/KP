@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.EditText
@@ -22,6 +24,7 @@ import com.example.lotus.R
 import com.example.lotus.models.CommentRowModel
 import com.example.lotus.models.DataSearch
 import com.example.lotus.models.Respons
+import com.example.lotus.models.User
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.explore.general.GeneralActivity
@@ -35,10 +38,10 @@ import kotlinx.android.synthetic.main.activity_search.*
 
 class SearchActivity : AppCompatActivity() {
     private var manager: FragmentManager? = null
-    var dataSearch = ArrayList<DataSearch>()
+    var dataSearch = ArrayList<User>()
     var username = SharedPrefManager.getInstance(this).user.username
     var token = SharedPrefManager.getInstance(this).token.token
-    lateinit var adapter: SearchAdapter
+    lateinit var adapter: SearchUser
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         try {
@@ -50,6 +53,29 @@ class SearchActivity : AppCompatActivity() {
         listenAppToolbar()
         manager = supportFragmentManager
         val srlSearch: PullRefreshLayout = findViewById(R.id.srlSearch)
+        val edSearch: EditText = findViewById(R.id.edSearchbar)
+
+        edSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(
+                charSequence: CharSequence,
+                i: Int,
+                i1: Int,
+                i2: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                charSequence: CharSequence,
+                i: Int,
+                i1: Int,
+                i2: Int
+            ) {
+            }
+
+            override fun afterTextChanged(editable: Editable) {
+                adapter.filter(editable.toString())
+            }
+        })
 
         getSearch(null)
         srlSearch.setOnRefreshListener {
@@ -57,20 +83,7 @@ class SearchActivity : AppCompatActivity() {
 
         }
 
-
-        user_search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                adapter.filter.filter(newText)
-                return false
-            }
-
-        })
     }
-
 
     private fun listenAppToolbar() {
         val toolbar: Toolbar = findViewById<Toolbar>(R.id.tbSearch)
@@ -94,19 +107,18 @@ class SearchActivity : AppCompatActivity() {
                     override fun onResponse(respon: Respons) {
                         srlSearch.setRefreshing(false)
                         val gson = Gson()
-                        val temp = ArrayList<DataSearch>()
+                        val temp = ArrayList<User>()
                         if (respon.code.toString() == "200") {
                             Log.e("RESPON!!", respon.data.toString())
                             for ((i, res) in respon.data.withIndex()) {
                                 val strRes = gson.toJson(res)
-                                val dataJson = gson.fromJson(strRes, DataSearch::class.java)
+                                val dataJson = gson.fromJson(strRes, User::class.java)
                                 temp.add(dataJson)
                                 Log.d("TEMP", temp.toString())
                             }
                             val context : Context = this@SearchActivity
-                            adapter = SearchAdapter(temp, context)
                             dataSearch = temp
-                            loadSearch(dataSearch as ArrayList<DataSearch>, findViewById(R.id.rvSearch))
+                            loadSearch(dataSearch, rvSearch)
                         }
                     }
 
@@ -119,11 +131,12 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-    private fun loadSearch(data: ArrayList<DataSearch>, search: RecyclerView) {
+    private fun loadSearch(data: ArrayList<User>, search: RecyclerView) {
+        adapter = SearchUser(data, this)
+        adapter.notifyDataSetChanged()
+
+        search.adapter = adapter
         search.setHasFixedSize(true)
         search.layoutManager = LinearLayoutManager(this)
-        val adapter = SearchAdapter(data, this)
-        adapter.notifyDataSetChanged()
-        search.adapter = adapter
     }
 }
