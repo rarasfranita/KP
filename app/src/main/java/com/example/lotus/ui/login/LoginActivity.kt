@@ -7,6 +7,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns.EMAIL_ADDRESS
+import android.util.Patterns.PHONE
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
@@ -30,11 +31,11 @@ import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.home.HomeActivity
 import com.google.gson.Gson
+import java.util.regex.Pattern
 
 
 class LoginActivity : AppCompatActivity() {
-
-
+    val PHONE_PATTERN: Pattern = Pattern.compile("(\\+62 ((\\d{3}([ -]\\d{3,})([- ]\\d{4,})?)|(\\d+)))|(\\(\\d+\\) \\d+)|\\d{3}( \\d+)+|(\\d+[ -]\\d+)|\\d+")
     private lateinit var loginViewModel: LoginViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,10 +109,16 @@ class LoginActivity : AppCompatActivity() {
             login.setOnClickListener {
 
                 val type =
-                    if (EMAIL_ADDRESS.matcher(username.text.toString()).matches()) {
-                        "email"
-                    } else {
-                        "username"
+                    when {
+                        EMAIL_ADDRESS.matcher(username.text.toString()).matches() -> {
+                            "email"
+                        }
+                        PHONE_PATTERN.matcher(username.text.toString()).matches() -> {
+                            "phone"
+                        }
+                        else -> {
+                            "username"
+                        }
                     }
                 loading.visibility = View.VISIBLE
                 AndroidNetworking.post(EnvService.ENV_API + "/users/login")
