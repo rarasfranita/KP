@@ -64,7 +64,8 @@ class VerificationCodeFragment : Fragment() {
     // fungsi verifcode
     //hit api dengan parameter code & token
     fun checkCode (code: String){
-        AndroidNetworking.get(EnvService.ENV_API + "/users/verify-registration-code?=$code&token=$token")
+        Log.d("TOKEN NIH", token.toString())
+        AndroidNetworking.get(EnvService.ENV_API + "/users/verify-registration-code?code=$code&token=$token")
             .setPriority(Priority.MEDIUM)
             .build()
             .getAsObject(
@@ -75,14 +76,14 @@ class VerificationCodeFragment : Fragment() {
                         if (respon.code.toString() == "200") {
                             val dataJson =gson.toJson(respon.data)
                             val data = gson.fromJson(dataJson, Data::class.java)
-                    //        if (data.status.toString() == "OK" ){
-                      //          view?.findNavController()
-                        //            ?.navigate(R.id.action_verificationCodeFragment_to_choseUsernameFragment)
-                                Log.d("verif code berhasil atau tidak",code)
-                          //  }else{
-                            //    Log.d("Else", data.status.toString())
-                                    //    Toast.makeText(context,"Your code is incorrect, please check again", Toast.LENGTH_LONG).show()
-                            //}
+                            if (data.status.toString() == "OK" ){
+                                view?.findNavController()
+                                    ?.navigate(R.id.action_verificationCodeFragment_to_choseUsernameFragment)
+                                Log.d("verif code berhasil atau tidak","${data.status}, dan token: ${data.token}")
+                            }else{
+                                Log.d("Else", data.status.toString())
+                                Toast.makeText(context,"Your code is incorrect, please check again", Toast.LENGTH_LONG).show()
+                             }
                         }else {
                             Log.e("ERROR!!!", "Cek code  ${respon.code}, ${respon.data}")
                         }
@@ -93,11 +94,6 @@ class VerificationCodeFragment : Fragment() {
                 })
 
     }
-
-
-
-
-
 
     //code udh ke verif pindah page ke username terus simpan state (update state)
 

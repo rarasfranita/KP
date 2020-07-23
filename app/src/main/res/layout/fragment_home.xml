@@ -41,5 +41,44 @@
             android:paddingBottom="50dp"/>
     </com.baoyz.widget.PullRefreshLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="?attr/actionBarSize"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:id="@+id/feedNoData">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_null_data"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-40dp"
+            android:text="You haven't follow anyone or post\nanything"
+            android:gravity="center_horizontal"
+            android:textColor="@color/colorPrimary"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="end">
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabCreatePost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="40dp"
+            android:layout_marginBottom="60dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:scaleType="center"
+            android:src="@drawable/ic_add_white"
+            app:fabSize="auto"
+            app:borderWidth="0dp"
+            app:maxImageSize="50dp"
+            app:tint="@android:color/white"/>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

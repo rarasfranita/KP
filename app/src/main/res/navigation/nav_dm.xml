@@ -39,5 +39,5 @@
         android:id="@+id/listChatFragment"
         android:name="com.example.lotus.ui.dm.ListChatFragment"
         android:label="ListChatFragment"
-        tools:layout="@layout/fragment_list_chat" />
+        tools:layout="@layout/layout_chatting" />
 </navigation>

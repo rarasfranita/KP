@@ -34,11 +34,13 @@ import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.CreatePostActivity
 import com.example.lotus.ui.explore.general.GeneralActivity
-import com.example.lotus.ui.home.HomeActivity
+import com.example.lotus.ui.notification.NotificationActivity
+import com.example.lotus.ui.profile.ProfileActivity
 import com.example.lotus.utils.dateToFormatTime
 import com.example.lotus.utils.dislikePost
 import com.example.lotus.utils.downloadMedia
 import com.example.lotus.utils.likePost
+import com.google.android.material.card.MaterialCardView
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.layout_detail_post.*
 import kotlinx.android.synthetic.main.layout_detail_post.view.*
@@ -56,6 +58,7 @@ class DetailPost : Fragment() {
 
     var token: String? = null
     var userID: String? = null
+    var username: String? = null
     var postData: Post? = null
     var likeStatus: Int? = 0
     var likeCount: Int = 0
@@ -73,8 +76,12 @@ class DetailPost : Fragment() {
         super.onCreate(savedInstanceState)
         val v = inflater.inflate(R.layout.fragment_detail_post, container, false)
 
+        val textStatus = v.findViewById<MaterialCardView>(R.id.cardPostText)
+        textStatus.visibility = View.INVISIBLE
+
         token = SharedPrefManager.getInstance(requireContext()).token.token
         userID = SharedPrefManager.getInstance(requireContext()).user._id
+        username = SharedPrefManager.getInstance(requireContext()).user.username
 
         val bundle = this.arguments
         if (bundle != null) {
@@ -94,9 +101,46 @@ class DetailPost : Fragment() {
         listenRepostIcon(v)
         listenLikeIcon(v)
         toolBarListener(v)
+        setImageProfileAndListen(v)
+        listenAvatarAndUsername(v)
         listenMenu(v)
 
         return v
+    }
+
+    private fun listenAvatarAndUsername(v: View) {
+        val avatar = v.imageAvatarPost
+        val username = v.textUsernamePost
+
+        avatar.setOnClickListener {
+            gotoProfile(postData?.belongsTo.toString())
+        }
+
+        username.setOnClickListener {
+            gotoProfile(postData?.belongsTo.toString())
+        }
+    }
+
+    fun gotoProfile(userID: String){
+        val intent = Intent(this.activity, ProfileActivity::class.java)
+        intent.putExtra("userID", userID)
+        startActivity(intent)
+    }
+
+    private fun setImageProfileAndListen(v: View) {
+        val imageSend = v.findViewById<ImageView>(R.id.profileAtCommentSend)
+        val profilePicture = SharedPrefManager.getInstance(requireContext()).user.avatar
+
+        if (profilePicture != null){
+            imageSend.load(profilePicture){
+                transformations(CircleCropTransformation())
+            }
+        }
+
+        imageSend.setOnClickListener {
+            val intent = Intent(this.activity, ProfileActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     fun sendComment(v: View){
@@ -440,11 +484,12 @@ class DetailPost : Fragment() {
 
         toolbar.setNavigationOnClickListener {
 
-            if (context is HomeActivity){
-                (context as HomeActivity).setfabPostVisible()
-            }
-            else if (context is GeneralActivity){
+            if (context is GeneralActivity){
                 (context as GeneralActivity).setAppBarVisible()
+            }else if(context is ProfileActivity){
+                (context as ProfileActivity).setAppBarVisible()
+            }else if (context is NotificationActivity){
+                (context as NotificationActivity).setAppBarVisible()
             }
             getActivity()?.onBackPressed()
         }
@@ -479,8 +524,8 @@ class DetailPost : Fragment() {
             val uri: Uri = Uri.parse(media.link)
             val shareIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_STREAM, media.link)
-                type = "*"
+                putExtra(Intent.EXTRA_TEXT, media.link)
+                type = "text/plain"
             }
             startActivity(Intent.createChooser(shareIntent, "Share To"))
         }

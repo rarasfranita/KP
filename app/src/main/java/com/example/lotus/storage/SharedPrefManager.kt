@@ -1,8 +1,12 @@
 package com.example.lotus.storage
 
 import android.content.Context
+import com.example.lotus.models.Post
 import com.example.lotus.models.Token
 import com.example.lotus.models.User
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.lang.reflect.Type
 
 class SharedPrefManager private constructor(private val mCtx: Context) {
 
@@ -96,6 +100,7 @@ class SharedPrefManager private constructor(private val mCtx: Context) {
             return mInstance as SharedPrefManager
         }    }
 
+
     //for save state
     fun saveState(state: String) {
 
@@ -117,5 +122,25 @@ class SharedPrefManager private constructor(private val mCtx: Context) {
         }
 
     // for
+    fun setCachePost(post: ArrayList<Post>){
+        val sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        val gson = Gson()
+        val jsonString = gson.toJson(post)
+        editor.putString("cache_post", jsonString)
+        editor.apply()
+    }
+
+    val cachePost: ArrayList<Post>?
+        get() {
+            val gson = Gson()
+            val sharedPreferences =
+                mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
+
+            val value = sharedPreferences.getString("cache_post", null)
+            val type: Type = object : TypeToken<ArrayList<Post>>() {}.type
+            val posts = gson.fromJson<ArrayList<Post>>(value, type)
+            return posts
+        }
 
 }

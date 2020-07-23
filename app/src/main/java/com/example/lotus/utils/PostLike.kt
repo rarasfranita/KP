@@ -22,12 +22,12 @@ fun likePost(postID: String, userID: String, token: String){
                     if (respon.code.toString() == "200") {
                         Log.d("Like", "Success")
                     }else {
-                        Log.e("ERROR!!!", "Like Post ${respon.code}, ${respon.data}")
+                        Log.e("ERROR!!!", "Like Post ${respon.code},\n${respon.data}, ${respon.data}")
                     }
                 }
 
                 override fun onError(anError: ANError) {
-                    Log.e("ERROR!!!", "Like Post ${anError.errorCode}")
+                    Log.e("ERROR!!!", "Like Post ${anError.errorCode},\n${anError.errorDetail}")
 
                 }
             })
@@ -52,7 +52,8 @@ fun dislikePost(postID: String, userID: String, token: String){
                 }
 
                 override fun onError(anError: ANError) {
-                    Log.e("ERROR!!!", "Dislike Post ${anError.errorCode}")
+                    Log.e("ERROR!!!", "Dislike Post ${anError.errorCode}\n" +
+                            "${anError.errorDetail}")
 
                 }
             })

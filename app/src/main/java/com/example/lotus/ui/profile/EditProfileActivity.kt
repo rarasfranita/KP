@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.example.lotus.R
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.media_profile_fragment.*
+import kotlinx.android.synthetic.main.fragment_media_profile.*
 
 class EditProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
