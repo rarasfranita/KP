@@ -2,38 +2,28 @@ package com.example.lotus.ui.explore
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.View
 import android.widget.EditText
-import androidx.appcompat.widget.SearchView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.ViewPager
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.ParsedRequestListener
 import com.baoyz.widget.PullRefreshLayout
 import com.example.lotus.R
-import com.example.lotus.models.CommentRowModel
-import com.example.lotus.models.DataSearch
 import com.example.lotus.models.Respons
 import com.example.lotus.models.User
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.explore.general.GeneralActivity
-import com.example.lotus.ui.explore.general.adapter.GeneralMediaAdapter
-import com.example.lotus.ui.explore.general.model.Data
-import com.example.lotus.ui.home.HomeActivity
-import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_explore_general.*
 import kotlinx.android.synthetic.main.activity_search.*
 
 class SearchActivity : AppCompatActivity() {
@@ -57,7 +47,7 @@ class SearchActivity : AppCompatActivity() {
 
         edSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(
-                charSequence: CharSequence,
+                s: CharSequence,
                 i: Int,
                 i1: Int,
                 i2: Int
@@ -65,22 +55,22 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(
-                charSequence: CharSequence,
-                i: Int,
-                i1: Int,
-                i2: Int
+                s: CharSequence,
+                start: Int,
+                before: Int,
+                count: Int
             ) {
+                adapter.filter(s.toString())
             }
 
             override fun afterTextChanged(editable: Editable) {
-                adapter.filter(editable.toString())
+
             }
         })
 
         getSearch(null)
         srlSearch.setOnRefreshListener {
             getSearch(srlSearch)
-
         }
 
     }
@@ -89,8 +79,7 @@ class SearchActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById<Toolbar>(R.id.tbSearch)
 
         toolbar.setNavigationOnClickListener {
-            val intent = Intent(this, GeneralActivity::class.java)
-            startActivity(intent)
+            this.onBackPressed()
         }
 
     }
@@ -116,7 +105,7 @@ class SearchActivity : AppCompatActivity() {
                                 temp.add(dataJson)
                                 Log.d("TEMP", temp.toString())
                             }
-                            val context : Context = this@SearchActivity
+                            val context: Context = this@SearchActivity
                             dataSearch = temp
                             loadSearch(dataSearch, rvSearch)
                         }

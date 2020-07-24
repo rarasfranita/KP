@@ -137,7 +137,7 @@ class NewMessageFragment : Fragment() {
         val toolbar: Toolbar = v?.findViewById(R.id.tbNewMessage) as Toolbar
 
         toolbar.setNavigationOnClickListener {
-            view?.findNavController()?.navigate(R.id.action_newMessageFragment_to_homeFragmentDM)
+            activity?.onBackPressed()
         }
 
     }

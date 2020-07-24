@@ -100,8 +100,7 @@ class HomeFragmentDM : Fragment() {
         val toolbar: Toolbar = v?.findViewById(R.id.tbMessage) as Toolbar
 
         toolbar.setNavigationOnClickListener {
-            val intent = Intent(activity, HomeActivity::class.java)
-            startActivity(intent)
+            activity?.onBackPressed()
         }
 
         toolbar.setOnMenuItemClickListener() {

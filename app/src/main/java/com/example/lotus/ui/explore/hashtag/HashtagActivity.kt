@@ -280,8 +280,7 @@ class HashtagActivity : AppCompatActivity() {
     }
 
     fun backToExplore(view: View) {
-        val intent = Intent(this, GeneralActivity::class.java)
-        startActivity(intent)
+        this.onBackPressed()
     }
 
     internal class ViewPagerAdapterHashtag(fragmentManager: FragmentManager) :
