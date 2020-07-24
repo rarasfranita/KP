@@ -93,8 +93,7 @@ class GeneralActivity : AppCompatActivity() {
             val toolbar: Toolbar = findViewById<Toolbar>(R.id.tbExplore)
 
             toolbar.setNavigationOnClickListener {
-                val intent = Intent(this, HomeActivity::class.java)
-                startActivity(intent)
+                this.onBackPressed()
             }
             toolbar.setOnMenuItemClickListener {
                 val intent = Intent(this, SearchActivity::class.java)

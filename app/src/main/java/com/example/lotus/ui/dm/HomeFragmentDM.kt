@@ -7,9 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -24,16 +22,22 @@ import com.androidnetworking.interfaces.ParsedRequestListener
 import com.baoyz.widget.PullRefreshLayout
 import com.example.lotus.R
 import com.example.lotus.models.DM.Channel.Dm
+import com.example.lotus.models.DM.Get.Get
 import com.example.lotus.models.Respons
+import com.example.lotus.models.User
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
+import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.home.HomeActivity
+import com.github.nkzawa.emitter.Emitter
 import com.github.nkzawa.socketio.client.IO
 import com.github.nkzawa.socketio.client.Socket
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_maindm.*
 import kotlinx.android.synthetic.main.fragment_homedm.*
+import kotlinx.android.synthetic.main.layout_chatting.*
 import kotlinx.android.synthetic.main.layout_list_messages.view.*
+import org.json.JSONObject
 
 // TODO: 21/07/20 socket
 class HomeFragmentDM : Fragment() {
@@ -69,7 +73,7 @@ class HomeFragmentDM : Fragment() {
         mSocket.connect()
 //        mSocket.on(userID, onConnect)
         val v = inflater.inflate(R.layout.fragment_homedm, container, false)
-        val reload :PullRefreshLayout = v.findViewById(R.id.realodDM)
+        val reload: PullRefreshLayout = v.findViewById(R.id.realodDM)
         listenAppToolbar(v)
         getListMessage(null)
         reload.setOnRefreshListener {
@@ -96,14 +100,14 @@ class HomeFragmentDM : Fragment() {
         val toolbar: Toolbar = v?.findViewById(R.id.tbMessage) as Toolbar
 
         toolbar.setNavigationOnClickListener {
-            val intent = Intent(activity, HomeActivity::class.java)
-            startActivity(intent)
+            activity?.onBackPressed()
         }
 
-        toolbar.setOnMenuItemClickListener(){
-            when (it.itemId){
+        toolbar.setOnMenuItemClickListener() {
+            when (it.itemId) {
                 R.id.fragmentNewDM ->
-                    view?.findNavController()?.navigate(R.id.action_homeFragmentDM_to_newMessageFragment)
+                    view?.findNavController()
+                        ?.navigate(R.id.action_homeFragmentDM_to_newMessageFragment)
 
             }
             true
@@ -195,7 +199,7 @@ class DmAdapter(private var channelDm: ArrayList<Dm>, var context: Context) :
         val extras = Bundle()
         val message = Holder(holder.itemView)
 
-        message.ll2.setOnClickListener {
+        message.rlMessage.setOnClickListener {
             val intent = Intent(context, GetMessage::class.java)
             extras.putString("name", channelDm[position].receiver!!.name)
             extras.putString("username", channelDm[position].receiver!!.username)
@@ -213,7 +217,7 @@ class DmAdapter(private var channelDm: ArrayList<Dm>, var context: Context) :
     class Holder(val view: View) : RecyclerView.ViewHolder(view) {
         var mContext: Context? = null
         val username: TextView = view.findViewById(R.id.username)
-        val ll2: LinearLayout = view.findViewById(R.id.ll2)
+        val rlMessage: RelativeLayout = view.findViewById(R.id.rlMessage)
 
         fun bindMessage(dm: Dm, context: Context) {
             itemView.apply {
@@ -223,7 +227,8 @@ class DmAdapter(private var channelDm: ArrayList<Dm>, var context: Context) :
                 val profileMessage: ImageView = view.findViewById(R.id.profileMessage)
                 lastMessage.text = dm.lastMessage!!.message
                 username.text = dm.name.toString()
-                setProfilePicture(profileMessage, dm.receiver!!.profilePicture)
+                Log.d("nukanya", dm.receiver!!.profilePicture)
+                setProfilePicture(profileMessage, dm.receiver.profilePicture)
 
                 if (dm.isRead == 1) {
                     read.visibility = View.GONE
@@ -239,8 +244,5 @@ class DmAdapter(private var channelDm: ArrayList<Dm>, var context: Context) :
                 transformations(CircleCropTransformation())
             }
         }
-
-
     }
-
 }

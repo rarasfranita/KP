@@ -28,22 +28,21 @@
             app:titleTextColor="#6B6B6B" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!--    todo : unhide search -->
-
-    <androidx.appcompat.widget.SearchView
-        android:visibility="gone"
-        android:id="@+id/user_search"
+    <EditText
+        android:id="@+id/edSearchbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:background="#EAEAEA"
-        android:fontFamily="@font/lato"
-        app:iconifiedByDefault="false"
-        app:queryHint="Search People or Hashtag (#)"
-        app:queryBackground="@null" />
+        android:maxLines="1"
+        android:drawableLeft="@drawable/ic_search"
+        android:drawablePadding="10dp"
+        android:background="@drawable/search_bar_drawable_2"
+        android:hint="@string/search_explore"
+        android:textSize="14sp"/>
 
     <com.baoyz.widget.PullRefreshLayout
         android:id="@+id/srlSearch"
+        android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:refreshColor="@color/colorPrimary">

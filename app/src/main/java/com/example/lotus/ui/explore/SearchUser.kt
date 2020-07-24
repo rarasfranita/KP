@@ -18,26 +18,21 @@ import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.ParsedRequestListener
 import com.example.lotus.R
-import com.example.lotus.models.DataSearch
 import com.example.lotus.models.Respon
+import com.example.lotus.models.User
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
-import com.example.lotus.ui.dm.DmAdapter
-import com.example.lotus.ui.dm.GetMessage
 import com.example.lotus.ui.home.Constant
-import com.example.lotus.ui.home.HomeActivity
 import com.example.lotus.ui.profile.ProfileActivity
 import kotlinx.android.synthetic.main.layout_list_messages.view.*
-import kotlinx.android.synthetic.main.layout_mainfeed_listitem.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-class SearchAdapter(private val listSearchUser: ArrayList<DataSearch>, val context: Context) :
-    RecyclerView.Adapter<SearchAdapter.Holder>(), Filterable{
+class SearchUser(private var listSearchUser: ArrayList<User>, val context: Context) :
+    RecyclerView.Adapter<SearchUser.Holder>(){
+    val userData = listSearchUser
     val token = SharedPrefManager.getInstance(context).token.token
     val userID = SharedPrefManager.getInstance(context).user._id
-    var searchUserFilterList = ArrayList<String>()
-    var a = listSearchUser[0].username?.toArrayList()
     private var mContext: Context? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -137,7 +132,7 @@ class SearchAdapter(private val listSearchUser: ArrayList<DataSearch>, val conte
         val unfollow: Button = view.findViewById(R.id.btnUnfollowSearch)
 
         var mContext: Context? = null
-        private var userData: DataSearch? = null
+        private var userData: User? = null
         private var token: String = null.toString()
         private var userID: String = null.toString()
 
@@ -149,7 +144,7 @@ class SearchAdapter(private val listSearchUser: ArrayList<DataSearch>, val conte
             this.userID = userID
         }
 
-        fun bindFeed(search: DataSearch, context: Context) {
+        fun bindFeed(search: User, context: Context) {
             itemView.apply {
                 read.visibility = View.GONE
 
@@ -192,36 +187,24 @@ class SearchAdapter(private val listSearchUser: ArrayList<DataSearch>, val conte
         }
     }
 
-    override fun getFilter():Filter {
-        return object : Filter() {
-            override fun performFiltering(constraint: CharSequence?): FilterResults {
-                val charSearch = constraint.toString()
-                if (charSearch.isEmpty()) {
-                    searchUserFilterList = a!!
-                } else {
-                    val resultList = ArrayList<String>()
-                    for (row in a!!) {
-                        if (row.toLowerCase(Locale.ROOT).contains(charSearch.toLowerCase(Locale.ROOT))) {
-                            resultList.add(row)
-                        }
-                    }
-                    searchUserFilterList = resultList
-                }
-                val filterResults = FilterResults()
-                filterResults.values = searchUserFilterList
-                return filterResults
-            }
+    fun filter(text: String) {
+        val a = userData
+        val filterdNames: ArrayList<User> = ArrayList()
 
-            @Suppress("UNCHECKED_CAST")
-            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                searchUserFilterList = results?.values as ArrayList<String>
-                notifyDataSetChanged()
+        for (s in a) {
+            if (s.username.toString().toLowerCase(Locale.ROOT).contains(text.toLowerCase(Locale.ROOT))) {
+                filterdNames.add(s)
             }
+            Log.d("filterdNames", filterdNames.toString())
 
         }
+        filterList(filterdNames)
     }
-}
 
-fun String.toArrayList(): ArrayList<String> {
-    return ArrayList(this.split("").drop(1).dropLast(1))
+    private fun filterList(filterdNames: ArrayList<User>) {
+        this.listSearchUser = filterdNames
+        Log.d("dsdsd", filterdNames.toString())
+        notifyDataSetChanged()
+    }
+
 }
