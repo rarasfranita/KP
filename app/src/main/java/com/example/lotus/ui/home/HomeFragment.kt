@@ -113,14 +113,15 @@ class HomeFragment : Fragment() {
                         reloadFeed.setRefreshing(false)
                         val gson = Gson()
                         var tempDataFeed = ArrayList<Post>()
+                        var cacheDataFeed = ArrayList<Post>()
                         if (respon.code.toString() == "200") {
                             for ((i, res) in respon.data.withIndex()) {
                                 val strRes = gson.toJson(res)
                                 val dataJson = gson.fromJson(strRes, Post::class.java)
-                                dataFeed.add(dataJson)
+                                tempDataFeed.add(dataJson)
 
                                 if (i < 10){
-                                    tempDataFeed.add(dataJson)
+                                    cacheDataFeed.add(dataJson)
                                 }
 
                                 /* TODO: For load data scrolling
@@ -129,6 +130,8 @@ class HomeFragment : Fragment() {
                                 }
                                  */
                             }
+
+                            dataFeed = tempDataFeed
 
                             if (dataFeed.size < 1){
                                 feedNoData.visibility = View.VISIBLE
