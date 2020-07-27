@@ -30,16 +30,24 @@ import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.home.HomeActivity
+import com.example.lotus.ui.register.RegisterActivity
 import com.google.gson.Gson
 import java.util.regex.Pattern
+import kotlinx.android.synthetic.main.activity_login.*
 
 
 class LoginActivity : AppCompatActivity() {
-    val PHONE_PATTERN: Pattern = Pattern.compile("(\\+62 ((\\d{3}([ -]\\d{3,})([- ]\\d{4,})?)|(\\d+)))|(\\(\\d+\\) \\d+)|\\d{3}( \\d+)+|(\\d+[ -]\\d+)|\\d+")
+    val PHONE_PATTERN: Pattern =
+        Pattern.compile("(\\+62 ((\\d{3}([ -]\\d{3,})([- ]\\d{4,})?)|(\\d+)))|(\\(\\d+\\) \\d+)|\\d{3}( \\d+)+|(\\d+[ -]\\d+)|\\d+")
+
     private lateinit var loginViewModel: LoginViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        Register.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
+        }
 
         val username = findViewById<EditText>(R.id.username)
         val password = findViewById<EditText>(R.id.password)
@@ -136,17 +144,28 @@ class LoginActivity : AppCompatActivity() {
                                 val dataJson = gson.fromJson(strRes, DataUser::class.java)
                                 val data = gson.fromJson(strRes, Token::class.java)
 
-                                loginViewModel.login(dataJson.user.name.toString(), password.text.toString())
+                                loginViewModel.login(
+                                    dataJson.user.name.toString(),
+                                    password.text.toString()
+                                )
 
-                                SharedPrefManager.getInstance(applicationContext).saveUser(dataJson.user)
-                                SharedPrefManager.getInstance(applicationContext).saveToken(data)
+                                SharedPrefManager.getInstance(applicationContext)
+                                    .saveUser(dataJson.user)
+                                SharedPrefManager.getInstance(applicationContext)
+                                    .saveToken(data)
                                 val token = data.toString()
 
-                                val intent = Intent(applicationContext, GeneralActivity::class.java)
-                                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                val intent =
+                                    Intent(applicationContext, GeneralActivity::class.java)
+                                intent.flags =
+                                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             } else {
                                 Log.d("onError: Failed", respon.toString())
-                                Toast.makeText(applicationContext, "" + respon.data.toString(), Toast.LENGTH_SHORT)
+                                Toast.makeText(
+                                    applicationContext,
+                                    "" + respon.data.toString(),
+                                    Toast.LENGTH_SHORT
+                                )
                                     .show()
                             }
                         }
@@ -154,12 +173,17 @@ class LoginActivity : AppCompatActivity() {
                         override fun onError(error: ANError) {
                             loading.visibility = View.INVISIBLE
                             Log.d("onError: Failed", error.toString())
-                            Toast.makeText(applicationContext, "gagal login", Toast.LENGTH_SHORT)
+                            Toast.makeText(
+                                applicationContext,
+                                "gagal login",
+                                Toast.LENGTH_SHORT
+                            )
                                 .show()
                         }
                     })
             }
         }
+
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {
@@ -192,20 +216,26 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-}
 
 
-/**
- * Extension function to simplify setting an afterTextChanged action to EditText components.
- */
-fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
-    this.addTextChangedListener(object : TextWatcher {
-        override fun afterTextChanged(editable: Editable?) {
-            afterTextChanged.invoke(editable.toString())
-        }
+    /**
+     * Extension function to simplify setting an afterTextChanged action to EditText components.
+     */
+    fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
+        this.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(editable: Editable?) {
+                afterTextChanged.invoke(editable.toString())
+            }
 
-        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(
+                s: CharSequence,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+            }
 
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-    })
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+        })
+    }
 }

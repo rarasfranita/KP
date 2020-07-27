@@ -103,10 +103,31 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_login"
+        android:orientation="horizontal">
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:gravity="center_horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/main_login"
-        android:text="Register here"></TextView>
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:text="Don't have account?"
+        ></TextView>
+
+        <TextView
+            android:id="@+id/Register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:text=" Register"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            ></TextView>
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

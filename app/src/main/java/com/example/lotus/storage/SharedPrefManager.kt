@@ -100,6 +100,24 @@ class SharedPrefManager private constructor(private val mCtx: Context) {
             return mInstance as SharedPrefManager
         }    }
 
+
+    //for save state
+    fun saveState(state: String) {
+        val sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("state", state)
+        editor.apply()
+    }
+
+    // for get state
+    val state: String
+        get() {
+            val sharedPreferences =
+                mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
+            return sharedPreferences.getString("state", null).toString()
+        }
+
+    // for
     fun setCachePost(post: ArrayList<Post>){
         val sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
