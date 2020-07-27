@@ -40,17 +40,9 @@
         android:hint="@string/search_explore"
         android:textSize="14sp"/>
 
-    <com.baoyz.widget.PullRefreshLayout
-        android:id="@+id/srlSearch"
-        android:layout_margin="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:refreshColor="@color/colorPrimary">
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvSearch"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1" />
-    </com.baoyz.widget.PullRefreshLayout>
 </LinearLayout>

@@ -1,11 +1,8 @@
 package com.example.lotus.ui.explore
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -16,13 +13,11 @@ import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.ParsedRequestListener
-import com.baoyz.widget.PullRefreshLayout
 import com.example.lotus.R
 import com.example.lotus.models.Respons
 import com.example.lotus.models.User
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
-import com.example.lotus.ui.explore.general.GeneralActivity
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_search.*
 
@@ -42,7 +37,6 @@ class SearchActivity : AppCompatActivity() {
 
         listenAppToolbar()
         manager = supportFragmentManager
-        val srlSearch: PullRefreshLayout = findViewById(R.id.srlSearch)
         val edSearch: EditText = findViewById(R.id.edSearchbar)
 
         edSearch.addTextChangedListener(object : TextWatcher {
@@ -68,11 +62,7 @@ class SearchActivity : AppCompatActivity() {
             }
         })
 
-        getSearch(null)
-        srlSearch.setOnRefreshListener {
-            getSearch(srlSearch)
-        }
-
+        getSearch()
     }
 
     private fun listenAppToolbar() {
@@ -84,37 +74,29 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-    private fun getSearch(v: PullRefreshLayout?) {
-        v?.setRefreshing(true)
+    private fun getSearch() {
         AndroidNetworking.get(EnvService.ENV_API + "/users")
-            .addHeaders("Authorization", "Bearer " + token)
+            .addHeaders("Authorization", "Bearer $token")
             .setPriority(Priority.HIGH)
             .build()
             .getAsObject(
                 Respons::class.java,
                 object : ParsedRequestListener<Respons> {
                     override fun onResponse(respon: Respons) {
-                        srlSearch.setRefreshing(false)
                         val gson = Gson()
                         val temp = ArrayList<User>()
                         if (respon.code.toString() == "200") {
-                            Log.e("RESPON!!", respon.data.toString())
                             for ((i, res) in respon.data.withIndex()) {
                                 val strRes = gson.toJson(res)
                                 val dataJson = gson.fromJson(strRes, User::class.java)
                                 temp.add(dataJson)
-                                Log.d("TEMP", temp.toString())
                             }
-                            val context: Context = this@SearchActivity
                             dataSearch = temp
                             loadSearch(dataSearch, rvSearch)
                         }
                     }
 
                     override fun onError(anError: ANError) {
-                        srlSearch.setRefreshing(false)
-                        Log.e("ERROR!!!", "While search ${anError.errorCode}")
-
                     }
                 })
 

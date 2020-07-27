@@ -29,7 +29,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class SearchUser(private var listSearchUser: ArrayList<User>, val context: Context) :
-    RecyclerView.Adapter<SearchUser.Holder>(){
+    RecyclerView.Adapter<SearchUser.Holder>() {
     val userData = listSearchUser
     val token = SharedPrefManager.getInstance(context).token.token
     val userID = SharedPrefManager.getInstance(context).user._id
@@ -58,7 +58,6 @@ class SearchUser(private var listSearchUser: ArrayList<User>, val context: Conte
             extras.putString("userID", listSearchUser[position]._id)
             intent.putExtras(extras)
             context.startActivity(intent)
-            listSearchUser[position].username?.let { it1 -> Log.d("username", it1) }
         }
         holder.bindFeed(listSearchUser[position], context)
         if (holder.itemViewType == Constant.VIEW_TYPE_ITEM) {
@@ -71,11 +70,11 @@ class SearchUser(private var listSearchUser: ArrayList<User>, val context: Conte
 
             item.follow.setOnClickListener {
                 val usernameTrg = listSearchUser[position].username
-                Log.d("usernameSrc", "${usernameSrc} , usernameTarget, ${usernameTrg}")
+                Log.d("usernameSrc", "$usernameSrc , usernameTarget, $usernameTrg")
                 AndroidNetworking.get(EnvService.ENV_API + "/users/$usernameSrc/follow/$usernameTrg")
                     .addPathParameter("usernameSource", usernameSrc)
                     .addPathParameter("usernameTarget", usernameTrg)
-                    .addHeaders("Authorization", "Bearer " + token)
+                    .addHeaders("Authorization", "Bearer $token")
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsObject(
@@ -83,26 +82,22 @@ class SearchUser(private var listSearchUser: ArrayList<User>, val context: Conte
                         object : ParsedRequestListener<Respon> {
                             override fun onResponse(respon: Respon) {
                                 if (respon.code.toString() == "200") {
-                                    Log.d("RESPON FOLLOWW", respon.data.toString())
                                     item.setFollowing()
-                                } else {
-                                    Log.e("ERROR!!!", "Following ${respon.code}")
                                 }
                             }
 
                             override fun onError(anError: ANError) {
-                                Log.e("ERROR!!!", "While following ${anError.errorCode}")
 
                             }
                         })
             }
             item.unfollow.setOnClickListener {
                 val usernameTrg = listSearchUser[position].username
-                Log.d("usernameSrc", "${usernameSrc} , usernameTarget, ${usernameTrg}")
+                Log.d("usernameSrc", "$usernameSrc , usernameTarget, $usernameTrg")
                 AndroidNetworking.get(EnvService.ENV_API + "/users/$usernameSrc/unfollow/$usernameTrg")
                     .addPathParameter("usernameSource", usernameSrc)
                     .addPathParameter("usernameTarget", usernameTrg)
-                    .addHeaders("Authorization", "Bearer " + token)
+                    .addHeaders("Authorization", "Bearer $token")
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsObject(
@@ -110,15 +105,11 @@ class SearchUser(private var listSearchUser: ArrayList<User>, val context: Conte
                         object : ParsedRequestListener<Respon> {
                             override fun onResponse(respon: Respon) {
                                 if (respon.code.toString() == "200") {
-                                    Log.d("RESPON UNFOLLOWW", respon.data.toString())
                                     item.setUnfollow()
-                                } else {
-                                    Log.e("ERROR!!!", "Unfollowing ${respon.code}")
                                 }
                             }
 
                             override fun onError(anError: ANError) {
-                                Log.e("ERROR!!!", "While unfollowing ${anError.errorCode}")
 
                             }
                         })
@@ -192,10 +183,11 @@ class SearchUser(private var listSearchUser: ArrayList<User>, val context: Conte
         val filterdNames: ArrayList<User> = ArrayList()
 
         for (s in a) {
-            if (s.username.toString().toLowerCase(Locale.ROOT).contains(text.toLowerCase(Locale.ROOT))) {
+            if (s.username.toString().toLowerCase(Locale.ROOT)
+                    .contains(text.toLowerCase(Locale.ROOT))
+            ) {
                 filterdNames.add(s)
             }
-            Log.d("filterdNames", filterdNames.toString())
 
         }
         filterList(filterdNames)
@@ -203,7 +195,6 @@ class SearchUser(private var listSearchUser: ArrayList<User>, val context: Conte
 
     private fun filterList(filterdNames: ArrayList<User>) {
         this.listSearchUser = filterdNames
-        Log.d("dsdsd", filterdNames.toString())
         notifyDataSetChanged()
     }
 
