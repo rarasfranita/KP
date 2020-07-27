@@ -87,7 +87,7 @@
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="10dp"
                 android:background="#FBC9A7"
-                android:enabled="true"
+                android:enabled="false"
                 android:text="@string/next"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"

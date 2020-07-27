@@ -16,6 +16,7 @@ import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.home.HomeActivity
 import com.example.lotus.ui.login.LoginActivity
+import com.example.lotus.ui.register.ChoseUsernameFragment
 import com.example.lotus.ui.register.VerificationCodeFragment
 import com.github.nkzawa.socketio.client.IO
 import com.github.nkzawa.socketio.client.Socket
@@ -39,7 +40,15 @@ class SplashActivity : AppCompatActivity() {
        val state = SharedPrefManager.getInstance(this).state
         var manager: FragmentManager? = getSupportFragmentManager()
 
-        if(state == "vercode") {
+        if(state == "chosename"){
+            val logo = findViewById<ImageView>(R.id.logoSplashScreen)
+            manager?.beginTransaction()
+                ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                ?.replace(R.id.wrapperSplashScreen,ChoseUsernameFragment())
+                ?.addToBackStack("Home")
+                ?.commit()
+            logo.visibility= View.GONE
+        }else if(state == "vercode") {
             val logo = findViewById<ImageView>(R.id.logoSplashScreen)
             manager?.beginTransaction()
                 ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)

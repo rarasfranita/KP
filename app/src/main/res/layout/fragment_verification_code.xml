@@ -14,7 +14,7 @@
         tools:ignore="MissingConstraints">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/tbregisterVC"
+            android:id="@+id/tbVerCode"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@android:color/white"
@@ -78,7 +78,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_gravity="center"
                 android:textColor="@color/colorPrimary"
-                android:textSize="12sp"></TextView>
+                android:textSize="12sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -105,6 +105,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/VerifCode"
                     android:inputType="number"
+                    android:maxLength="4"
                     android:textColor="@color/black"
                     android:textColorHint="@color/colorPrimary"
                     android:textSize="14sp" />
@@ -120,7 +121,7 @@
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="10dp"
             android:background="#FBC9A7"
-            android:enabled="true"
+            android:enabled="false"
             android:text="@string/next"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"

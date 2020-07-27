@@ -103,13 +103,10 @@ class SharedPrefManager private constructor(private val mCtx: Context) {
 
     //for save state
     fun saveState(state: String) {
-
         val sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-
         editor.putString("state", state)
         editor.apply()
-
     }
 
     // for get state
@@ -118,7 +115,6 @@ class SharedPrefManager private constructor(private val mCtx: Context) {
             val sharedPreferences =
                 mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
             return sharedPreferences.getString("state", null).toString()
-
         }
 
     // for

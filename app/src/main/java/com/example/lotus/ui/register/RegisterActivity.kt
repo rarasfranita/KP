@@ -7,6 +7,6 @@ import com.example.lotus.R
 class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register2)
+        setContentView(R.layout.activity_register)
     }
 }
