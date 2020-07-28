@@ -14,13 +14,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.dm.GetMessage"></activity>
-        <activity android:name=".ui.explore.SearchActivity" />
+
+        <activity android:name=".ui.register.RegisterActivity">
+
+        </activity>
         <activity android:name=".ui.explore.general.GeneralActivity" />
         <activity
             android:name=".ui.explore.hashtag.HashtagActivity"
-            android:label="@string/title_activity_explore" />
+            android:label="@string/title_activity_explore"></activity>
 
+        <activity android:name=".ui.dm.GetMessage"></activity>
+        <activity android:name=".ui.explore.SearchActivity" />
         <meta-data
             android:name="android.app.searchable"
             android:resource="@xml/searchable" />
@@ -37,7 +41,8 @@
         <activity android:name=".ui.dm.MainActivityDM" />
         <activity
             android:name=".ui.login.LoginActivity"
-            android:label="@string/title_activity_login" />
+            android:label="@string/title_activity_login" >
+        </activity>
         <activity
             android:name=".ui.SplashActivity"
             android:label="@string/app_name">
