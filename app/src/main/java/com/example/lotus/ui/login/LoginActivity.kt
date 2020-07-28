@@ -216,7 +216,7 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-
+}
 
     /**
      * Extension function to simplify setting an afterTextChanged action to EditText components.
@@ -238,4 +238,3 @@ class LoginActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         })
     }
-}
