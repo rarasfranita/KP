@@ -44,6 +44,8 @@ import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_explore_general.*
 import kotlinx.android.synthetic.main.activity_hashtag.*
+import kotlinx.android.synthetic.main.fragment_list_media_general.*
+import kotlinx.android.synthetic.main.fragment_list_text_general.*
 
 
 class GeneralActivity : AppCompatActivity() {
@@ -88,24 +90,14 @@ class GeneralActivity : AppCompatActivity() {
 
     private fun listenAppToolbar() {
         if (!SharedPrefManager.getInstance(this).isLoggedIn) {
-            tbExplore.navigationIcon?.isVisible
-        } else {
-            val toolbar: Toolbar = findViewById<Toolbar>(R.id.tbExplore)
-
-            toolbar.setNavigationOnClickListener {
-                this.onBackPressed()
-            }
-            toolbar.setOnMenuItemClickListener {
-                val intent = Intent(this, SearchActivity::class.java)
-                    when (it.itemId) {
-                    R.id.search ->
-                        startActivity(intent)
-                    }
-                true
-            }
+            LinLayou1.visibility = View.GONE
         }
     }
 
+    fun search (view : View){
+        val intent = Intent(this, SearchActivity::class.java)
+        startActivity(intent)
+    }
     private fun getExploreText(v: PullRefreshLayout?) {
         if (SharedPrefManager.getInstance(this).isLoggedIn) {
             v?.setRefreshing(true)
@@ -238,30 +230,38 @@ class GeneralActivity : AppCompatActivity() {
 
 
     fun loadExploreMedia(data: ArrayList<Data>, explore: RecyclerView) {
-        explore.setHasFixedSize(true)
-        explore.layoutManager = LinearLayoutManager(this)
-        val adapter =
-            GeneralMediaAdapter(data, this)
-        adapter.notifyDataSetChanged()
-
-        explore.adapter = adapter
+        if (data.size < 1){
+            explore.visibility = View.GONE
+        } else {
+            dataEmptyMediaGeneral.visibility = View.GONE
+            explore.setHasFixedSize(true)
+            explore.layoutManager = LinearLayoutManager(this)
+            val adapter =
+                GeneralMediaAdapter(data, this)
+            adapter.notifyDataSetChanged()
+            explore.adapter = adapter
+        }
     }
 
     fun loadExploreText(data: ArrayList<Data>, explore: RecyclerView) {
-        explore.setHasFixedSize(true)
-        explore.layoutManager = LinearLayoutManager(this)
-        val adapter =
-            GeneralTextAdapter(
-                data,
-                this
-            )
-        adapter.notifyDataSetChanged()
+        if (data.size < 1){
+            explore.visibility = View.GONE
+        } else {
+            dataEmptyTextGeneral.visibility = View.GONE
+            explore.setHasFixedSize(true)
+            explore.layoutManager = LinearLayoutManager(this)
+            val adapter =
+                GeneralTextAdapter(
+                    data,
+                    this
+                )
+            adapter.notifyDataSetChanged()
 
-        explore.adapter = adapter
+            explore.adapter = adapter
+        }
     }
 
     fun backToHome(view: View) {
-        appBarLayout?.visibility = View.VISIBLE
         tabs.visibility = View.VISIBLE
         manager?.beginTransaction()
             ?.replace(R.id.fragmentExplore, ListMediaGeneral())?.commit()
@@ -302,7 +302,7 @@ class GeneralActivity : AppCompatActivity() {
         val bundle = Bundle().apply {
             putString("postId", postId)
         }
-        appBarLayout.visibility = View.INVISIBLE
+//        appBarLayout.visibility = View.INVISIBLE
         val dataPost = DetailPost()
         dataPost.arguments = bundle
         manager?.beginTransaction()
@@ -313,7 +313,7 @@ class GeneralActivity : AppCompatActivity() {
     }
 
     fun setAppBarVisible() {
-        appBarLayout.visibility = View.VISIBLE
+//        appBarLayout.visibility = View.VISIBLE
     }
 
     fun showDialog(medias: ArrayList<MediaData>) {
@@ -344,6 +344,9 @@ class GeneralActivity : AppCompatActivity() {
 
     }
 
+    fun backtoExplore(view :View){
+        this.onBackPressed()
+    }
     fun shareMediaToOtherApp(medias: ArrayList<MediaData>) {
         for (media in medias) {
             val uri: Uri = Uri.parse(media.link)

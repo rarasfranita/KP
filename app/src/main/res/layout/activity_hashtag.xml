@@ -39,11 +39,18 @@
             android:textColor="#6B6B6B"/>
     </LinearLayout>
 
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EAEAEA"
+        app:layout_constraintTop_toBottomOf="@+id/LinLayout1"/>
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabsHashtag"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/LinLayout1"
+        app:layout_constraintTop_toBottomOf="@+id/view"
         app:tabBackground="@color/white"
         app:tabIconTint="#F79543"
         app:tabIndicatorColor="#F79543"

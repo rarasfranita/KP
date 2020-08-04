@@ -1,6 +1,5 @@
 package com.example.lotus.ui.explore.hashtag
 
-//import com.example.lotus.ui.explore.detailpost.DetailPostHashtag
 import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
@@ -30,7 +29,6 @@ import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.detailpost.DetailPost
-import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.explore.hashtag.adapter.HashtagMediaAdapter
 import com.example.lotus.ui.explore.hashtag.adapter.HashtagTextAdapter
 import com.example.lotus.ui.explore.hashtag.fragment.ListMediaHashtag
@@ -273,7 +271,7 @@ class HashtagActivity : AppCompatActivity() {
     }
 
     fun backToHome(view: View) {
-        LinLayout1?.visibility = View.VISIBLE
+        LinLayout1.visibility = View.VISIBLE
         tabsHashtag.visibility = View.VISIBLE
         manager?.beginTransaction()
             ?.replace(R.id.fragment_list_media_hashtag, ListMediaHashtag())?.commit()
@@ -317,9 +315,9 @@ class HashtagActivity : AppCompatActivity() {
         val bundle = Bundle().apply {
             putString("postId", postId)
         }
-        if (appBarLayout != null){
-            appBarLayout.visibility = View.INVISIBLE
-        }
+//        if (appBarLayout != null){
+//            appBarLayout.visibility = View.INVISIBLE
+//        }
         val dataPost = DetailPost()
         dataPost.arguments = bundle
         manager?.beginTransaction()

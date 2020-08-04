@@ -76,10 +76,7 @@ class GetMessage : AppCompatActivity(), View.OnClickListener {
         adapter = GetMessageAdapter(chatList, this)
         rv_listMessage.adapter = adapter
 
-        // TODO: 21/07/20 fix reverse RV not work
         val layoutManager = LinearLayoutManager(this)
-        layoutManager.reverseLayout = true
-        layoutManager.stackFromEnd = true
         rv_listMessage.layoutManager = layoutManager
 
 
@@ -115,8 +112,8 @@ class GetMessage : AppCompatActivity(), View.OnClickListener {
 
         runOnUiThread {
             adapter.chatList.add(get)
-            rv_listMessage.scrollToPosition(adapter.chatList.size -1)
-            Log.d("chatList.size", adapter.chatList.size .toString())
+            rv_listMessage.scrollToPosition(adapter.chatList.size - 1)
+            Log.d("chatList.size", adapter.chatList.size.toString())
             adapter.notifyDataSetChanged()
 
         }
@@ -135,6 +132,7 @@ class GetMessage : AppCompatActivity(), View.OnClickListener {
         val bundle = intent.extras
         val userid = bundle?.getString("userId")
 
+        // end point send message
         AndroidNetworking.post(EnvService.ENV_API + "/users/{senderId}/dm")
             .addPathParameter("senderId", userId.toString())
             .addBodyParameter("userId", userid.toString())
@@ -146,7 +144,6 @@ class GetMessage : AppCompatActivity(), View.OnClickListener {
                 Respon::class.java,
                 object : ParsedRequestListener<Respon> {
                     override fun onResponse(respon: Respon) {
-//                        rv_listMessage.smoothScrollToPosition(chatlist.size -1)
                         val gson = Gson()
                         val temp = ArrayList<Chat>()
                         if (respon.code.toString() == "200") {
@@ -234,9 +231,9 @@ class GetMessage : AppCompatActivity(), View.OnClickListener {
                 })
     }
 
+
     fun backToDM(view: View) {
-        val intent = Intent(this, MainActivityDM::class.java)
-        startActivity(intent)
+        this.onBackPressed()
     }
 
     fun loadDm(data: ArrayList<Get>, dm: RecyclerView) {

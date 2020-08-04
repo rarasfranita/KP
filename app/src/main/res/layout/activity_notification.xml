@@ -3,78 +3,92 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/containerNotification"
+    style="@style/SlidingActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".ui.notification.NotificationActivity"
-    style="@style/SlidingActivity">
+    tools:context=".ui.notification.NotificationActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <RelativeLayout
         android:id="@+id/appbarNotification"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         tools:ignore="MissingConstraints">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbarNotification"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@android:color/white"
-            app:elevation="10dp"
-            app:navigationIcon="@drawable/ic_arrow_back_black"
-            >
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/notification"
-                    android:textSize="20dp"
-                    android:id="@+id/postingTitle"/>
-            </RelativeLayout>
-        </com.google.android.material.appbar.MaterialToolbar>
-    </com.google.android.material.appbar.AppBarLayout>
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="back"
+            android:src="@drawable/ic_arrow_back_black" />
+
+        <TextView
+            android:id="@+id/profileTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@+id/back"
+            android:fontFamily="@font/lato"
+            android:text="Notification"
+            android:textColor="#6B6B6B"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EAEAEA"
+        app:layout_constraintBottom_toBottomOf="@id/appbarNotification"
+        />
 
     <com.baoyz.widget.PullRefreshLayout
         android:id="@+id/reloadNotification"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:refreshColor="@color/colorPrimary"
-        app:layout_constraintTop_toBottomOf="@+id/appbarNotification">
+        app:layout_constraintTop_toBottomOf="@+id/view"
+        app:refreshColor="@color/colorPrimary">
+
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvNotification"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/rvNotification"
-            android:paddingBottom="60dp">
-        </androidx.recyclerview.widget.RecyclerView>
+            android:paddingBottom="60dp"/>
 
     </com.baoyz.widget.PullRefreshLayout>
 
     <LinearLayout
+        android:id="@+id/noData"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
-        android:orientation="vertical"
         android:gravity="center"
-        android:id="@+id/noData">
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_null_data" >
+            android:src="@drawable/ic_null_data">
 
         </ImageView>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="You don't have any notification yet"
-            android:textColor="@color/colorPrimary"
-            android:padding="20dp"
             android:layout_marginTop="-55dp"
             android:gravity="center"
-            ></TextView>
+            android:padding="20dp"
+            android:text="You don't have any notification yet"
+            android:textColor="@color/colorPrimary"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

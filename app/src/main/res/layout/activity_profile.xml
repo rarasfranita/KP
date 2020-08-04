@@ -7,55 +7,71 @@
     android:id="@+id/containerProfile"
     tools:context=".ui.profile.ProfileActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbarProfile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbarProfile"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@android:color/white"
-            app:elevation="10dp"
-            app:navigationIcon="@drawable/ic_arrow_back_black"
-            >
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Profile"
-                    android:textSize="20dp"
-                    android:id="@+id/profileTitle"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:src="@drawable/ic_ellipses"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="10dp"
-                    android:id="@+id/icBurgerProfile"/>
-
-            </RelativeLayout>
-        </com.google.android.material.appbar.MaterialToolbar>
-    </com.google.android.material.appbar.AppBarLayout>
+<!--    scrollview still not working    -->
 
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/scrollView"
-        android:fillViewport="true"
-        android:paddingTop="10dp">
+        android:fillViewport="true">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/rl1">
+
+            <RelativeLayout
+                android:id="@+id/LinLay1"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <ImageView
+                    android:id="@+id/back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="10dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="listenToolbar"
+                    android:src="@drawable/ic_arrow_back_black" />
+
+                <TextView
+                    android:id="@+id/profileTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="10dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@+id/back"
+                    android:fontFamily="@font/lato"
+                    android:text="Profile"
+                    android:textColor="#6B6B6B"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/icBurgerProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="10dp"
+                    android:onClick="listenMenuBurger"
+                    android:src="@drawable/ic_ellipses" />
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#EAEAEA"
+                android:layout_below="@+id/LinLay1"
+                />
+
             <RelativeLayout
                 android:id="@+id/myprofile"
                 android:layout_width="match_parent"
@@ -70,6 +86,7 @@
                     android:gravity="center_horizontal"
                     android:paddingTop="?attr/actionBarSize"
                     android:orientation="vertical">
+
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
@@ -100,8 +117,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingTop="10dp"
-                        android:layout_below="@+id/ll1">
+                        android:paddingTop="10dp">
 
                         <RelativeLayout
                             android:id="@+id/tvPost"
@@ -252,6 +268,6 @@
                 android:layout_below="@+id/tab_Layout">
             </androidx.viewpager.widget.ViewPager>
         </RelativeLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </RelativeLayout>
