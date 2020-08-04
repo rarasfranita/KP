@@ -9,69 +9,100 @@
     android:layout_height="match_parent"
     tools:context=".ui.explore.general.GeneralActivity">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayout"
+    <RelativeLayout
+        android:id="@+id/LinLayou1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        tools:ignore="MissingConstraints">
+
+        <ImageView
+            android:id="@+id/imageBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="backtoExplore"
+            android:src="@drawable/ic_arrow_back_black" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@+id/imageBack"
+            android:fontFamily="@font/lato"
+            android:text="Explore"
+            android:textColor="#6B6B6B"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_search"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="20dp"
+            android:onClick="search"
+            android:layout_alignParentEnd="true"
+            />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EAEAEA"
+        app:layout_constraintTop_toBottomOf="@+id/LinLayou1" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view"
+        app:tabBackground="@color/white"
+        app:tabIconTint="#F79543"
+        app:tabIndicatorColor="#F79543"
+        app:tabSelectedTextColor="#F79543"
+        app:tabTextAppearance="@style/MyCustomTextAppearance">
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/media_tab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Media" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/text_tab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Text" />
+    </com.google.android.material.tabs.TabLayout>
+
+    <com.baoyz.widget.PullRefreshLayout
+        android:id="@+id/srlMediaGeneral"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabs"
+        app:layout_constraintVertical_bias="0.0"
+        app:refreshColor="@color/colorPrimary">
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/view_pager"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints">
-
-                <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/tbExplore"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="@android:color/white"
-                    app:elevation="10dp"
-                    app:navigationIcon="@drawable/ic_arrow_back_black"
-                    app:title="Explore"
-                    app:menu="@menu/search"
-                    app:titleTextColor="#6B6B6B" />
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-            app:tabBackground="@color/white"
-            app:tabIconTint="#F79543"
-            app:tabIndicatorColor="#F79543"
-            app:tabSelectedTextColor="#F79543"
-            app:tabTextAppearance="@style/MyCustomTextAppearance">
-
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/media_tab"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Media" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/text_tab"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Text" />
-        </com.google.android.material.tabs.TabLayout>
-
-        <com.baoyz.widget.PullRefreshLayout
-            android:id="@+id/srlMediaGeneral"
-            android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:refreshColor="@color/colorPrimary"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tabs"
-            app:layout_constraintVertical_bias="0.0">
-
-                <androidx.viewpager.widget.ViewPager
-                    android:id="@+id/view_pager"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-        </com.baoyz.widget.PullRefreshLayout>
+            android:layout_weight="1" />
+    </com.baoyz.widget.PullRefreshLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

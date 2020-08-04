@@ -58,10 +58,13 @@ class NotificationActivity : AppCompatActivity() {
         reloadNotification.setOnRefreshListener {
             getNotifications(reloadNotification)
         }
-        listenAppToolbar()
     }
 
-    fun loadNotification(data: ArrayList<Notification>, notification: RecyclerView){
+    fun back(view: View) {
+        this.onBackPressed()
+    }
+
+    fun loadNotification(data: ArrayList<Notification>, notification: RecyclerView) {
         adapter = NotificationAdapter(data, this)
         adapter.notifyDataSetChanged()
 
@@ -71,8 +74,8 @@ class NotificationActivity : AppCompatActivity() {
         notification.layoutManager = LinearLayoutManager(this)
     }
 
-    private fun getNotifications(v: PullRefreshLayout?){
-        if (v !=  null){
+    private fun getNotifications(v: PullRefreshLayout?) {
+        if (v != null) {
             v.setRefreshing(true)
         }
 
@@ -96,25 +99,33 @@ class NotificationActivity : AppCompatActivity() {
                                 notificationsData.add(dataJson)
                             }
 
-                            if (notificationsData.size < 1){
+                            if (notificationsData.size < 1) {
                                 noData.visibility = View.VISIBLE
-                            }else{
+                            } else {
                                 loadNotification(notificationsData, rvNotification)
                             }
-                        }else {
-                            Toast.makeText(this@NotificationActivity, "Error ${respon.code}", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(
+                                this@NotificationActivity,
+                                "Error ${respon.code}",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
 
                     override fun onError(anError: ANError) {
                         reloadNotification.setRefreshing(false)
-                        Toast.makeText(this@NotificationActivity, "Error ${anError.errorCode}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@NotificationActivity,
+                            "Error ${anError.errorCode}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         Log.d("Errornya disini kah?", anError.toString())
                     }
                 })
     }
 
-    fun gotoProfilePicture(UID: String){
+    fun gotoProfilePicture(UID: String) {
         val intent = Intent(this, ProfileActivity::class.java)
         intent.putExtra("userID", UID)
         startActivity(intent)
@@ -124,7 +135,6 @@ class NotificationActivity : AppCompatActivity() {
         val bundle = Bundle().apply {
             putString("postId", postId)
         }
-        appbarNotification.visibility = View.INVISIBLE
         val dataPost = DetailPost()
         dataPost.arguments = bundle
         manager?.beginTransaction()
@@ -134,24 +144,11 @@ class NotificationActivity : AppCompatActivity() {
             ?.commit()
     }
 
-    fun onSlider(){
+    fun onSlider() {
         val config = SlidrConfig.Builder()
             .position(SlidrPosition.RIGHT)
 
         Slidr.attach(this, config.build())
-    }
-
-    private fun listenAppToolbar() {
-        val toolbar: Toolbar = findViewById<Toolbar>(R.id.toolbarNotification)
-
-        toolbar.setNavigationOnClickListener {
-            this.onBackPressed()
-        }
-
-    }
-
-    fun setAppBarVisible() {
-        appbarNotification.visibility = View.VISIBLE
     }
 
 }

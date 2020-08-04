@@ -70,7 +70,7 @@ class HomeFragmentDM : Fragment() {
             Log.d("fail", "Failed to connect")
         }
 
-        mSocket.connect()
+//        mSocket.connect()
 //        mSocket.on(userID, onConnect)
         val v = inflater.inflate(R.layout.fragment_homedm, container, false)
         val reload: PullRefreshLayout = v.findViewById(R.id.realodDM)
@@ -114,6 +114,7 @@ class HomeFragmentDM : Fragment() {
         }
     }
 
+    // TODO: 04/08/20 end point : get channel internal server error 
     private fun getListMessage(v: PullRefreshLayout?) {
         v?.setRefreshing(true)
         AndroidNetworking.get(EnvService.ENV_API + "/users/{userid}/dm")
@@ -138,11 +139,6 @@ class HomeFragmentDM : Fragment() {
                             }
                             dmData = temp
 
-                            if (dmData.size < 1) {
-                                dataNull.visibility = View.VISIBLE
-                            } else {
-                                loadDm(dmData, rv_listChat)
-                            }
                         } else {
                         }
                     }

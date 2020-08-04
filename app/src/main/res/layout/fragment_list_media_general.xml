@@ -7,6 +7,14 @@
     android:id="@+id/fragment_list_media_general"
     tools:context=".ui.explore.general.fragment.ListMediaGeneral">
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/dataEmptyMediaGeneral">
+                <include layout="@layout/empty_explore"></include>
+        </LinearLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvExploreMedia"
             android:layout_width="match_parent"

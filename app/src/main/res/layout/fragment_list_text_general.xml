@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".ui.explore.general.fragment.ListTextGeneral">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/dataEmptyTextGeneral">
+        <include layout="@layout/empty_explore"/>
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvExploreText"
         android:layout_width="match_parent"

@@ -65,10 +65,6 @@ class DetailPost : Fragment() {
     var commentCount: Int = 0
     var postID: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -235,7 +231,7 @@ class DetailPost : Fragment() {
         val inputManager =
             requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(
-            requireActivity().getCurrentFocus()?.getWindowToken(),
+            requireActivity().currentFocus?.windowToken,
             InputMethodManager.HIDE_NOT_ALWAYS
         )
     }
@@ -244,10 +240,10 @@ class DetailPost : Fragment() {
         val inputComment = view.findViewById<EditText>(R.id.inputComment)
 
         inputComment.requestFocus()
-        inputComment.setFocusableInTouchMode(true)
+        inputComment.isFocusableInTouchMode = true
         val imm: InputMethodManager =
             activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm?.showSoftInput(inputComment, InputMethodManager.SHOW_FORCED)
+        imm.showSoftInput(inputComment, InputMethodManager.SHOW_FORCED)
     }
 
     fun listenLikeIcon(view: View){
@@ -483,16 +479,9 @@ class DetailPost : Fragment() {
         val toolbar: Toolbar = view.findViewById(R.id.tbDetailPost) as Toolbar
 
         toolbar.setNavigationOnClickListener {
-
-            if (context is GeneralActivity){
-                (context as GeneralActivity).setAppBarVisible()
-            }else if(context is ProfileActivity){
-                (context as ProfileActivity).setAppBarVisible()
-            }else if (context is NotificationActivity){
-                (context as NotificationActivity).setAppBarVisible()
-            }
-            getActivity()?.onBackPressed()
+            activity?.onBackPressed()
         }
+
     }
 
     fun showDialog() {

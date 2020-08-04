@@ -78,8 +78,6 @@ class ProfileActivity : AppCompatActivity() {
         viewPager.adapter = viewPagerAdapter
         tableLayout.setupWithViewPager(viewPager)
         manager = getSupportFragmentManager()
-        listenToolbar()
-        listenMenuBurger()
         listenSendMessage()
     }
 
@@ -315,7 +313,7 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         val dataPost = DetailPost()
-        appbarProfile.visibility = View.INVISIBLE
+        LinLay1.visibility = View.INVISIBLE
         dataPost.arguments = bundle
         manager?.beginTransaction()
             ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
@@ -324,16 +322,12 @@ class ProfileActivity : AppCompatActivity() {
             ?.commit()
     }
 
-    fun listenToolbar(){
-        toolbarProfile.setNavigationOnClickListener{
+    fun listenToolbar(view: View){
             this.onBackPressed()
-        }
     }
 
-    fun listenMenuBurger(){
-        icBurgerProfile.setOnClickListener {
+    fun listenMenuBurger(view: View){
             showDialog()
-        }
     }
 
     fun listenSendMessage(){
@@ -388,10 +382,6 @@ class ProfileActivity : AppCompatActivity() {
 
                     }
                 })
-    }
-
-    fun setAppBarVisible(){
-        appbarProfile.visibility = View.VISIBLE
     }
 
     fun showDialog(medias: ArrayList<MediaData>) {
