@@ -311,9 +311,7 @@ class ProfileActivity : AppCompatActivity() {
         val bundle = Bundle().apply {
             putString("postId", postId)
         }
-
         val dataPost = DetailPost()
-        LinLay1.visibility = View.INVISIBLE
         dataPost.arguments = bundle
         manager?.beginTransaction()
             ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)

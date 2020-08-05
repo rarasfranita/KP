@@ -98,6 +98,8 @@
     <string name="ChangePP">Change Profile Picture</string>
     <string name="Password">Password</string>
     <string name="SetYN">Set your password</string>
+    <string name="internetError">Oops! You lost your internet \n connetion. Please connect to a \n network and reload</string>
+    <string name="server_error">Oops! There\'s something wrong in our \n server. Please comeback later</string>
     <!-- Text Home-->
 
     <!-- -->
