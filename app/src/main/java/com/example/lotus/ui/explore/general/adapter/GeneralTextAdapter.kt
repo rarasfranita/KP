@@ -38,6 +38,7 @@ import com.example.lotus.ui.home.HomeActivity
 import com.example.lotus.ui.login.LoginActivity
 import com.example.lotus.utils.dislikePost
 import com.example.lotus.utils.likePost
+import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.layout_explore_textitem.view.*
 import kotlinx.android.synthetic.main.layout_mainfeed_listitem.view.*
 
@@ -60,17 +61,38 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
     override fun getItemCount(): Int = listExploreText.size
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
+        // not Login
+        holder.itemView.icShareGeneralText.visibility = View.GONE
+        holder.itemView.icShare2GeneralText.visibility = View.GONE
+        holder.itemView.ivEllipses1GeneralText.visibility = View.GONE
+        holder.itemView.ivEllipses2GeneralText.visibility = View.GONE
+
+        if (SharedPrefManager.getInstance(context).isLoggedIn) {
+            holder.itemView.icShareGeneralText.visibility = View.VISIBLE
+            holder.itemView.icShare2GeneralText.visibility = View.VISIBLE
+            holder.itemView.ivEllipses1GeneralText.visibility = View.VISIBLE
+            holder.itemView.ivEllipses2GeneralText.visibility = View.VISIBLE
+        }
+
         val usernameSrc = SharedPrefManager.getInstance(context).user.username
         if (holder.itemViewType == Constant.VIEW_TYPE_ITEM) {
             val item = Holder(holder.itemView)
 
+            // not Login
+            item.follow.visibility = View.GONE
+            item.follow2.visibility = View.GONE
+
+            if (SharedPrefManager.getInstance(context).isLoggedIn) {
+                item.follow.visibility = View.VISIBLE
+                item.follow2.visibility = View.VISIBLE
+            }
             item.setToken(token.toString())
             item.bindFeed(listExploreText[position], context)
 
 
             holder.itemView.icShareGeneralText.setOnClickListener {
-                val intent = Intent(context, CreatePostActivity::class.java)
 
+                val intent = Intent(context, CreatePostActivity::class.java)
                 intent.putExtra("Extra", "DetailPost")
                 intent.putExtra("Media", listExploreText[position].posts?.get(0)?.media)
                 intent.putExtra("Text", listExploreText[position].posts?.get(0)?.text)
@@ -217,7 +239,6 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
             }
         }
     }
-
     class Holder(val view: View) : RecyclerView.ViewHolder(view) {
         val follow: Button = view.findViewById(R.id.btnFollow)
         val follow2: Button = view.findViewById(R.id.btnFollow2)
@@ -249,15 +270,12 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
         }
 
         fun checkLogin() {
-            if (!(this.mContext?.let { SharedPrefManager.getInstance(it).isLoggedIn })!!) {
-                mContext!!.startActivity(Intent(mContext, LoginActivity::class.java))
-            }
+
         }
 
         fun listenSendhashtag(view: View, data: Data) {
             val more: TextView = view.findViewById(R.id.moreTextGeneralText)
             more.setOnClickListener {
-//                checkLogin()
                 val more = Intent(mContext, HashtagActivity::class.java)
                 val ani = data.hashtag
                 val bundle = Bundle()
@@ -273,7 +291,6 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
             val icCommentGeneralText = view.findViewById<ImageView>(R.id.icCommentGeneralText)
             val icComment2GeneralText = view.findViewById<ImageView>(R.id.icComment2GeneralText)
             icCommentGeneralText.setOnClickListener {
-                checkLogin()
                 val ani = data.posts?.get(0)?.id
                 val bundle = Bundle()
                 bundle.putString("id", ani)
@@ -285,7 +302,6 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
                 }
             }
             icComment2GeneralText.setOnClickListener {
-                checkLogin()
                 val ani = data.posts?.get(1)?.id
                 val bundle = Bundle()
                 bundle.putString("id", ani)
@@ -332,40 +348,45 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
                                     val share1 =
                                         view.findViewById<ImageView>(R.id.icShareGeneralText)
                                     likeIcon1.setOnClickListener {
-                                        checkLogin()
-                                        if (likeStatus.toString() == "1") {
-                                            dislikePost(
-                                                post.id.toString(),
-                                                post.userId.toString(), token
-                                            )
-                                            likeStatus = 0
-                                            likeCount--
-                                            setLike1(view, likeStatus, likeCount)
+                                        if ((this.mContext?.let { SharedPrefManager.getInstance(it).isLoggedIn })!!) {
+                                            if (likeStatus.toString() == "1") {
+                                                dislikePost(
+                                                    post.id.toString(),
+                                                    post.userId.toString(), token
+                                                )
+                                                likeStatus = 0
+                                                likeCount--
+                                                setLike1(view, likeStatus, likeCount)
+                                            } else {
+                                                likePost(
+                                                    post.id.toString(),
+                                                    post.belongsTo.toString(), token.toString()
+                                                )
+                                                likeStatus = 1
+                                                likeCount++
+                                                setLike1(view, likeStatus, likeCount)
+                                            }
                                         } else {
-                                            likePost(
-                                                post.id.toString(),
-                                                post.belongsTo.toString(), token.toString()
-                                            )
-                                            likeStatus = 1
-                                            likeCount++
-                                            setLike1(view, likeStatus, likeCount)
+                                            mContext!!.startActivity(Intent(mContext, LoginActivity::class.java))
                                         }
                                     }
                                     share1.setOnClickListener {
-                                        checkLogin()
-                                        val intent =
-                                            Intent(mContext, CreatePostActivity::class.java)
-                                        intent.putExtra("Extra", "Detailpost")
-                                        intent.putExtra("Media", post.media)
-                                        intent.putExtra("Text", post.text)
-                                        intent.putExtra("postID", post.id)
-                                        intent.putExtra("username", post.username)
-                                        intent.putExtra("Tags", post.tag)
+                                        if ((this.mContext?.let { SharedPrefManager.getInstance(it).isLoggedIn })!!) {
+                                            val intent =
+                                                Intent(mContext, CreatePostActivity::class.java)
+                                            intent.putExtra("Extra", "Detailpost")
+                                            intent.putExtra("Media", post.media)
+                                            intent.putExtra("Text", post.text)
+                                            intent.putExtra("postID", post.id)
+                                            intent.putExtra("username", post.username)
+                                            intent.putExtra("Tags", post.tag)
 
-                                        if (mContext is GeneralActivity) {
-                                            (mContext as GeneralActivity).startActivity(intent)
+                                            if (mContext is GeneralActivity) {
+                                                (mContext as GeneralActivity).startActivity(intent)
+                                            }
+                                        } else {
+                                            mContext!!.startActivity(Intent(mContext, LoginActivity::class.java))
                                         }
-
                                     }
                                     if (post.text?.length!! > 249) {
                                         val cutCaption =
@@ -411,26 +432,27 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
                                     val likeIcon2 =
                                         view.findViewById<RelativeLayout>(R.id.likeLayout2GeneralText)
                                     likeIcon2.setOnClickListener {
-                                        checkLogin()
-                                        if (likeStatus.toString() == "1") {
-                                            dislikePost(
-                                                post.id.toString(),
-                                                post.userId.toString(), token
-                                            )
-                                            likeStatus = 0
-                                            likeCount--
-                                            setLike2(view, likeStatus, likeCount)
+                                        if ((this.mContext?.let { SharedPrefManager.getInstance(it).isLoggedIn })!!) {
+                                            if (likeStatus.toString() == "1") {
+                                                dislikePost(
+                                                    post.id.toString(),
+                                                    post.userId.toString(), token
+                                                )
+                                                likeStatus = 0
+                                                likeCount--
+                                                setLike2(view, likeStatus, likeCount)
+                                            } else {
+                                                likePost(
+                                                    post.id.toString(),
+                                                    post.belongsTo.toString(), token.toString()
+                                                )
+                                                likeStatus = 1
+                                                likeCount++
+                                                setLike2(view, likeStatus, likeCount)
+                                            }
                                         } else {
-                                            likePost(
-                                                post.id.toString(),
-                                                post.belongsTo.toString(), token.toString()
-                                            )
-                                            likeStatus = 1
-                                            likeCount++
-                                            setLike2(view, likeStatus, likeCount)
+                                            mContext!!.startActivity(Intent(mContext, LoginActivity::class.java))
                                         }
-
-
                                     }
                                     if (post.text?.length!! > 249) {
                                         val cutCaption =
@@ -483,25 +505,28 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
                                     val likeIcon1 =
                                         view.findViewById<RelativeLayout>(R.id.likeLayoutGeneralText)
                                     likeIcon1.setOnClickListener {
-                                        checkLogin()
-                                        if (likeStatus.toString() == "1") {
-                                            dislikePost(
-                                                post.id.toString(),
-                                                post.userId.toString(), token
-                                            )
-                                            likeStatus = 0
-                                            likeCount--
-                                            setLike1(view, likeStatus, likeCount)
+                                        if ((this.mContext?.let { SharedPrefManager.getInstance(it).isLoggedIn })!!) {
+                                            if (likeStatus.toString() == "1") {
+                                                dislikePost(
+                                                    post.id.toString(),
+                                                    post.userId.toString(), token
+                                                )
+                                                likeStatus = 0
+                                                likeCount--
+                                                setLike1(view, likeStatus, likeCount)
 
 
-                                        } else {
-                                            likePost(
-                                                post.id.toString(),
-                                                post.belongsTo.toString(), token.toString()
-                                            )
-                                            likeStatus = 1
-                                            likeCount++
-                                            setLike1(view, likeStatus, likeCount)
+                                            } else {
+                                                likePost(
+                                                    post.id.toString(),
+                                                    post.belongsTo.toString(), token.toString()
+                                                )
+                                                likeStatus = 1
+                                                likeCount++
+                                                setLike1(view, likeStatus, likeCount)
+                                            }
+                                        }else {
+                                            mContext!!.startActivity(Intent(mContext, LoginActivity::class.java))
                                         }
                                     }
                                     if (post.text?.length!! > 249) {
@@ -647,6 +672,7 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
             unfollow1.visibility = View.VISIBLE
             follow.visibility = View.GONE
         }
+
         @SuppressLint("ResourceAsColor")
         fun setFollowing2() {
             unfollow2.visibility = View.VISIBLE
@@ -658,6 +684,7 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
             unfollow1.visibility = View.GONE
             follow.visibility = View.VISIBLE
         }
+
         @SuppressLint("ResourceAsColor")
         fun setUnfollow2() {
             unfollow2.visibility = View.GONE

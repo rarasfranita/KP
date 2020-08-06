@@ -77,7 +77,7 @@ class GeneralMediaAdapter(
         fun listenSendhashtag(view: View, data: Data) {
             val more: TextView = view.findViewById(R.id.moreMedia)
             more.setOnClickListener {
-                checkLogin()
+//                checkLogin()
                 val more = Intent(mContext, HashtagActivity::class.java)
                 val ani = data.hashtag
                 val bundle = Bundle()
@@ -94,10 +94,11 @@ class GeneralMediaAdapter(
             val dynamicSquare2: DynamicSquareLayout = view.findViewById(R.id.dynamicSquare2)
             val dynamicSquare3: DynamicSquareLayout = view.findViewById(R.id.dynamicSquare3)
             dynamicSquare1.setOnClickListener {
-                checkLogin()
+//                checkLogin()
                 val ani = data.posts?.get(0)?.id
                 val bundle = Bundle()
                 bundle.putString("id", ani)
+                Log.d("aninya", ani.toString())
                 val dataPost = DetailPost()
                 dataPost.arguments = bundle
                 if (mContext is GeneralActivity) {
@@ -105,10 +106,11 @@ class GeneralMediaAdapter(
                 }
             }
             dynamicSquare2.setOnClickListener {
-                checkLogin()
+//                checkLogin()
                 val ani = data.posts?.get(1)?.id
                 val bundle = Bundle()
                 bundle.putString("id", ani)
+                Log.d("aninya", ani.toString())
                 val dataPost = DetailPost()
                 dataPost.arguments = bundle
                 if (mContext is GeneralActivity) {
@@ -116,10 +118,11 @@ class GeneralMediaAdapter(
                 }
             }
             dynamicSquare3.setOnClickListener {
-                checkLogin()
+//                checkLogin()
                 val ani = data.posts?.get(2)?.id
                 val bundle = Bundle()
                 bundle.putString("id", ani)
+                Log.d("aninya", ani.toString())
                 val dataPost = DetailPost()
                 dataPost.arguments = bundle
                 if (mContext is GeneralActivity) {

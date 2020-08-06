@@ -9,9 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.Window
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

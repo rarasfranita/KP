@@ -33,8 +33,7 @@
             <RelativeLayout
                 android:id="@+id/relLayout1GeneralText"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center_horizontal">
+                android:layout_height="50dp">
 
                 <ImageView
                     android:id="@+id/imageAvatar1GeneralText"
@@ -85,14 +84,13 @@
                     tools:ignore="MissingPrefix"
                     android:visibility="gone"/>
 
-
                 <ImageView
                     android:id="@+id/ivEllipses1GeneralText"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="34dp"
+                    android:layout_marginRight="20dp"
                     android:src="@drawable/ic_ellipses" />
 
             </RelativeLayout>
@@ -225,8 +223,7 @@
             <RelativeLayout
                 android:id="@+id/relLayout4GeneralText"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center_horizontal">
+                android:layout_height="50dp">
 
                 <ImageView
                     android:id="@+id/imageAvatar2GeneralText"
