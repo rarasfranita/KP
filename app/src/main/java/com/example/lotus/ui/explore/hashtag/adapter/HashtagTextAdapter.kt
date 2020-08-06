@@ -64,26 +64,38 @@ class HashtagTextAdapter(private val listHashtagText: ArrayList<Post>, val conte
 
 
             holder.itemView.icShareHashtagT.setOnClickListener {
-                val intent = Intent(context, CreatePostActivity::class.java)
+                if (SharedPrefManager.getInstance(context).isLoggedIn) {
+                    val intent = Intent(context, CreatePostActivity::class.java)
 
-                intent.putExtra("Extra", "DetailPost")
-                intent.putExtra("Media", listHashtagText[position].media)
-                intent.putExtra("Text", listHashtagText[position].text)
-                intent.putExtra("PostID", listHashtagText[position].id)
-                intent.putExtra("Username", listHashtagText[position].username)
-                intent.putExtra("Tags", listHashtagText[position].tag)
+                    intent.putExtra("Extra", "DetailPost")
+                    intent.putExtra("Media", listHashtagText[position].media)
+                    intent.putExtra("Text", listHashtagText[position].text)
+                    intent.putExtra("PostID", listHashtagText[position].id)
+                    intent.putExtra("Username", listHashtagText[position].username)
+                    intent.putExtra("Tags", listHashtagText[position].tag)
 
-                if (context is HashtagActivity) {
-                    context.startActivity(intent)
+                    if (context is HashtagActivity) {
+                        context.startActivity(intent)
+                    }
+                } else {
+                    mContext!!.startActivity(Intent(mContext, LoginActivity::class.java))
                 }
             }
 
             holder.itemView.ivEllipsesHashtag.setOnClickListener {
-                if (context is HashtagActivity){
-                    context.showDialog(listHashtagText[position].media!!)
+                if (SharedPrefManager.getInstance(context).isLoggedIn) {
+                    if (context is HashtagActivity){
+                        context.showDialog(listHashtagText[position].media!!)
+                    }
+                } else {
+                    mContext!!.startActivity(Intent(mContext, LoginActivity::class.java))
                 }
             }
 
+            item.follow.visibility = View.GONE
+            if (SharedPrefManager.getInstance(context).isLoggedIn) {
+                item.follow.visibility = View.VISIBLE
+            }
             item.follow.setOnClickListener {
                 val usernameTrg = listHashtagText[position].username
                 Log.d("usernameSrc", "${usernameSrc} , usernameTarget, ${usernameTrg}")
@@ -185,17 +197,20 @@ class HashtagTextAdapter(private val listHashtagText: ArrayList<Post>, val conte
             }
         }
 
-        fun checkLogin() {
-            if (!(this.mContext?.let { SharedPrefManager.getInstance(it).isLoggedIn })!!) {
-                mContext!!.startActivity(Intent(mContext, LoginActivity::class.java))
-            }
-        }
-
         fun listenSendId(view: View, data: Post) {
+            val relLayoutHashtag = view.findViewById<RelativeLayout>(R.id.relLayoutHashtag)
             val icCommentHashtag = view.findViewById<ImageView>(R.id.icCommentHashtag)
-
+            relLayoutHashtag.setOnClickListener {
+                val ani = data.id
+                val bundle = Bundle()
+                bundle.putString("id", ani)
+                val dataPost = DetailPost()
+                dataPost.arguments = bundle
+                if (mContext is HashtagActivity) {
+                    (mContext as HashtagActivity).detailPost(ani.toString())
+                }
+            }
             icCommentHashtag.setOnClickListener {
-                checkLogin()
                 val ani = data.id
                 val bundle = Bundle()
                 bundle.putString("id", ani)
@@ -257,18 +272,21 @@ class HashtagTextAdapter(private val listHashtagText: ArrayList<Post>, val conte
         fun listenLikeIcon(view: View) {
             val likeIcon = view.findViewById<RelativeLayout>(R.id.likeLayoutHashtag)
             likeIcon.setOnClickListener {
-                checkLogin()
-                if(likeStatus.toString() == "1"){
-                    dislikePost(postData?.id.toString(), userID, token)
-                    likeStatus = 0
-                    likeCount--
-                    setLike(view, likeStatus, likeCount)
-                    Log.e("Listen like account!!!", "like Post ${postData?.id}, ${userID}, ${token}")
-                }else {
-                    likePost(postData?.id.toString(), userID, token)
-                    likeStatus = 1
-                    likeCount++
-                    setLike(view, likeStatus, likeCount)
+                if ((this.mContext?.let { SharedPrefManager.getInstance(it).isLoggedIn })!!) {
+                    if(likeStatus.toString() == "1"){
+                        dislikePost(postData?.id.toString(), userID, token)
+                        likeStatus = 0
+                        likeCount--
+                        setLike(view, likeStatus, likeCount)
+                        Log.e("Listen like account!!!", "like Post ${postData?.id}, ${userID}, ${token}")
+                    }else {
+                        likePost(postData?.id.toString(), userID, token)
+                        likeStatus = 1
+                        likeCount++
+                        setLike(view, likeStatus, likeCount)
+                    }
+                } else {
+                    mContext!!.startActivity(Intent(mContext, LoginActivity::class.java))
                 }
             }
         }

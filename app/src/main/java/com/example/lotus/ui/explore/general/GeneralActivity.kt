@@ -94,20 +94,6 @@ class GeneralActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-//    fun refresh (view : View){
-//        setContentView(R.layout.activity_explore_general)
-//        val srlMediaGeneral: PullRefreshLayout = findViewById(R.id.srlMediaGeneral)
-//        getExploreMedia(null)
-//        getExploreText(null)
-//        srlMediaGeneral.setOnRefreshListener {
-//            getExploreText(srlMediaGeneral)
-//            getExploreMedia(srlMediaGeneral)
-//
-//        }
-//        Toast.makeText(this@GeneralActivity, "Terpencet", Toast.LENGTH_SHORT).show()
-//
-//    }
-
     private fun getExploreText(v: PullRefreshLayout?) {
         if (SharedPrefManager.getInstance(this).isLoggedIn) {
             v?.setRefreshing(true)

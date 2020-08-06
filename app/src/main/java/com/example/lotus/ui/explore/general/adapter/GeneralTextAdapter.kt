@@ -38,6 +38,7 @@ import com.example.lotus.ui.home.HomeActivity
 import com.example.lotus.ui.login.LoginActivity
 import com.example.lotus.utils.dislikePost
 import com.example.lotus.utils.likePost
+import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.layout_explore_textitem.view.*
 import kotlinx.android.synthetic.main.layout_mainfeed_listitem.view.*
@@ -288,8 +289,33 @@ class GeneralTextAdapter(private val listExploreText: MutableList<Data>, val con
         }
 
         fun listenSendId(view: View, data: Data) {
+            val cardPostTextGeneralText = view.findViewById<MaterialCardView>(R.id.cardPostTextGeneralText)
+            val cardPostText2GeneralText = view.findViewById<MaterialCardView>(R.id.cardPostText2GeneralText)
             val icCommentGeneralText = view.findViewById<ImageView>(R.id.icCommentGeneralText)
             val icComment2GeneralText = view.findViewById<ImageView>(R.id.icComment2GeneralText)
+
+            cardPostTextGeneralText.setOnClickListener {
+                val ani = data.posts?.get(0)?.id
+                val bundle = Bundle()
+                bundle.putString("id", ani)
+                val dataPost = DetailPost()
+                dataPost.arguments = bundle
+
+                if (mContext is GeneralActivity) {
+                    (mContext as GeneralActivity).detailPost(ani.toString())
+                }
+            }
+            cardPostText2GeneralText.setOnClickListener {
+                val ani = data.posts?.get(0)?.id
+                val bundle = Bundle()
+                bundle.putString("id", ani)
+                val dataPost = DetailPost()
+                dataPost.arguments = bundle
+
+                if (mContext is GeneralActivity) {
+                    (mContext as GeneralActivity).detailPost(ani.toString())
+                }
+            }
             icCommentGeneralText.setOnClickListener {
                 val ani = data.posts?.get(0)?.id
                 val bundle = Bundle()
