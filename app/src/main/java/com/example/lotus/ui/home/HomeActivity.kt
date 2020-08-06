@@ -159,7 +159,7 @@ class HomeActivity : AppCompatActivity() {
             ?.commit()
     }
 
-    fun gotoProfilePicture(UID: String){
+    fun gotoProfilePicture(UID: String) {
         val intent = Intent(this@HomeActivity, ProfileActivity::class.java)
         intent.putExtra("userID", UID)
         startActivity(intent)
@@ -177,9 +177,10 @@ class HomeActivity : AppCompatActivity() {
         }
 
         share.setOnClickListener {
-            if (medias.size < 1){
-                Toast.makeText(this@HomeActivity, "No media to be downloaded", Toast.LENGTH_SHORT).show()
-            }else {
+            if (medias.size < 1) {
+                Toast.makeText(this@HomeActivity, "No media to be downloaded", Toast.LENGTH_SHORT)
+                    .show()
+            } else {
                 shareMediaToOtherApp(medias)
                 dialog.dismiss()
             }
@@ -189,8 +190,8 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
-    fun shareMediaToOtherApp(medias: ArrayList<MediaData>){
-        for (media in medias){
+    fun shareMediaToOtherApp(medias: ArrayList<MediaData>) {
+        for (media in medias) {
             val uri: Uri = Uri.parse(media.link)
             val shareIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
@@ -217,16 +218,16 @@ class HomeActivity : AppCompatActivity() {
                 name = ""
             }
 
-            if (type == "LIKE"){
+            if (type == "LIKE") {
                 content = "Like your post."
                 channelID = "Notif"
-            }else if (type == "COMMENT"){
+            } else if (type == "COMMENT") {
                 content = "Comment your post."
                 channelID = "Notif"
-            }else if (type == "FOLLOW"){
+            } else if (type == "FOLLOW") {
                 content = "Following you."
                 channelID = "Notif"
-            }else{
+            } else {
                 val gson = Gson()
                 message = gson.fromJson(data.toString(), Get::class.java)
                 name = message.sender.name.toString()
@@ -255,19 +256,21 @@ class HomeActivity : AppCompatActivity() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        if (channelID == "DM"){
+        if (channelID == "DM") {
             id = 2
             fullScreenIntent = Intent(this, MainActivityDM::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
-        }else{
+        } else {
             fullScreenIntent = Intent(this, NotificationActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
         }
 
-        val fullScreenPendingIntent = PendingIntent.getActivity(this, 0,
-            fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val fullScreenPendingIntent = PendingIntent.getActivity(
+            this, 0,
+            fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT
+        )
 
         var builder = NotificationCompat.Builder(this, channelID)
             .setSmallIcon(R.drawable.logo_lotus)
@@ -284,5 +287,11 @@ class HomeActivity : AppCompatActivity() {
         with(NotificationManagerCompat.from(this)) {
             notify(id, builder)
         }
+    }
+
+    override fun onBackPressed() {
+        finishAffinity()
+        finish()
+        finishAndRemoveTask()
     }
 }

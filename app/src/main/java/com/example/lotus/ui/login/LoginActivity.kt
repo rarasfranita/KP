@@ -7,7 +7,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns.EMAIL_ADDRESS
-import android.util.Patterns.PHONE
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
@@ -32,8 +31,8 @@ import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.home.HomeActivity
 import com.example.lotus.ui.register.RegisterActivity
 import com.google.gson.Gson
-import java.util.regex.Pattern
 import kotlinx.android.synthetic.main.activity_login.*
+import java.util.regex.Pattern
 
 
 class LoginActivity : AppCompatActivity() {
@@ -215,6 +214,12 @@ class LoginActivity : AppCompatActivity() {
 
             startActivity(intent)
         }
+    }
+
+    override fun onBackPressed() {
+        finishAffinity()
+        finish()
+        finishAndRemoveTask()
     }
 }
 
