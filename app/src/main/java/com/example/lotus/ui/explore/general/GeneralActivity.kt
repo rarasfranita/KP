@@ -1,23 +1,20 @@
 package com.example.lotus.ui.explore.general
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.Window
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.fragment.app.FragmentTransaction
-import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
@@ -27,7 +24,8 @@ import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.ParsedRequestListener
 import com.baoyz.widget.PullRefreshLayout
 import com.example.lotus.R
-import com.example.lotus.models.*
+import com.example.lotus.models.MediaData
+import com.example.lotus.models.Respons
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.detailpost.DetailPost
@@ -37,13 +35,10 @@ import com.example.lotus.ui.explore.general.adapter.GeneralTextAdapter
 import com.example.lotus.ui.explore.general.fragment.ListMediaGeneral
 import com.example.lotus.ui.explore.general.fragment.ListTextGeneral
 import com.example.lotus.ui.explore.general.model.Data
-import com.example.lotus.ui.home.HomeActivity
-import com.example.lotus.ui.login.LoginActivity
 import com.example.lotus.utils.downloadMedia
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_explore_general.*
-import kotlinx.android.synthetic.main.activity_hashtag.*
 import kotlinx.android.synthetic.main.fragment_list_media_general.*
 import kotlinx.android.synthetic.main.fragment_list_text_general.*
 
@@ -98,6 +93,7 @@ class GeneralActivity : AppCompatActivity() {
         val intent = Intent(this, SearchActivity::class.java)
         startActivity(intent)
     }
+
     private fun getExploreText(v: PullRefreshLayout?) {
         if (SharedPrefManager.getInstance(this).isLoggedIn) {
             v?.setRefreshing(true)
@@ -129,7 +125,13 @@ class GeneralActivity : AppCompatActivity() {
                         }
 
                         override fun onError(anError: ANError) {
-                            // Next go to error page (Popup error)
+                            if (anError.errorDetail == "connectionError"){
+                                setContentView(R.layout.internet_error)
+                                Toast.makeText(this@GeneralActivity, "${anError.errorDetail}", Toast.LENGTH_SHORT).show()
+                            } else {
+                                setContentView(R.layout.internal_server_error)
+                                Toast.makeText(this@GeneralActivity, "${anError.errorDetail}", Toast.LENGTH_SHORT).show()
+                            }
                         }
                     })
         } else {

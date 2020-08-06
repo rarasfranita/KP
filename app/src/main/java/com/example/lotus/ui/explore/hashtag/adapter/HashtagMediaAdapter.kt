@@ -77,23 +77,35 @@ class HashtagMediaAdapter(private val listHashtagMedia: ArrayList<Post>, val con
 
 
             holder.itemView.icShareHashtagM.setOnClickListener {
-                val intent = Intent(context, CreatePostActivity::class.java)
+                if (SharedPrefManager.getInstance(context).isLoggedIn) {
+                    val intent = Intent(context, CreatePostActivity::class.java)
 
-                intent.putExtra("Extra", "DetailPost")
-                intent.putExtra("Media", listHashtagMedia[position].media)
-                intent.putExtra("Text", listHashtagMedia[position].text)
-                intent.putExtra("PostID", listHashtagMedia[position].id)
-                intent.putExtra("Username", listHashtagMedia[position].username)
-                intent.putExtra("Tags", listHashtagMedia[position].tag)
+                    intent.putExtra("Extra", "DetailPost")
+                    intent.putExtra("Media", listHashtagMedia[position].media)
+                    intent.putExtra("Text", listHashtagMedia[position].text)
+                    intent.putExtra("PostID", listHashtagMedia[position].id)
+                    intent.putExtra("Username", listHashtagMedia[position].username)
+                    intent.putExtra("Tags", listHashtagMedia[position].tag)
 
-                if (context is HashtagActivity) {
-                    context.startActivity(intent)
+                    if (context is HashtagActivity) {
+                        context.startActivity(intent)
+                    }
+                } else {
+                    mContext!!.startActivity(Intent(mContext, LoginActivity::class.java))
                 }
             }
 
+            item.follow.visibility = View.GONE
+            if (SharedPrefManager.getInstance(context).isLoggedIn) {
+                item.follow.visibility = View.VISIBLE
+            }
             holder.itemView.ivEllipsesHashtag.setOnClickListener {
-                if (context is HashtagActivity) {
-                    context.showDialog(listHashtagMedia[position].media!!)
+                if (SharedPrefManager.getInstance(context).isLoggedIn) {
+                    if (context is HashtagActivity) {
+                        context.showDialog(listHashtagMedia[position].media!!)
+                    }
+                }else {
+                    mContext!!.startActivity(Intent(mContext, LoginActivity::class.java))
                 }
             }
 
@@ -171,12 +183,6 @@ class HashtagMediaAdapter(private val listHashtagMedia: ArrayList<Post>, val con
             this.userID = userID
         }
 
-        fun checkLogin() {
-            if (!(this.mContext?.let { SharedPrefManager.getInstance(it).isLoggedIn })!!) {
-                mContext!!.startActivity(Intent(mContext, LoginActivity::class.java))
-            }
-        }
-
         fun bindFeed(post: Post, context: Context) {
             itemView.apply {
                 postData = post
@@ -235,7 +241,6 @@ class HashtagMediaAdapter(private val listHashtagMedia: ArrayList<Post>, val con
                 val spannableString = SpannableString(caption)
                 val clickableSpan = object : ClickableSpan() {
                     override fun onClick(p0: View) {
-                        checkLogin()
                         if (mContext is HashtagActivity) {
                             postData?.let { (mContext as HashtagActivity).gotoDetailPost(it) }
                         }
@@ -334,27 +339,41 @@ class HashtagMediaAdapter(private val listHashtagMedia: ArrayList<Post>, val con
         fun listenLikeIcon(view: View) {
             val likeIcon = view.findViewById<RelativeLayout>(R.id.likeLayoutHashtag)
             likeIcon.setOnClickListener {
-                checkLogin()
-                if (likeStatus.toString() == "1") {
-                    dislikePost(postData?.id.toString(), userID, token)
-                    likeStatus = 0
-                    likeCount--
-                    setLike(view, likeStatus, likeCount)
-                    Log.e(
-                        "Listen like account!!!",
-                        "like Post ${postData?.id}, ${userID}, ${token}"
-                    )
+                if ((this.mContext?.let { SharedPrefManager.getInstance(it).isLoggedIn })!!) {
+
+                    if (likeStatus.toString() == "1") {
+                        dislikePost(postData?.id.toString(), userID, token)
+                        likeStatus = 0
+                        likeCount--
+                        setLike(view, likeStatus, likeCount)
+                        Log.e(
+                            "Listen like account!!!",
+                            "like Post ${postData?.id}, ${userID}, ${token}"
+                        )
+                    } else {
+                        likePost(postData?.id.toString(), userID, token)
+                        likeStatus = 1
+                        likeCount++
+                        setLike(view, likeStatus, likeCount)
+                    }
                 } else {
-                    likePost(postData?.id.toString(), userID, token)
-                    likeStatus = 1
-                    likeCount++
-                    setLike(view, likeStatus, likeCount)
+                    mContext!!.startActivity(Intent(mContext, LoginActivity::class.java))
                 }
             }
         }
         fun listenSendId(view: View, data: Post) {
+            val relLayoutHashtag = view.findViewById<RelativeLayout>(R.id.relLayoutHashtag)
             val icCommentHashtag = view.findViewById<ImageView>(R.id.icCommentHashtag)
-
+            relLayoutHashtag.setOnClickListener {
+                val ani = data.id
+                val bundle = Bundle()
+                bundle.putString("id", ani)
+                val dataPost = DetailPost()
+                dataPost.arguments = bundle
+                if (mContext is HashtagActivity) {
+                    (mContext as HashtagActivity).detailPost(ani.toString())
+                }
+            }
             icCommentHashtag.setOnClickListener {
                 val ani = data.id
                 val bundle = Bundle()
