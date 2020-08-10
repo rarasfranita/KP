@@ -92,14 +92,15 @@
     <string name="withNumber">Use your email instead</string>
     <string name="VerifCode">Verification Code</string>
     <string name="verificationcode">We\'ve sent you code to confirm your email     </string>
-    <string name="googleaccount">    abcdefghij@gmail.com</string>
-    <string name="sendcode"> .Send Code Again</string>
+    <string name="googleaccount">abcdefghij@gmail.com</string>
+    <string name="sendcode"> Send Code Again</string>
     <string name="ChoseYN">Chose Your Username</string>
     <string name="ChangePP">Change Profile Picture</string>
     <string name="Password">Password</string>
     <string name="SetYN">Set your password</string>
     <string name="internetError">Oops! You lost your internet \n connetion. Please connect to a \n network and reload</string>
     <string name="server_error">Oops! There\'s something wrong in our \n server. Please comeback later</string>
+    <string name="confirm_new_password">Confirm New Password</string>
     <!-- Text Home-->
 
     <!-- -->

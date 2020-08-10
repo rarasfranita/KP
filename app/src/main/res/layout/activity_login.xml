@@ -77,11 +77,12 @@
             app:layout_constraintVertical_bias="0.2" />
 
         <TextView
+            android:id="@+id/frgtPass"
+            android:onClick="frgtpass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="@string/forget_password"
-            ></TextView>
+            android:text="@string/forget_password"/>
 
         <ProgressBar
             android:id="@+id/loading"
@@ -110,13 +111,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/main_login"
         android:orientation="horizontal">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:gravity="center"
-        android:text="Don't have account?"
-        ></TextView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:text="Don't have account?"
+            ></TextView>
 
         <TextView
             android:id="@+id/Register"

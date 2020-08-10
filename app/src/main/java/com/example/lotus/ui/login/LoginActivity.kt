@@ -27,7 +27,9 @@ import com.example.lotus.models.Respon
 import com.example.lotus.models.Token
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
+import com.example.lotus.ui.explore.SearchActivity
 import com.example.lotus.ui.explore.general.GeneralActivity
+import com.example.lotus.ui.forgotpass.ForgotPassword
 import com.example.lotus.ui.home.HomeActivity
 import com.example.lotus.ui.register.RegisterActivity
 import com.google.gson.Gson
@@ -205,6 +207,11 @@ class LoginActivity : AppCompatActivity() {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
 
+    fun frgtpass (view : View){
+        val intent = Intent(this, ForgotPassword::class.java)
+        startActivity(intent)
+    }
+
     override fun onStart() {
         super.onStart()
 
@@ -218,23 +225,23 @@ class LoginActivity : AppCompatActivity() {
 
 }
 
-    /**
-     * Extension function to simplify setting an afterTextChanged action to EditText components.
-     */
-    fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
-        this.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(editable: Editable?) {
-                afterTextChanged.invoke(editable.toString())
-            }
+/**
+ * Extension function to simplify setting an afterTextChanged action to EditText components.
+ */
+fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
+    this.addTextChangedListener(object : TextWatcher {
+        override fun afterTextChanged(editable: Editable?) {
+            afterTextChanged.invoke(editable.toString())
+        }
 
-            override fun beforeTextChanged(
-                s: CharSequence,
-                start: Int,
-                count: Int,
-                after: Int
-            ) {
-            }
+        override fun beforeTextChanged(
+            s: CharSequence,
+            start: Int,
+            count: Int,
+            after: Int
+        ) {
+        }
 
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-        })
-    }
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+    })
+}
