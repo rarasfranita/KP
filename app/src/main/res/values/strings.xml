@@ -69,6 +69,7 @@
     <string name="name">Name</string>
     <string name="username">Username</string>
     <string name="email">Email</string>
+    <string name="login">Email or Username or Whatsapp Number</string>
     <string name="number">Phone Number</string>
     <string name="birth">Date of Birth</string>
     <string name="gender">Gender</string>
