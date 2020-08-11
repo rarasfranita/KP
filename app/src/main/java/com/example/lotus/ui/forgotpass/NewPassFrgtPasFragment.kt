@@ -171,11 +171,6 @@ class NewPassFrgtPasFragment : Fragment() {
                         Log.d("saveUser", dataJson.user.toString())
                         val intent = Intent(context, HomeActivity::class.java)
                         startActivity(intent)
-//                        val gotoHome = HomeFragment()
-//                        manager?.beginTransaction()
-//                            ?.replace(R.id.navForgotPassword, gotoHome)
-//                            ?.addToBackStack("ForgotPassword")
-//                            ?.commit()
                     } else {
                         Log.d("onError: Failed", respon.toString())
                         Toast.makeText(
