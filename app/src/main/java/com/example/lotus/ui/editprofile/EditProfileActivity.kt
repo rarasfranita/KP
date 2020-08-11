@@ -1,4 +1,4 @@
-package com.example.lotus.ui.profile
+package com.example.lotus.ui.editprofile
 
 import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
