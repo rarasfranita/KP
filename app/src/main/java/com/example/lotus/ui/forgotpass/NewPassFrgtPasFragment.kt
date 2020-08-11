@@ -26,6 +26,7 @@ import com.example.lotus.models.Token
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.explore.general.GeneralActivity
+import com.example.lotus.ui.home.HomeActivity
 import com.example.lotus.ui.home.HomeFragment
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.gson.Gson
@@ -168,11 +169,8 @@ class NewPassFrgtPasFragment : Fragment() {
                         SharedPrefManager.getInstance(requireContext()).saveUser(dataJson.user)
                         Log.d("tokenLogin", data.toString())
                         Log.d("saveUser", dataJson.user.toString())
-                        val gotoHome = HomeFragment()
-                        manager?.beginTransaction()
-                            ?.replace(R.id.navForgotPassword, gotoHome)
-                            ?.addToBackStack("ForgotPassword")
-                            ?.commit()
+                        val intent = Intent(context, HomeActivity::class.java)
+                        startActivity(intent)
                     } else {
                         Log.d("onError: Failed", respon.toString())
                         Toast.makeText(
