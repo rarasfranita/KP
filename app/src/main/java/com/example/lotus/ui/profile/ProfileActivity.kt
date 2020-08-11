@@ -34,6 +34,7 @@ import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.detailpost.DetailPost
 import com.example.lotus.ui.dm.GetMessage
+import com.example.lotus.ui.editprofile.EditProfileActivity
 import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.utils.downloadMedia
 import com.google.android.material.tabs.TabLayout
@@ -82,6 +83,7 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     fun getProfileData(UID: String){
+        Log.d("UID", UID)
         AndroidNetworking.get(EnvService.ENV_API + "/users/{userID}/profile?viewer=$myUserID")
             .addHeaders("Authorization", "Bearer " + token)
             .addPathParameter("userID", UID)
@@ -405,7 +407,9 @@ class ProfileActivity : AppCompatActivity() {
         dialog.show()
 
     }
-
+    fun editProfile (view: View){
+        startActivity(Intent(this@ProfileActivity, EditProfileActivity::class.java))
+    }
     fun shareMediaToOtherApp(medias: ArrayList<MediaData>){
         for (media in medias){
             val uri: Uri = Uri.parse(media.link)
