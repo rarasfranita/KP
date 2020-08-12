@@ -46,4 +46,26 @@
             />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/downloadMedia"
+        android:id="@+id/reportPost">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_report"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Report"
+            android:textColor="#EB5757"
+            android:paddingStart="25dp"
+            android:gravity="center_vertical"
+            android:id="@+id/textReportPost"
+            />
+    </LinearLayout>
+
 </LinearLayout>

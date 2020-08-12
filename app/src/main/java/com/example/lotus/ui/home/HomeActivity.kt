@@ -14,6 +14,8 @@ import android.util.Log
 import android.view.View
 import android.view.Window
 import android.widget.LinearLayout
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
@@ -22,10 +24,15 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.findNavController
 import com.androidnetworking.AndroidNetworking
+import com.androidnetworking.common.Priority
+import com.androidnetworking.error.ANError
+import com.androidnetworking.interfaces.ParsedRequestListener
 import com.example.lotus.R
 import com.example.lotus.models.DM.Get.Get
 import com.example.lotus.models.MediaData
 import com.example.lotus.models.Post
+import com.example.lotus.models.Respon
+import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.detailpost.DetailPost
 import com.example.lotus.ui.dm.MainActivityDM
@@ -38,6 +45,7 @@ import com.github.nkzawa.socketio.client.Socket
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
+import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.bottom_sheet.*
 import org.json.JSONException
@@ -65,9 +73,9 @@ class HomeActivity : AppCompatActivity() {
         mSocket.connect()
         Log.d("SOCKET", "${mSocket.connected()},  ${mSocket.connect()}")
 
-        manager = getSupportFragmentManager()
+        manager = supportFragmentManager
 
-        AndroidNetworking.initialize(getApplicationContext());
+        AndroidNetworking.initialize(applicationContext)
     }
 
     private fun navigationMenuLogic() {
@@ -99,28 +107,28 @@ class HomeActivity : AppCompatActivity() {
         val btmNav2 =
             findViewById<BottomNavigationView>(R.id.bottom_navigation_2)
 
-        btmNav2.menu.findItem(R.id.navigation_calendar).setCheckable(false)
+        btmNav2.menu.findItem(R.id.navigation_calendar).isCheckable = false
         val navController = findNavController(R.id.nav_host_fragment)
 
         btmNav.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener { item ->
-            btmNav2.menu.findItem(R.id.navigation_calendar).setCheckable(false)
+            btmNav2.menu.findItem(R.id.navigation_calendar).isCheckable = false
             setButtonNavChekable(btmNav, true)
 
             when (item.itemId) {
                 R.id.navigation_meditation -> {
-                    btmNav.menu.findItem(item.itemId).setChecked(true)
+                    btmNav.menu.findItem(item.itemId).isChecked = true
                     navController.navigate(item.itemId)
                 }
                 R.id.navigation_home -> {
-                    btmNav.menu.findItem(item.itemId).setChecked(true)
+                    btmNav.menu.findItem(item.itemId).isChecked = true
                     navController.navigate(item.itemId)
                 }
                 R.id.navigation_reflection -> {
-                    btmNav.menu.findItem(item.itemId).setChecked(true)
+                    btmNav.menu.findItem(item.itemId).isChecked = true
                     navController.navigate(item.itemId)
                 }
                 R.id.navigation_tipitaka -> {
-                    btmNav.menu.findItem(item.itemId).setChecked(true)
+                    btmNav.menu.findItem(item.itemId).isChecked = true
                     navController.navigate(item.itemId)
                 }
             }
@@ -130,7 +138,7 @@ class HomeActivity : AppCompatActivity() {
         btmNav2.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_calendar -> {
-                    btmNav2.menu.findItem(R.id.navigation_calendar).setCheckable(true)
+                    btmNav2.menu.findItem(R.id.navigation_calendar).isCheckable = true
                     setButtonNavChekable(btmNav, false)
                     navController.navigate(item.itemId)
                 }
@@ -140,10 +148,10 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setButtonNavChekable(btmNav: BottomNavigationView, active: Boolean) {
-        btmNav.getMenu().findItem(R.id.navigation_reflection).setCheckable(active);
-        btmNav.getMenu().findItem(R.id.navigation_home).setCheckable(active);
-        btmNav.getMenu().findItem(R.id.navigation_tipitaka).setCheckable(active);
-        btmNav.getMenu().findItem(R.id.navigation_meditation).setCheckable(active);
+        btmNav.menu.findItem(R.id.navigation_reflection).isCheckable = active
+        btmNav.menu.findItem(R.id.navigation_home).isCheckable = active
+        btmNav.menu.findItem(R.id.navigation_tipitaka).isCheckable = active
+        btmNav.menu.findItem(R.id.navigation_meditation).isCheckable = active
     }
 
     fun gotoDetailPost(item: Post) {
@@ -165,12 +173,14 @@ class HomeActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun showDialog(medias: ArrayList<MediaData>) {
+    fun showDialog(medias: ArrayList<MediaData>, PostID : String) {
+        Log.d("PostID", PostID)
         val dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.layout_menu_post)
         val download = dialog.findViewById<LinearLayout>(R.id.downloadMedia)
         val share = dialog.findViewById<LinearLayout>(R.id.sharePost)
+        val report = dialog.findViewById<LinearLayout>(R.id.reportPost)
         download.setOnClickListener {
             downloadMedia(medias, this)
             dialog.dismiss()
@@ -186,8 +196,94 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
+        report.setOnClickListener {
+            Log.d("PostIDshowDialog", PostID)
+            dialogReport(PostID)
+//                postId = ""
+        }
+
         dialog.show()
 
+    }
+
+    fun dialogReport(postID: String) {
+        Log.d("PostIDshowdialogReport", postID)
+//        postId: String
+        val dialogReport = Dialog(this)
+        dialogReport.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialogReport.setContentView(R.layout.report_layout)
+
+        val cancel = dialogReport.findViewById<MaterialButton>(R.id.btnCancel)
+        val report = dialogReport.findViewById<MaterialButton>(R.id.btnReport)
+
+        cancel.setOnClickListener {
+            dialogReport.dismiss()
+        }
+        report.setOnClickListener {
+            val radioGroup = dialogReport.findViewById<RadioGroup>(R.id.radBtn)
+            val selectedId: Int = radioGroup.checkedRadioButtonId
+            val radioButton = dialogReport.findViewById(selectedId) as RadioButton
+            Log.d("radioButton", radioButton.text.toString())
+            val text = radioButton.text.toString()
+            reportPost(text, postID)
+            dialogReport.dismiss()
+        }
+        dialogReport.show()
+    }
+
+    private fun reportPost(text:String, postID: String) {
+        Log.d("postIDreportPost", postID)
+        Log.d("userID", userID.toString())
+        Log.d("text", text)
+
+
+        AndroidNetworking.post(EnvService.ENV_API + "/posts/{postId}/report")
+//            .addHeaders("Authorization", "Bearer $token")
+            .addPathParameter("postId", postID)
+            .addBodyParameter("userId", userID.toString())
+            .addBodyParameter("text", text)
+            .setPriority(Priority.HIGH)
+            .build()
+            .getAsObject(
+                Respon::class.java,
+                object : ParsedRequestListener<Respon> {
+                    override fun onResponse(respon: Respon) {
+                        if (respon.code.toString() == "200") {
+                            Log.d("Report Post", "Success")
+                            if (respon.data.toString() == "you have been reported this post"){
+                                Toast.makeText(
+                                    this@HomeActivity,
+                                    "${respon.data}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                Log.d("DATANYA", respon.data.toString())
+                            } else {
+                                Toast.makeText(
+                                    this@HomeActivity,
+                                    "Report Succes",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        } else {
+                            Toast.makeText(
+                                this@HomeActivity,
+                                "Error while Report Post, code: ${respon.code} \n${respon.data}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Log.e("ERROR!!!", "Report Post ${respon.code}, ${respon.data}")
+                        }
+                    }
+
+                    override fun onError(anError: ANError) {
+                        Toast.makeText(
+                            this@HomeActivity,
+                            "Error while Report Post, code: ${anError.errorDetail}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        Log.e("ERROR!!!", "Report Post ${anError.errorCode}")
+
+                    }
+                })
     }
 
     fun shareMediaToOtherApp(medias: ArrayList<MediaData>) {
@@ -274,12 +370,12 @@ class HomeActivity : AppCompatActivity() {
 
         var builder = NotificationCompat.Builder(this, channelID)
             .setSmallIcon(R.drawable.logo_lotus)
-            .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
+            .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher))
             .setContentTitle(title)
             .setContentText(content)
             .setAutoCancel(true)
             .setDefaults(NotificationCompat.DEFAULT_ALL)
-            .setColor(getResources().getColor(R.color.colorPrimary))
+            .setColor(resources.getColor(R.color.colorPrimary))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setFullScreenIntent(fullScreenPendingIntent, true)
             .build()
