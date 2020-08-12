@@ -7,6 +7,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns.EMAIL_ADDRESS
+import android.util.Patterns.PHONE
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
@@ -121,7 +122,7 @@ class LoginActivity : AppCompatActivity() {
                         EMAIL_ADDRESS.matcher(username.text.toString()).matches() -> {
                             "email"
                         }
-                        PHONE_PATTERN.matcher(username.text.toString()).matches() -> {
+                        PHONE.matcher(username.text.toString()).matches() -> {
                             "phone"
                         }
                         else -> {

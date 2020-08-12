@@ -119,6 +119,8 @@ class EditProfileActivity : AppCompatActivity() {
                         if (response.code.toString() == "200") {
                             val user : User? = null
 //                            user!!.username = EditProfileUsername.text.toString()
+                            // TODO: 12/08/20 use like register, this
+
                             Log.d("New Username", a)
 //                            if (user != null) {
 //                                SharedPrefManager.getInstance(applicationContext)
