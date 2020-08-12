@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
-import android.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.androidnetworking.AndroidNetworking
@@ -25,12 +24,9 @@ import com.example.lotus.models.Respon
 import com.example.lotus.models.Token
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
-import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.home.HomeActivity
-import com.example.lotus.ui.home.HomeFragment
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.fragment_forgot_password.*
 import kotlinx.android.synthetic.main.fragment_new_pass_frgt_pas.*
 import kotlinx.android.synthetic.main.fragment_verif_code_forgot_pass_.*
 

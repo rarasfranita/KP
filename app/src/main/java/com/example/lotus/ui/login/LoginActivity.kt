@@ -27,7 +27,6 @@ import com.example.lotus.models.Respon
 import com.example.lotus.models.Token
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
-import com.example.lotus.ui.explore.SearchActivity
 import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.forgotpass.ForgotPassword
 import com.example.lotus.ui.home.HomeActivity
@@ -144,7 +143,7 @@ class LoginActivity : AppCompatActivity() {
                                 val strRes = gson.toJson(respon.data)
                                 val dataJson = gson.fromJson(strRes, DataUser::class.java)
                                 val data = gson.fromJson(strRes, Token::class.java)
-
+                                Log.d("userLogin", dataJson.user.toString())
                                 loginViewModel.login(
                                     dataJson.user.name.toString(),
                                     password.text.toString()
