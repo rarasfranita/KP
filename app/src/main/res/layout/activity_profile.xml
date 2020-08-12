@@ -150,6 +150,7 @@
 
                         <RelativeLayout
                             android:id="@+id/tvFollowers"
+                            android:onClick="followers"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -178,6 +179,7 @@
 
                         <RelativeLayout
                             android:id="@+id/tvFollowing"
+                            android:onClick="following"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -211,6 +213,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Edit Profile"
+                        android:onClick="editProfile"
                         android:layout_marginTop="10dp"
                         android:textColor="@color/colorPrimaryDark"
                         android:backgroundTint="@color/white"

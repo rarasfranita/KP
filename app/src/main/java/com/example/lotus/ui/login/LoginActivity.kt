@@ -7,6 +7,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns.EMAIL_ADDRESS
+import android.util.Patterns.PHONE
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
@@ -27,7 +28,6 @@ import com.example.lotus.models.Respon
 import com.example.lotus.models.Token
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
-import com.example.lotus.ui.explore.SearchActivity
 import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.forgotpass.ForgotPassword
 import com.example.lotus.ui.home.HomeActivity
@@ -122,7 +122,7 @@ class LoginActivity : AppCompatActivity() {
                         EMAIL_ADDRESS.matcher(username.text.toString()).matches() -> {
                             "email"
                         }
-                        PHONE_PATTERN.matcher(username.text.toString()).matches() -> {
+                        PHONE.matcher(username.text.toString()).matches() -> {
                             "phone"
                         }
                         else -> {
@@ -144,7 +144,7 @@ class LoginActivity : AppCompatActivity() {
                                 val strRes = gson.toJson(respon.data)
                                 val dataJson = gson.fromJson(strRes, DataUser::class.java)
                                 val data = gson.fromJson(strRes, Token::class.java)
-
+                                Log.d("userLogin", dataJson.user.toString())
                                 loginViewModel.login(
                                     dataJson.user.name.toString(),
                                     password.text.toString()

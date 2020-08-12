@@ -17,7 +17,7 @@ data class User(
     val phone: String?,
     val postsCount: Int?,
     val updatedAt: String?,
-    val username: String?
+    var username: String?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readValue(Int::class.java.classLoader) as? Int,

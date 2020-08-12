@@ -34,7 +34,9 @@ import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.detailpost.DetailPost
 import com.example.lotus.ui.dm.GetMessage
+import com.example.lotus.ui.editprofile.EditProfileActivity
 import com.example.lotus.ui.explore.general.GeneralActivity
+import com.example.lotus.ui.home.HomeActivity
 import com.example.lotus.utils.downloadMedia
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
@@ -82,6 +84,7 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     fun getProfileData(UID: String){
+        Log.d("UID", UID)
         AndroidNetworking.get(EnvService.ENV_API + "/users/{userID}/profile?viewer=$myUserID")
             .addHeaders("Authorization", "Bearer " + token)
             .addPathParameter("userID", UID)
@@ -303,9 +306,11 @@ class ProfileActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-    fun backOnClick(view: View) {
-        this.onBackPressed()
-    }
+//    fun backOnClick(view: View) {
+//        val intent =
+//            Intent(applicationContext, HomeActivity::class.java)
+//        startActivity(intent)
+//    }
 
     fun gotoDetailPost(postId: String) {
         val bundle = Bundle().apply {
@@ -321,7 +326,9 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     fun listenToolbar(view: View){
-            this.onBackPressed()
+        val intent =
+            Intent(applicationContext, HomeActivity::class.java)
+        startActivity(intent)
     }
 
     fun listenMenuBurger(view: View){
@@ -405,7 +412,9 @@ class ProfileActivity : AppCompatActivity() {
         dialog.show()
 
     }
-
+    fun editProfile (view: View){
+        startActivity(Intent(this@ProfileActivity, EditProfileActivity::class.java))
+    }
     fun shareMediaToOtherApp(medias: ArrayList<MediaData>){
         for (media in medias){
             val uri: Uri = Uri.parse(media.link)
@@ -416,5 +425,13 @@ class ProfileActivity : AppCompatActivity() {
             }
             startActivity(Intent.createChooser(shareIntent, "Share To"))
         }
+    }
+
+    fun followers(view: View){
+        startActivity(Intent(this@ProfileActivity, EditProfileActivity::class.java))
+    }
+
+    fun following(view: View){
+        startActivity(Intent(this@ProfileActivity, EditProfileActivity::class.java))
     }
 }

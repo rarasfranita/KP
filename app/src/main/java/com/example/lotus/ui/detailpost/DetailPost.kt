@@ -157,18 +157,17 @@ class DetailPost : Fragment() {
 
     fun sendComment(v: View) {
         val btnSend = v.findViewById<View>(R.id.imageSendComment)
-        val s = v.findViewById<EditText>(R.id.inputComment)
         btnSend.setOnClickListener {
             if (SharedPrefManager.getInstance(requireContext()).isLoggedIn) {
-                s.isEnabled = true
-                if (!s.text.toString().equals("")) {
+                val s = v.inputComment.text
+                if (!s.toString().equals("")) {
                     closeEditTextComment()
                     if (commentID == null) {
                         AndroidNetworking.post(EnvService.ENV_API + "/posts/{postID}/comments")
                             .addHeaders("Authorization", "Bearer " + token)
                             .addPathParameter("postID", postData?.postId)
                             .addBodyParameter("userId", userID)
-                            .addBodyParameter("text", s.text.toString())
+                            .addBodyParameter("text", s.toString())
                             .setPriority(Priority.MEDIUM)
                             .build()
                             .getAsObject(
@@ -222,7 +221,6 @@ class DetailPost : Fragment() {
                 }
 
             } else {
-                s.isEnabled = false
                 this.activity!!.startActivity(Intent(context, LoginActivity::class.java))
             }
         }
