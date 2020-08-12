@@ -13,6 +13,7 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,20 +40,27 @@ import kotlinx.android.synthetic.main.layout_mainfeed_listitem.view.*
 import kotlinx.android.synthetic.main.progress_loading.view.*
 
 
-class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Context) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val token = SharedPrefManager.getInstance(context).token.token
     val userID = SharedPrefManager.getInstance(context).user._id
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == Constant.VIEW_TYPE_ITEM) {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_mainfeed_listitem, parent, false)
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.layout_mainfeed_listitem, parent, false)
             ItemViewHolder(view)
         } else {
-            val view = LayoutInflater.from(context).inflate(R.layout.progress_loading, parent, false)
+            val view =
+                LayoutInflater.from(context).inflate(R.layout.progress_loading, parent, false)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                view.progressbar.indeterminateDrawable.colorFilter = BlendModeColorFilter(Color.WHITE, BlendMode.SRC_ATOP)
+                view.progressbar.indeterminateDrawable.colorFilter =
+                    BlendModeColorFilter(Color.WHITE, BlendMode.SRC_ATOP)
             } else {
-                view.progressbar.indeterminateDrawable.setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY)
+                view.progressbar.indeterminateDrawable.setColorFilter(
+                    Color.WHITE,
+                    PorterDuff.Mode.MULTIPLY
+                )
             }
             LoadingViewHolder(view)
         }
@@ -81,9 +89,10 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
         }
     }
 
-    class ItemViewHolder(val view: View) : RecyclerView.ViewHolder(view){
+    class ItemViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val comment = view.findViewById<RelativeLayout>(R.id.rlCommentFeed)
-        val menu = view.findViewById<ImageView>(R.id.menuFeed)
+
+        //        val menu = view.findViewById<ImageView>(R.id.menuFeed)
         var mContext: Context? = null
         private var posterSlider: PosterSlider? = null
         private var postData: Post? = null
@@ -94,24 +103,24 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
         var likeCount: Int = 0
         var commentCount: Int = 0
 
-        fun setToken(token: String){
+        fun setToken(token: String) {
             this.token = token
         }
 
-        fun setUserID(userID: String){
+        fun setUserID(userID: String) {
             this.userID = userID
         }
 
-        fun bindFeed(post: Post, context: Context){
+        fun bindFeed(post: Post, context: Context) {
             itemView.apply {
                 postData = post
                 mContext = context
 
                 listenLikeIcon(view)
 
-                val username :TextView = view.findViewById<View>(R.id.textUsernameFeed) as TextView
-                val caption : TextView = view.findViewById<View>(R.id.textCaptionFeed) as TextView
-                val ava : ImageView = view.findViewById<View>(R.id.imageAvatarFeed) as ImageView
+                val username: TextView = view.findViewById<View>(R.id.textUsernameFeed) as TextView
+                val caption: TextView = view.findViewById<View>(R.id.textCaptionFeed) as TextView
+                val ava: ImageView = view.findViewById<View>(R.id.imageAvatarFeed) as ImageView
                 val comment: TextView = view.findViewById<View>(R.id.textIcCommentFeed) as TextView
                 val time: TextView = view.findViewById<View>(R.id.textTimeFeed) as TextView
 
@@ -120,9 +129,9 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
                 likeStatus = post?.liked
                 commentCount = post?.commentsCount!!
 
-                if (commentCount > 0){
+                if (commentCount > 0) {
                     comment.text = commentCount.toString()
-                }else{
+                } else {
                     viewAllComment.visibility = View.GONE
                 }
 
@@ -133,7 +142,7 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
             }
         }
 
-        private fun setMediaPost(view: View, medias: ArrayList<MediaData>?, text: String?){
+        private fun setMediaPost(view: View, medias: ArrayList<MediaData>?, text: String?) {
             val postText = view.findViewById<CardView>(R.id.cardPostText)
             val postMedia = view.findViewById<RelativeLayout>(R.id.mediaWrap)
             val caption = view.findViewById<RelativeLayout>(R.id.relLayout3)
@@ -177,7 +186,12 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
                     }
 
                     postTextView.setMovementMethod(LinkMovementMethod.getInstance());
-                    spannableString.setSpan(clickableSpan, caption.length - 4, caption.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    spannableString.setSpan(
+                        clickableSpan,
+                        caption.length - 4,
+                        caption.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
                     postTextView.text = spannableString
                     tag.visibility = View.GONE
                 } else {
@@ -188,7 +202,7 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
             }
         }
 
-        fun setCaption (view: View, text: String?){
+        fun setCaption(view: View, text: String?) {
             val tagView = view.findViewById<TextView>(R.id.textHashtagFeed)
             val captionView = view.findViewById<TextView>(R.id.textCaptionFeed)
             if (text?.length!! > 99) {
@@ -204,11 +218,16 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
                 }
 
                 captionView.setMovementMethod(LinkMovementMethod.getInstance());
-                spannableString.setSpan(clickableSpan, caption.length - 4, caption.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                spannableString.setSpan(
+                    clickableSpan,
+                    caption.length - 4,
+                    caption.length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
                 captionView.text = spannableString
                 tagView.visibility = View.GONE
-            }else{
-                if (text?.length!! < 1){
+            } else {
+                if (text?.length!! < 1) {
                     captionView.visibility = View.GONE
                 }
                 val tagCaption = view.findViewById<TextView>(R.id.textHashtag2)
@@ -217,14 +236,14 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
             }
         }
 
-        fun setHashTag(view: TextView, tags: ArrayList<String>?){
+        fun setHashTag(view: TextView, tags: ArrayList<String>?) {
             if (tags?.size!! > 0) {
                 var hashTag: String = ""
                 var anyMore = false
 
-                for ((i, tag) in tags.withIndex()){
+                for ((i, tag) in tags.withIndex()) {
                     hashTag += "#$tag "
-                    if (i == 5){
+                    if (i == 5) {
                         val tagMore = "$hashTag... more"
                         val spannableString = SpannableString(tagMore)
                         val clickableSpan = object : ClickableSpan() {
@@ -236,36 +255,41 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
                         }
 
                         view.setMovementMethod(LinkMovementMethod.getInstance());
-                        spannableString.setSpan(clickableSpan, tagMore.length - 4, tagMore.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        spannableString.setSpan(
+                            clickableSpan,
+                            tagMore.length - 4,
+                            tagMore.length,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
                         view.text = spannableString
                         anyMore = true
                         break
                     }
                 }
 
-                if (!anyMore){
+                if (!anyMore) {
                     view.text = hashTag
                 }
-            }else{
+            } else {
                 view.visibility = View.GONE
             }
         }
 
-        fun setProfilePicture(profpic: ImageView, url: String){
-            profpic.load(url){
+        fun setProfilePicture(profpic: ImageView, url: String) {
+            profpic.load(url) {
                 transformations(CircleCropTransformation())
             }
         }
 
-        fun setLike(view: View, likeStatus: Int?, likeCount: Int){
+        fun setLike(view: View, likeStatus: Int?, likeCount: Int) {
             val iconLikeTrue = view.findViewById<ImageView>(R.id.icLikeTrueFeed)
             val iconLikeFalse = view.findViewById<ImageView>(R.id.icLikeFalseFeed)
             val textLikeCount = view.findViewById<TextView>(R.id.textIctLikesFeed)
 
-            if (likeStatus.toString() == "1"){
+            if (likeStatus.toString() == "1") {
                 iconLikeTrue.visibility = View.VISIBLE
                 iconLikeFalse.visibility = View.GONE
-            }else {
+            } else {
                 iconLikeTrue.visibility = View.GONE
                 iconLikeFalse.visibility = View.VISIBLE
             }
@@ -273,15 +297,15 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
             textLikeCount.text = likeCount.toString()
         }
 
-        fun listenLikeIcon(view: View){
+        fun listenLikeIcon(view: View) {
             val likeIcon = view.findViewById<RelativeLayout>(R.id.likeLayoutFeed)
             likeIcon.setOnClickListener {
-                if(likeStatus.toString() == "1"){
+                if (likeStatus.toString() == "1") {
                     dislikePost(postData?.postId.toString(), userID.toString(), token)
                     likeStatus = 0
                     likeCount--
                     setLike(view, likeStatus, likeCount)
-                }else {
+                } else {
                     likePost(postData?.postId.toString(), userID.toString(), token)
                     likeStatus = 1
                     likeCount++
@@ -330,19 +354,22 @@ class PostFeedAdapter(private var listPost: ArrayList<Post>, val context: Contex
             }
 
             holder.itemView.menuFeed.setOnClickListener {
-                if (context is HomeActivity){
-                    (context as HomeActivity).showDialog(listPost[position].media!!)
+                if (context is HomeActivity) {
+                    context.showDialog(listPost[position].media!!, listPost[position].postId!!)
+                    Log.d("listPost[position].media", listPost[position].media.toString())
+                    Log.d("listPost[position].media", listPost[position].postId.toString())
+
                 }
             }
 
             holder.itemView.imageAvatarFeed.setOnClickListener {
-                if (context is HomeActivity){
+                if (context is HomeActivity) {
                     context.gotoProfilePicture(listPost[position].belongsTo.toString())
                 }
             }
 
             holder.itemView.textUsernameFeed.setOnClickListener {
-                if (context is HomeActivity){
+                if (context is HomeActivity) {
                     context.gotoProfilePicture(listPost[position].belongsTo.toString())
                 }
             }

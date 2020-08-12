@@ -99,7 +99,8 @@ class EditProfileActivity : AppCompatActivity() {
     fun UpdateProfile() {
         val load = findViewById<ProgressBar>(R.id.loadingUpdate)
         load.visibility = View.VISIBLE
-        val updateUser = AndroidNetworking.upload(EnvService.ENV_API + "/users/{username}")
+        val updateUser =
+            AndroidNetworking.upload(EnvService.ENV_API + "/users/{username}")
         val avatar = File(profPictUpdate?.path)
         Log.d("COBA CEK profPictUpdate UPDATE ", avatar.toString())
 
