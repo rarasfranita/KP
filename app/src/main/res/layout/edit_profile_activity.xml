@@ -43,13 +43,12 @@
                     android:textSize="20sp" />
 
                 <ImageView
-                    android:id="@+id/ivEllipses"
+                    android:id="@+id/updateProfile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="24dp"
-                    android:onClick="EditProfile"
                     android:src="@drawable/ic_checklist" />
             </RelativeLayout>
         </com.google.android.material.appbar.MaterialToolbar>
@@ -174,5 +173,13 @@
             android:textColorHint="@color/colorPrimary"
             android:textSize="14sp" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <ProgressBar
+        android:id="@+id/loadingUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/colorPrimary"/>
 
 </LinearLayout>

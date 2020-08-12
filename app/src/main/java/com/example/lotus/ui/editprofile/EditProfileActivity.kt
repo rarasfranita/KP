@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.text.Editable
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -20,22 +22,32 @@ import com.example.lotus.models.Respon
 import com.example.lotus.models.User
 import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
+import com.example.lotus.ui.explore.general.GeneralActivity
+import com.example.lotus.ui.profile.ProfileActivity
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.edit_profile_activity.*
+import java.io.File
 
+// TODO: 12/08/20 add DOB and GENDER
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class EditProfileActivity : AppCompatActivity() {
     private val myUserID = SharedPrefManager.getInstance(this).user._id
     private val token = SharedPrefManager.getInstance(this).token.token
     private val myUsername = SharedPrefManager.getInstance(this).user.username
+    private val myPass = SharedPrefManager.getInstance(this).user.password
+    private val myPostCount = SharedPrefManager.getInstance(this).user.postsCount
+
     private var profileData: User? = null
-    lateinit var profilePicture: Uri
+    var changeProfilePicture: Uri? = null
+    var profPictUpdate : Uri? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.edit_profile_activity)
 
         SelectPicture()
+        Update()
         getProfileData(myUsername.toString())
         Log.d("myUserID", myUserID.toString())
     }
@@ -53,63 +65,53 @@ class EditProfileActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        profilePicture = data?.data!!
-        imageEditProfile.load(profilePicture) {
+        changeProfilePicture = data?.data!!
+        profPictUpdate = changeProfilePicture
+        imageEditProfile.load(changeProfilePicture) {
             transformations(CircleCropTransformation())
         }
-        Log.d("COBA CEK ", profilePicture.toString())
+        Log.d("COBA CEK ", changeProfilePicture.toString())
+        Log.d("COBA profPictUpdate ", profPictUpdate.toString())
+        val update = findViewById<ImageView>(R.id.updateProfile)
+
+        if (profPictUpdate != null) {
+            update.setOnClickListener {
+                UpdateProfile()
+                Log.d("UpdateProfile", "terpencet")
+            }
+        }
     }
 
 
     fun backToHome(view: View) {
         this.onBackPressed()
     }
-//    fun UpdateProfilePict (view: View){
-//        val updateUser = AndroidNetworking.upload(EnvService.ENV_API + "/users/{username}")
-//        val avatar = File(profilePicture.path)
-//        updateUser.addMultipartFile("profilePicture", avatar)
-//        Log.d("COBA CEK ", avatar.toString())
-//        Log.d("username",myUsername.toString() )
-//        updateUser
-//            .addPathParameter("username", myUsername)
-//            .addMultipartParameter("email", EditProfileEmail.text.toString())
-//            .addMultipartParameter("username", EditProfileUsername.text.toString())
-//            .addMultipartParameter("phone", EditProfilePhone.text.toString())
-//            .addMultipartParameter("bio", EditProfileBio.text.toString())
-//            .addMultipartParameter("name", EditProfilename.text.toString())
-//            .setTag(this)
-//            .setPriority(Priority.HIGH)
-//            .build()
-//            .getAsObject(
-//                Respon::class.java,
-//                object : ParsedRequestListener<Respon>{
-//                    override fun onResponse(response: Respon) {
-//                        if (response.code.toString() == "200"){
-//                            Log.d("status", response.data.toString())
-//                            Toast.makeText(this@EditProfileActivity,"Edit Profile Succes", Toast.LENGTH_LONG).show()
-//                        }
-//                    }
-//                    override fun onError(anError: ANError?) {
-//                        Log.d("ERROORORRRRR", anError.toString())
-//                    }
-//
-//                }
-//            )
-//    }
 
-    fun EditProfile(view: View) {
-        val a = EditProfileUsername.text.toString()
-        Log.d("newUname",EditProfileUsername.text.toString())
-        val updateUser = AndroidNetworking.patch(EnvService.ENV_API + "/users/{username}")
+    fun Update() {
+        val update = findViewById<ImageView>(R.id.updateProfile)
+            update.setOnClickListener {
+                UpdateProfile2()
+                Log.d("UpdateProfile2", "terpencet")
+            }
+
+    }
+
+    fun UpdateProfile() {
+        val load = findViewById<ProgressBar>(R.id.loadingUpdate)
+        load.visibility = View.VISIBLE
+        val updateUser = AndroidNetworking.upload(EnvService.ENV_API + "/users/{username}")
+        val avatar = File(profPictUpdate?.path)
+        Log.d("COBA CEK profPictUpdate UPDATE ", avatar.toString())
+
         updateUser
             .addHeaders("Authorization", "Bearer $token")
             .addPathParameter("username", myUsername.toString())
-            .addBodyParameter("email", EditProfileEmail.text.toString())
-            .addBodyParameter("username", EditProfileUsername.text.toString())
-            .addBodyParameter("phone", EditProfilePhone.text.toString())
-            .addBodyParameter("bio", EditProfileBio.text.toString())
-            .addBodyParameter("name", EditProfilename.text.toString())
-            .setTag(this)
+            .addMultipartFile("profilePicture", avatar)
+            .addMultipartParameter("email", EditProfileEmail.text.toString())
+            .addMultipartParameter("username", EditProfileUsername.text.toString())
+            .addMultipartParameter("phone", EditProfilePhone.text.toString())
+            .addMultipartParameter("bio", EditProfileBio.text.toString())
+            .addMultipartParameter("name", EditProfilename.text.toString())
             .setPriority(Priority.HIGH)
             .build()
             .getAsObject(
@@ -117,30 +119,103 @@ class EditProfileActivity : AppCompatActivity() {
                 object : ParsedRequestListener<Respon> {
                     override fun onResponse(response: Respon) {
                         if (response.code.toString() == "200") {
-                            val user : User? = null
-//                            user!!.username = EditProfileUsername.text.toString()
-                            // TODO: 12/08/20 use like register, this
-
-                            Log.d("New Username", a)
-//                            if (user != null) {
-//                                SharedPrefManager.getInstance(applicationContext)
-//                                    .saveUser(user)
-//                            }
+                            load.visibility = View.GONE
+                            val user = User(
+                                0,
+                                myUserID,
+                                "",
+                                EditProfileBio.text.toString(),
+                                createdAt = false,
+                                deleted = false,
+                                email = EditProfileEmail.text.toString(),
+                                emailVerified = false,
+                                name = EditProfilename.text.toString(),
+                                password = myPass,
+                                phone = EditProfilePhone.text.toString(),
+                                postsCount = myPostCount,
+                                updatedAt = "",
+                                username = EditProfileUsername.text.toString()
+                            )
+                            SharedPrefManager.getInstance(applicationContext).saveUser(user)
+                            Log.d("cekSaveEmail", user.email.toString())
                             Log.d("status", response.data.toString())
+                            Log.d("cekUser", user.toString())
                             Toast.makeText(
                                 this@EditProfileActivity,
                                 "Edit Profile Succes",
-                                Toast.LENGTH_LONG
+                                Toast.LENGTH_SHORT
                             ).show()
+                            val intent =
+                                Intent(applicationContext, ProfileActivity::class.java)
+                            startActivity(intent)
                         }
                     }
 
                     override fun onError(anError: ANError?) {
+                        load.visibility = View.GONE
                         Log.d("ERROORORRRRR", anError.toString())
                     }
 
-                }
-            )
+                })
+    }
+
+    fun UpdateProfile2() {
+        val load = findViewById<ProgressBar>(R.id.loadingUpdate)
+        val updateUser = AndroidNetworking.upload(EnvService.ENV_API + "/users/{username}")
+        load.visibility = View.VISIBLE
+        updateUser
+            .addHeaders("Authorization", "Bearer $token")
+            .addPathParameter("username", myUsername.toString())
+            .addMultipartParameter("email", EditProfileEmail.text.toString())
+            .addMultipartParameter("username", EditProfileUsername.text.toString())
+            .addMultipartParameter("phone", EditProfilePhone.text.toString())
+            .addMultipartParameter("bio", EditProfileBio.text.toString())
+            .addMultipartParameter("name", EditProfilename.text.toString())
+            .setPriority(Priority.HIGH)
+            .build()
+            .getAsObject(
+                Respon::class.java,
+                object : ParsedRequestListener<Respon> {
+                    override fun onResponse(response: Respon) {
+                        load.visibility = View.GONE
+                        if (response.code.toString() == "200") {
+                            val user = User(
+                                0,
+                                myUserID,
+                                "",
+                                EditProfileBio.text.toString(),
+                                createdAt = false,
+                                deleted = false,
+                                email = EditProfileEmail.text.toString(),
+                                emailVerified = false,
+                                name = EditProfilename.text.toString(),
+                                password = myPass,
+                                phone = EditProfilePhone.text.toString(),
+                                postsCount = myPostCount,
+                                updatedAt = "",
+                                username = EditProfileUsername.text.toString()
+                            )
+                            SharedPrefManager.getInstance(applicationContext).saveUser(user)
+                            Log.d("cekSaveEmail", user.email.toString())
+                            Log.d("status", response.data.toString())
+                            Log.d("cekUser", user.toString())
+                            Toast.makeText(
+                                this@EditProfileActivity,
+                                "Edit Profile Succes",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            val intent =
+                                Intent(applicationContext, ProfileActivity::class.java)
+                            startActivity(intent)
+                        }
+                    }
+
+                    override fun onError(anError: ANError?) {
+                        load.visibility = View.GONE
+                        Log.d("ERROORORRRRR", anError.toString())
+                    }
+
+                })
     }
 
     private fun getProfileData(uname: String) {
