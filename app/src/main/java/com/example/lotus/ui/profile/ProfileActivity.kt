@@ -37,6 +37,8 @@ import com.example.lotus.ui.dm.GetMessage
 import com.example.lotus.ui.editprofile.EditProfileActivity
 import com.example.lotus.ui.explore.general.GeneralActivity
 import com.example.lotus.ui.home.HomeActivity
+import com.example.lotus.ui.relations.FollowersActivity
+import com.example.lotus.ui.relations.FollowingActivity
 import com.example.lotus.utils.downloadMedia
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
@@ -428,10 +430,10 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     fun followers(view: View){
-        startActivity(Intent(this@ProfileActivity, EditProfileActivity::class.java))
+        startActivity(Intent(this@ProfileActivity, FollowersActivity::class.java))
     }
 
     fun following(view: View){
-        startActivity(Intent(this@ProfileActivity, EditProfileActivity::class.java))
+        startActivity(Intent(this@ProfileActivity, FollowingActivity::class.java))
     }
 }

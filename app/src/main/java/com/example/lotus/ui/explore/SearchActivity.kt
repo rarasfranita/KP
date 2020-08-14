@@ -66,7 +66,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun listenAppToolbar() {
-        val toolbar: Toolbar = findViewById<Toolbar>(R.id.tbSearch)
+        val toolbar: Toolbar = findViewById(R.id.tbSearch)
 
         toolbar.setNavigationOnClickListener {
             this.onBackPressed()
