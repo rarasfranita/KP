@@ -1,5 +1,4 @@
-package com.example.lotus.ui.explore
-
+package com.example.lotus.ui.relations
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -9,7 +8,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import coil.transform.CircleCropTransformation
@@ -24,16 +26,16 @@ import com.example.lotus.service.EnvService
 import com.example.lotus.storage.SharedPrefManager
 import com.example.lotus.ui.home.Constant
 import com.example.lotus.ui.profile.ProfileActivity
-import kotlinx.android.synthetic.main.layout_list_messages.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-class SearchUser(private var listSearchUser: ArrayList<User>, val context: Context) :
-    RecyclerView.Adapter<SearchUser.Holder>() {
-    val userData = listSearchUser
+class SearchUserFollowers(private var listSearchFollowers: ArrayList<User>, val context: Context) :
+    RecyclerView.Adapter<SearchUserFollowers.Holder>() {
+    val userFollowersData = listSearchFollowers
     val token = SharedPrefManager.getInstance(context).token.token
     val userID = SharedPrefManager.getInstance(context).user._id
     private var mContext: Context? = null
+    private var isFollowing: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         this.mContext = context;
@@ -41,11 +43,11 @@ class SearchUser(private var listSearchUser: ArrayList<User>, val context: Conte
         return Holder(
             LayoutInflater.from(
                 parent.context
-            ).inflate(R.layout.layout_list_messages, parent, false)
+            ).inflate(R.layout.layout_list_followers, parent, false)
         )
     }
 
-    override fun getItemCount(): Int = listSearchUser.size
+    override fun getItemCount(): Int = listSearchFollowers.size
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val usernameSrc = SharedPrefManager.getInstance(context).user.username
@@ -55,66 +57,45 @@ class SearchUser(private var listSearchUser: ArrayList<User>, val context: Conte
 
         search.rlMessage.setOnClickListener {
             val intent = Intent(context, ProfileActivity::class.java)
-            extras.putString("userID", listSearchUser[position]._id)
+            extras.putString("userID", listSearchFollowers[position]._id)
             intent.putExtras(extras)
             context.startActivity(intent)
         }
-        holder.bindFeed(listSearchUser[position], context)
+        holder.bindFeed(listSearchFollowers[position], context)
 
         if (holder.itemViewType == Constant.VIEW_TYPE_ITEM) {
             val item = Holder(holder.itemView)
 
             item.setToken(token.toString())
             item.setUserID(userID.toString())
-            item.bindFeed(listSearchUser[position], context)
+            item.bindFeed(listSearchFollowers[position], context)
+            item.follow.visibility = View.GONE
+            item.unfollow.visibility = View.GONE
+            // TODO: 14/08/20 item.unfollow.visibility = View.VISIBLE  and uncomment item.unfollow
 
-
-            item.follow.setOnClickListener {
-                val usernameTrg = listSearchUser[position].username
-                Log.d("usernameSrc", "$usernameSrc , usernameTarget, $usernameTrg")
-                AndroidNetworking.get(EnvService.ENV_API + "/users/$usernameSrc/follow/$usernameTrg")
-                    .addPathParameter("usernameSource", usernameSrc)
-                    .addPathParameter("usernameTarget", usernameTrg)
-                    .addHeaders("Authorization", "Bearer $token")
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .getAsObject(
-                        Respon::class.java,
-                        object : ParsedRequestListener<Respon> {
-                            override fun onResponse(respon: Respon) {
-                                if (respon.code.toString() == "200") {
-                                    item.setFollowing()
-                                }
-                            }
-
-                            override fun onError(anError: ANError) {
-
-                            }
-                        })
-            }
-            item.unfollow.setOnClickListener {
-                val usernameTrg = listSearchUser[position].username
-                Log.d("usernameSrc", "$usernameSrc , usernameTarget, $usernameTrg")
-                AndroidNetworking.get(EnvService.ENV_API + "/users/$usernameSrc/unfollow/$usernameTrg")
-                    .addPathParameter("usernameSource", usernameSrc)
-                    .addPathParameter("usernameTarget", usernameTrg)
-                    .addHeaders("Authorization", "Bearer $token")
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .getAsObject(
-                        Respon::class.java,
-                        object : ParsedRequestListener<Respon> {
-                            override fun onResponse(respon: Respon) {
-                                if (respon.code.toString() == "200") {
-                                    item.setUnfollow()
-                                }
-                            }
-
-                            override fun onError(anError: ANError) {
-
-                            }
-                        })
-            }
+//            item.unfollow.setOnClickListener {
+//                val usernameTrg = listSearchFollowers[position].username
+//                Log.d("usernameSrc", "$usernameSrc , usernameTarget, $usernameTrg")
+//                AndroidNetworking.get(EnvService.ENV_API + "/users/$usernameSrc/unfollow/$usernameTrg")
+//                    .addPathParameter("usernameSource", usernameSrc)
+//                    .addPathParameter("usernameTarget", usernameTrg)
+//                    .addHeaders("Authorization", "Bearer $token")
+//                    .setPriority(Priority.HIGH)
+//                    .build()
+//                    .getAsObject(
+//                        Respon::class.java,
+//                        object : ParsedRequestListener<Respon> {
+//                            override fun onResponse(respon: Respon) {
+//                                if (respon.code.toString() == "200") {
+//                                    item.setUnfollow()
+//                                }
+//                            }
+//
+//                            override fun onError(anError: ANError) {
+//
+//                            }
+//                        })
+//            }
         }
     }
 
@@ -128,6 +109,7 @@ class SearchUser(private var listSearchUser: ArrayList<User>, val context: Conte
         private var token: String = null.toString()
         private var userID: String = null.toString()
 
+
         fun setToken(token: String) {
             this.token = token
         }
@@ -136,11 +118,11 @@ class SearchUser(private var listSearchUser: ArrayList<User>, val context: Conte
             this.userID = userID
         }
 
-        fun bindFeed(search: User, context: Context) {
-            itemView.apply {
-                read.visibility = View.GONE
 
-                userData = search
+        fun bindFeed(searchFollowers: User, context: Context) {
+            itemView.apply {
+
+                userData = searchFollowers
                 mContext = context
 
                 val usernameSearch: TextView =
@@ -149,9 +131,9 @@ class SearchUser(private var listSearchUser: ArrayList<User>, val context: Conte
                     view.findViewById<View>(R.id.profileMessage) as ImageView
                 val bioSearch: TextView = view.findViewById<View>(R.id.lastMessage) as TextView
 
-                usernameSearch.text = search.username
-                setProfilePicture(profileSearch, search.avatar.toString())
-                bioSearch.text = search.bio
+                usernameSearch.text = searchFollowers.username
+                setProfilePicture(profileSearch, searchFollowers.avatar.toString())
+                bioSearch.text = searchFollowers.bio
             }
         }
 
@@ -164,23 +146,18 @@ class SearchUser(private var listSearchUser: ArrayList<User>, val context: Conte
                 }
             }
         }
-
-
-        @SuppressLint("ResourceAsColor")
-        fun setFollowing() {
-            unfollow.visibility = View.VISIBLE
-            follow.visibility = View.GONE
-        }
+        
 
         @SuppressLint("ResourceAsColor")
         fun setUnfollow() {
-            unfollow.visibility = View.GONE
             follow.visibility = View.VISIBLE
+            unfollow.visibility = View.GONE
         }
+
     }
 
     fun filter(text: String) {
-        val a = userData
+        val a = userFollowersData
         val filterdNames: ArrayList<User> = ArrayList()
 
         for (s in a) {
@@ -195,8 +172,7 @@ class SearchUser(private var listSearchUser: ArrayList<User>, val context: Conte
     }
 
     private fun filterList(filterdNames: ArrayList<User>) {
-        this.listSearchUser = filterdNames
+        this.listSearchFollowers = filterdNames
         notifyDataSetChanged()
     }
-
 }
